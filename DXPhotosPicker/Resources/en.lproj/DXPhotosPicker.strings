@@ -1,0 +1,17 @@
+/* 
+  DXPhotosPicker.strings
+  DXPhotosPickerDemo
+
+  Created by DingXiao on 15/10/13.
+  Copyright © 2015年 Dennis. All rights reserved.
+*/
+
+"albumTitle" = "Photos";
+"cancel" = "Cancel";
+"send" = "send";
+"preview" = "preview";
+"fullImage" = "Full Image";
+"alertTitle" = "Tips";
+"alertContent" = "Can not select more than 9 photos";
+"alertButton" = "OK";
+"UnAuthorizedTip" = "Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"";

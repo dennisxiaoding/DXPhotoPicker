@@ -16,6 +16,8 @@
 		9541C6CC1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6CB1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift */; };
 		9541C6DB1BCD084C003102FC /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541C6DA1BCD084C003102FC /* Photos.framework */; };
 		9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */; settings = {ASSET_TAGS = (); }; };
+		956595BD1BCD4DCD00A74B30 /* DXPhotosPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 956595BF1BCD4DCD00A74B30 /* DXPhotosPicker.strings */; };
+		956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956595C11BCD4E6A00A74B30 /* DXPromptView.swift */; settings = {ASSET_TAGS = (); }; };
 		95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95A3F1881BCD441300A43CE1 /* imageResources.xcassets */; settings = {ASSET_TAGS = (); }; };
 		95A3F1951BCD459500A43CE1 /* DXPhototsPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -53,6 +55,9 @@
 		9541C6CD1BCD080D003102FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9541C6DA1BCD084C003102FC /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DXHex.swift"; sourceTree = "<group>"; };
+		956595BE1BCD4DCD00A74B30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/DXPhotosPicker.strings"; sourceTree = "<group>"; };
+		956595C01BCD4DD100A74B30 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DXPhotosPicker.strings; sourceTree = "<group>"; };
+		956595C11BCD4E6A00A74B30 /* DXPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPromptView.swift; sourceTree = "<group>"; };
 		95A3F1881BCD441300A43CE1 /* imageResources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = imageResources.xcassets; sourceTree = "<group>"; };
 		95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhototsPickerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */,
+				956595C11BCD4E6A00A74B30 /* DXPromptView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -166,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				95A3F1881BCD441300A43CE1 /* imageResources.xcassets */,
+				956595BF1BCD4DCD00A74B30 /* DXPhotosPicker.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -256,6 +263,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 9541C69F1BCD080D003102FC;
 			productRefGroup = 9541C6A91BCD080D003102FC /* Products */;
@@ -278,6 +286,7 @@
 				95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */,
 				9541C6B31BCD080D003102FC /* Assets.xcassets in Resources */,
 				9541C6B11BCD080D003102FC /* Main.storyboard in Resources */,
+				956595BD1BCD4DCD00A74B30 /* DXPhotosPicker.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */,
 				9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */,
 				95A3F1951BCD459500A43CE1 /* DXPhototsPickerController.swift in Sources */,
 				9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */,
@@ -355,6 +365,15 @@
 				9541C6B51BCD080D003102FC /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		956595BF1BCD4DCD00A74B30 /* DXPhotosPicker.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				956595BE1BCD4DCD00A74B30 /* zh-Hans */,
+				956595C01BCD4DD100A74B30 /* en */,
+			);
+			name = DXPhotosPicker.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
