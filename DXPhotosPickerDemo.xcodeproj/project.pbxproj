@@ -16,6 +16,8 @@
 		9541C6CC1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6CB1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift */; };
 		9541C6DB1BCD084C003102FC /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541C6DA1BCD084C003102FC /* Photos.framework */; };
 		9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */; settings = {ASSET_TAGS = (); }; };
+		95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95A3F1881BCD441300A43CE1 /* imageResources.xcassets */; settings = {ASSET_TAGS = (); }; };
+		95A3F1951BCD459500A43CE1 /* DXPhototsPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		9541C6CD1BCD080D003102FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9541C6DA1BCD084C003102FC /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+DXHex.swift"; sourceTree = "<group>"; };
+		95A3F1881BCD441300A43CE1 /* imageResources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = imageResources.xcassets; sourceTree = "<group>"; };
+		95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhototsPickerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +149,7 @@
 		9541C6DC1BCD0A00003102FC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				95A3F1941BCD459500A43CE1 /* DXPhototsPickerController.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -160,6 +165,7 @@
 		9541C6DE1BCD0A43003102FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				95A3F1881BCD441300A43CE1 /* imageResources.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -226,6 +232,7 @@
 		9541C6A01BCD080D003102FC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = DX;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Dennis;
 				TargetAttributes = {
@@ -268,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9541C6B61BCD080D003102FC /* LaunchScreen.storyboard in Resources */,
+				95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */,
 				9541C6B31BCD080D003102FC /* Assets.xcassets in Resources */,
 				9541C6B11BCD080D003102FC /* Main.storyboard in Resources */,
 			);
@@ -295,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */,
+				95A3F1951BCD459500A43CE1 /* DXPhototsPickerController.swift in Sources */,
 				9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */,
 				9541C6AC1BCD080D003102FC /* AppDelegate.swift in Sources */,
 			);
@@ -521,6 +530,7 @@
 				9541C6D21BCD080D003102FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9541C6D31BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotosPickerDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +539,7 @@
 				9541C6D51BCD080D003102FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9541C6D61BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotosPickerDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +548,7 @@
 				9541C6D81BCD080D003102FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
