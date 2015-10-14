@@ -32,7 +32,7 @@ public class DXPromptView: UIWindow {
         self.addSubview(label)
     }
     
-    public func showWithImageName(imageName: String, message: String) {
+    public class func showWithImageName(imageName: String, message: String) {
         
     }
 
