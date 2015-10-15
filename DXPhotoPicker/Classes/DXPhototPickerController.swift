@@ -14,25 +14,20 @@ import UIKit
 }
 
 @available(iOS 8.0, *)
-public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate {
+public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     var isDuringPushAnimating = false
     private weak var navDelegate: UINavigationControllerDelegate?
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        self.interactivePopGestureRecognizer?.delegate = self
+        self.interactivePopGestureRecognizer?.enabled = true
     }
 
     override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: UINavigationControllerDelegate
-    override weak public var delegate: UINavigationControllerDelegate? {
-        didSet {
-//            self.navDelegate = (delegate! != self ? delegate : nil)
-        }
     }
     
 }
