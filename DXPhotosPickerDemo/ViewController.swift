@@ -9,17 +9,13 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+// MARK: ui actions
+    @IBAction func addPhotos(sender: UIButton) {
+        DXLog(sender)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }
 

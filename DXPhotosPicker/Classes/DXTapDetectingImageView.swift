@@ -9,10 +9,10 @@
 
 import UIKit
 
-@objc public protocol DXTapDetectingImageViewDelegate: NSObjectProtocol {
-    optional func imageView(imageView: UIImageView?, singleTapDetected touch: UITouch?)
-    optional func imageView(imageview: UIImageView?, doubleTapDetected touch: UITouch?)
-    optional func imageView(imageView: UIImageView?, tripleTapDetected touch: UITouch?)
+@objc protocol DXTapDetectingImageViewDelegate: NSObjectProtocol {
+    optional func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?)
+    optional func imageView(imageview: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?)
+    optional func imageView(imageView: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?)
 }
 
 class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {

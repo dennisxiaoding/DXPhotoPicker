@@ -8,15 +8,21 @@
 
 import UIKit
 
-class DXPhototsPickerController: UINavigationController {
+@available(iOS 8.0, *)
+@objc public protocol DXPhototsPickerControllerDelegate: NSObjectProtocol {
+    optional func photosPickerController(photosPicker: DXPhototsPickerController?, sendImages: [AnyObject]?, isFullImage: Bool)
+}
 
-    override func viewDidLoad() {
+@available(iOS 8.0, *)
+public class DXPhototsPickerController: UINavigationController {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
