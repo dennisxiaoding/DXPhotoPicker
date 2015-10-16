@@ -13,3 +13,7 @@ public func DXLog<T>(message: T, file: String = __FILE__, method: String = __FUN
         print("\((file as NSString).lastPathComponent)[line:\(line)], \(method): \(message)")
     #endif
 }
+
+public func DXlocalizedString(key: String, comment: String) -> String {
+    return NSLocalizedString(key, tableName: "DXPhotoPicker", bundle: NSBundle.mainBundle(), value: "", comment: comment)
+}

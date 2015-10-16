@@ -59,7 +59,7 @@ class DXSendButton: UIView {
     
     private lazy var sendButton: UIButton = {
        let button = UIButton(type: UIButtonType.Custom)
-        button.setTitle(String.dx_localizedStrin("send", comment: "发送"), forState: UIControlState.Normal)
+        button.setTitle(DXlocalizedString("send", comment: "发送"), forState: UIControlState.Normal)
         button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintNormalColor), forState: UIControlState.Normal)
         button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintHighlightedColor), forState: UIControlState.Highlighted)
         button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintDisabledColor), forState: UIControlState.Disabled)

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		95146FF11BD0E07A00C8C45C /* DXAlbumTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95146FF01BD0E07A00C8C45C /* DXAlbumTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		95146FF31BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95146FF21BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift */; settings = {ASSET_TAGS = (); }; };
+		95146FF51BD0F49600C8C45C /* DXBadgeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95146FF41BD0F49600C8C45C /* DXBadgeLabel.swift */; settings = {ASSET_TAGS = (); }; };
+		95146FF71BD0F62900C8C45C /* UIView+DXFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */; settings = {ASSET_TAGS = (); }; };
 		9541C6AC1BCD080D003102FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6AB1BCD080D003102FC /* AppDelegate.swift */; };
 		9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6AD1BCD080D003102FC /* ViewController.swift */; };
 		9541C6B11BCD080D003102FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6AF1BCD080D003102FC /* Main.storyboard */; };
@@ -20,7 +24,6 @@
 		9552D3E21BCE235F00DD553B /* DXPhotoBroswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552D3E11BCE235F00DD553B /* DXPhotoBroswer.swift */; settings = {ASSET_TAGS = (); }; };
 		9552D3E41BCE2CFF00DD553B /* DXBrowserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552D3E31BCE2CFF00DD553B /* DXBrowserCell.swift */; settings = {ASSET_TAGS = (); }; };
 		9552D3E61BCE4F2300DD553B /* DXSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552D3E51BCE4F2300DD553B /* DXSendButton.swift */; settings = {ASSET_TAGS = (); }; };
-		9552D3E81BCE57C700DD553B /* String+DXLocalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552D3E71BCE57C700DD553B /* String+DXLocalized.swift */; settings = {ASSET_TAGS = (); }; };
 		95643B311BCF54FF0091ACE8 /* DXUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95643B301BCF54FF0091ACE8 /* DXUtil.swift */; settings = {ASSET_TAGS = (); }; };
 		956595BD1BCD4DCD00A74B30 /* DXPhotoPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 956595BF1BCD4DCD00A74B30 /* DXPhotoPicker.strings */; };
 		956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956595C11BCD4E6A00A74B30 /* DXPromptView.swift */; settings = {ASSET_TAGS = (); }; };
@@ -46,6 +49,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		95146FF01BD0E07A00C8C45C /* DXAlbumTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXAlbumTableViewController.swift; sourceTree = "<group>"; };
+		95146FF21BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXUnAuthorizedTipsView.swift; sourceTree = "<group>"; };
+		95146FF41BD0F49600C8C45C /* DXBadgeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXBadgeLabel.swift; sourceTree = "<group>"; };
+		95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DXFrame.swift"; sourceTree = "<group>"; };
 		9541C6A81BCD080D003102FC /* DXPhotoPickerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DXPhotoPickerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9541C6AB1BCD080D003102FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9541C6AD1BCD080D003102FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,7 +72,6 @@
 		9552D3E11BCE235F00DD553B /* DXPhotoBroswer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhotoBroswer.swift; sourceTree = "<group>"; };
 		9552D3E31BCE2CFF00DD553B /* DXBrowserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXBrowserCell.swift; sourceTree = "<group>"; };
 		9552D3E51BCE4F2300DD553B /* DXSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXSendButton.swift; sourceTree = "<group>"; };
-		9552D3E71BCE57C700DD553B /* String+DXLocalized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+DXLocalized.swift"; sourceTree = "<group>"; };
 		95643B301BCF54FF0091ACE8 /* DXUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXUtil.swift; sourceTree = "<group>"; };
 		956595BE1BCD4DCD00A74B30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/DXPhotoPicker.strings"; sourceTree = "<group>"; };
 		956595C01BCD4DD100A74B30 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DXPhotoPicker.strings; sourceTree = "<group>"; };
@@ -167,11 +173,14 @@
 			isa = PBXGroup;
 			children = (
 				95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */,
+				95146FF01BD0E07A00C8C45C /* DXAlbumTableViewController.swift */,
 				956595C11BCD4E6A00A74B30 /* DXPromptView.swift */,
 				9552D3DF1BCDF0B600DD553B /* DXTapDetectingImageView.swift */,
 				9552D3E11BCE235F00DD553B /* DXPhotoBroswer.swift */,
 				9552D3E31BCE2CFF00DD553B /* DXBrowserCell.swift */,
 				9552D3E51BCE4F2300DD553B /* DXSendButton.swift */,
+				95146FF21BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift */,
+				95146FF41BD0F49600C8C45C /* DXBadgeLabel.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -180,8 +189,8 @@
 			isa = PBXGroup;
 			children = (
 				9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */,
-				9552D3E71BCE57C700DD553B /* String+DXLocalized.swift */,
 				95643B301BCF54FF0091ACE8 /* DXUtil.swift */,
+				95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -332,12 +341,15 @@
 				956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */,
 				9552D3E61BCE4F2300DD553B /* DXSendButton.swift in Sources */,
 				9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */,
+				95146FF51BD0F49600C8C45C /* DXBadgeLabel.swift in Sources */,
 				95A3F1951BCD459500A43CE1 /* DXPhototPickerController.swift in Sources */,
+				95146FF31BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift in Sources */,
 				9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */,
 				95643B311BCF54FF0091ACE8 /* DXUtil.swift in Sources */,
+				95146FF11BD0E07A00C8C45C /* DXAlbumTableViewController.swift in Sources */,
 				9552D3E01BCDF0B600DD553B /* DXTapDetectingImageView.swift in Sources */,
-				9552D3E81BCE57C700DD553B /* String+DXLocalized.swift in Sources */,
 				9552D3E21BCE235F00DD553B /* DXPhotoBroswer.swift in Sources */,
+				95146FF71BD0F62900C8C45C /* UIView+DXFrame.swift in Sources */,
 				9552D3E41BCE2CFF00DD553B /* DXBrowserCell.swift in Sources */,
 				9541C6AC1BCD080D003102FC /* AppDelegate.swift in Sources */,
 			);

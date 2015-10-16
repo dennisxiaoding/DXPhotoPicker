@@ -12,8 +12,6 @@ class ViewController: UIViewController {
 // MARK: ui actions
     @IBAction func addPhotos(sender: UIButton) {
         DXLog(sender)
-//        let vc = DXPhototPickerController()
-//        navigationController?.pushViewController(vc, animated: true)
     }
     
     override func viewDidLoad() {
