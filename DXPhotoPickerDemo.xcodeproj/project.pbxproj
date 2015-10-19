@@ -27,6 +27,7 @@
 		95643B311BCF54FF0091ACE8 /* DXUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95643B301BCF54FF0091ACE8 /* DXUtil.swift */; settings = {ASSET_TAGS = (); }; };
 		956595BD1BCD4DCD00A74B30 /* DXPhotoPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 956595BF1BCD4DCD00A74B30 /* DXPhotoPicker.strings */; };
 		956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956595C11BCD4E6A00A74B30 /* DXPromptView.swift */; settings = {ASSET_TAGS = (); }; };
+		9593F8EC1BD4CD7F009FFE7E /* DXPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9593F8EB1BD4CD7F009FFE7E /* DXPickerManager.swift */; settings = {ASSET_TAGS = (); }; };
 		95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95A3F1881BCD441300A43CE1 /* imageResources.xcassets */; settings = {ASSET_TAGS = (); }; };
 		95A3F1951BCD459500A43CE1 /* DXPhototPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		956595BE1BCD4DCD00A74B30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/DXPhotoPicker.strings"; sourceTree = "<group>"; };
 		956595C01BCD4DD100A74B30 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/DXPhotoPicker.strings; sourceTree = "<group>"; };
 		956595C11BCD4E6A00A74B30 /* DXPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPromptView.swift; sourceTree = "<group>"; };
+		9593F8EB1BD4CD7F009FFE7E /* DXPickerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPickerManager.swift; sourceTree = "<group>"; };
 		95A3F1881BCD441300A43CE1 /* imageResources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = imageResources.xcassets; sourceTree = "<group>"; };
 		95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhototPickerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -181,6 +183,7 @@
 				9552D3E51BCE4F2300DD553B /* DXSendButton.swift */,
 				95146FF21BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift */,
 				95146FF41BD0F49600C8C45C /* DXBadgeLabel.swift */,
+				9593F8EB1BD4CD7F009FFE7E /* DXPickerManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				956595C21BCD4E6A00A74B30 /* DXPromptView.swift in Sources */,
 				9552D3E61BCE4F2300DD553B /* DXSendButton.swift in Sources */,
 				9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */,
+				9593F8EC1BD4CD7F009FFE7E /* DXPickerManager.swift in Sources */,
 				95146FF51BD0F49600C8C45C /* DXBadgeLabel.swift in Sources */,
 				95A3F1951BCD459500A43CE1 /* DXPhototPickerController.swift in Sources */,
 				95146FF31BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift in Sources */,

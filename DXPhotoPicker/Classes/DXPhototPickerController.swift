@@ -7,6 +7,14 @@
 //
 
 import UIKit
+import Photos
+
+public enum DXPhototPickerMediaType: Int {
+    case Unknow
+    case Image
+    case Video
+    case All
+}
 
 @available(iOS 8.0, *)
 @objc protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
@@ -18,6 +26,9 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
 
     var isDuringPushAnimating = false
     private weak var navDelegate: UINavigationControllerDelegate?
+//    private lazy var defaultAblumName: String? = {
+//        let string = NSUserDefaults.standardUserDefaults().objectForKey(<#T##defaultName: String##String#>)
+//    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()

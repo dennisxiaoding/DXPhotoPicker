@@ -7,29 +7,38 @@
 //
 
 import UIKit
+import Photos
 
 private class DXAlbumTableViewController: UITableViewController {
 
+    let dxalbumTableViewCellReuseIdentifier = "dxalbumTableViewCellReuseIdentifier"
+    
+    let assetsCollection: [PHAssetCollection]?  = DXPickerManager.sharedManager.fetchAlbums()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+         self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        guard self.assetsCollection != nil else {
+            return 0
+        }
+        return self.assetsCollection!.count
+    }
+    
+    private override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath)
+        let collection = self.assetsCollection![indexPath.row]
+        cell.textLabel?.text = collection.localizedTitle
+        DXPickerManager.sharedManager.fetchImageWithAssetCollection(collection, targetSize: CGSizeMake(60, 60)) {(image) -> Void in
+            cell.imageView?.image = image
+        }
+        return cell
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
