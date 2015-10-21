@@ -25,20 +25,20 @@ public enum DXPhototPickerMediaType: Int {
 public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     var isDuringPushAnimating = false
-    private weak var navDelegate: UINavigationControllerDelegate?
-//    private lazy var defaultAblumName: String? = {
-//        let string = NSUserDefaults.standardUserDefaults().objectForKey(<#T##defaultName: String##String#>)
-//    }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.interactivePopGestureRecognizer?.delegate = self
         self.interactivePopGestureRecognizer?.enabled = true
+           DXLog("\(PHPhotoLibrary.authorizationStatus()) !")
+        
+        if DXPickerManager.sharedManager.defultAlbum == nil {
+            showAlbumList()
+        }
     }
 
-    override public func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func showAlbumList() {
+        let viewController = DXAlbumTableViewController()
+        self.viewControllers = [viewController]
     }
-    
 }

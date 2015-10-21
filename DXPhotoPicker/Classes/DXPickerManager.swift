@@ -15,7 +15,7 @@ class DXPickerManager {
     
     private static let sharedInstance = DXPickerManager()
     
-    private var photoLibrary: PHPhotoLibrary 
+    var photoLibrary: PHPhotoLibrary 
     
     class var sharedManager: DXPickerManager {
         return sharedInstance
@@ -25,25 +25,72 @@ class DXPickerManager {
         photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
     }
     
-    var mediaType: DXPhototPickerMediaType = DXPhototPickerMediaType.Unknow
+    var mediaType: DXPhototPickerMediaType = DXPhototPickerMediaType.Image
 
     lazy var defultAlbum: String? = {
         let string = NSUserDefaults.standardUserDefaults().objectForKey(kDXPickerManagerDefaultAlbumName) as? String
         return string
     }()
     
-    
-    func fetchAlbums() -> [PHAssetCollection]? {
-        let userAlbumsOptions = PHFetchOptions()
-        userAlbumsOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0 and mediaType = \(fetchTypeViaMediaType(self.mediaType))")
-        let userAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.Album, subtype: PHAssetCollectionSubtype.Any, options: userAlbumsOptions)
-        var albums: [PHAssetCollection] = []
+    func fetchAlbumList() -> [DXAlbum] {
         
-        userAlbums.enumerateObjectsUsingBlock { (collection, idx, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-            albums.append(collection as! PHAssetCollection)
+        func fetchAlbums() -> [PHFetchResult]? {
+            let userAlbumsOptions = PHFetchOptions()
+            userAlbumsOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
+            userAlbumsOptions.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+            var albums: [PHFetchResult] = []
+            albums.append(
+                PHAssetCollection.fetchAssetCollectionsWithType(
+                    PHAssetCollectionType.SmartAlbum,
+                    subtype: PHAssetCollectionSubtype.AlbumRegular,
+                    options: nil)
+            )
+            
+            albums.append(
+                PHAssetCollection.fetchAssetCollectionsWithType(
+                    PHAssetCollectionType.Album,
+                    subtype: PHAssetCollectionSubtype.Any,
+                    options: userAlbumsOptions)
+            )
+            return albums
+        }
+
+        
+        let results = fetchAlbums()
+        var list: [DXAlbum] = []
+        guard results != nil else {
+            return list
+        }
+        let options = PHFetchOptions()
+        options.predicate = NSPredicate(
+            format: "mediaType = %d", self.fetchTypeViaMediaType(self.mediaType).rawValue
+        )
+        
+        for (_, result) in results!.enumerate() {
+            result.enumerateObjectsUsingBlock({ (collection, index, isStop) -> Void in
+                let album = collection as! PHAssetCollection
+                let assetResults = PHAsset.fetchAssetsInAssetCollection(album, options: options)
+                var count = 0
+                switch album.assetCollectionType {
+                case .Album:
+                    count = album.estimatedAssetCount
+                case .SmartAlbum:
+                    count = assetResults.count
+                case .Moment:
+                    count = 0
+                }
+                if count > 0 {
+                    let ab = DXAlbum()
+                    ab.count = count
+                    ab.results = assetResults
+                    ab.name = album.localizedTitle
+                    ab.startDate = album.startDate
+                    list.append(ab)
+                }
+            })
         }
         
-        return albums
+        return list
     }
     
     private func fetchTypeViaMediaType(meidaType: DXPhototPickerMediaType) -> PHAssetMediaType {
@@ -63,17 +110,20 @@ class DXPickerManager {
     func fetchImageWithAssetCollection(collection: PHAssetCollection, targetSize: CGSize, imageResultHandler: (image: UIImage?)->Void) {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        fetchOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0 and mediaType = \(fetchTypeViaMediaType(self.mediaType))")
         let fetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: fetchOptions)
         let asset = fetchResult.firstObject as? PHAsset
+        guard asset != nil else {
+            return
+        }
         let options = PHImageRequestOptions()
         options.resizeMode = PHImageRequestOptionsResizeMode.Exact
         let scale = UIScreen.mainScreen().scale
         let size = CGSizeMake(targetSize.width*scale, targetSize.height*scale);
         PHImageManager.defaultManager().requestImageForAsset(asset!, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: options) { (result, info) -> Void in
-            imageResultHandler(image: result)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                 imageResultHandler(image: result)
+            })
         }
-
     }
     
 }

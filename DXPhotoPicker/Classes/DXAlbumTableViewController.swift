@@ -9,17 +9,17 @@
 import UIKit
 import Photos
 
-private class DXAlbumTableViewController: UITableViewController {
+class DXAlbumTableViewController: UITableViewController {
 
     let dxalbumTableViewCellReuseIdentifier = "dxalbumTableViewCellReuseIdentifier"
     
-    let assetsCollection: [PHAssetCollection]?  = DXPickerManager.sharedManager.fetchAlbums()
+    var assetsCollection: [DXAlbum]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         self.clearsSelectionOnViewWillAppear = false
-
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.clearsSelectionOnViewWillAppear = false
+        assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
     }
 
     // MARK: - Table view data source
@@ -31,13 +31,10 @@ private class DXAlbumTableViewController: UITableViewController {
         return self.assetsCollection!.count
     }
     
-    private override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath)
-        let collection = self.assetsCollection![indexPath.row]
-        cell.textLabel?.text = collection.localizedTitle
-        DXPickerManager.sharedManager.fetchImageWithAssetCollection(collection, targetSize: CGSizeMake(60, 60)) {(image) -> Void in
-            cell.imageView?.image = image
-        }
+        let album = self.assetsCollection![indexPath.row]
+        cell.textLabel?.text = album.name! + "(\(album.count))"
         return cell
     }
     

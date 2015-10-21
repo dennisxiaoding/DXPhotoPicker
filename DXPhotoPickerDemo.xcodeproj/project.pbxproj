@@ -30,6 +30,7 @@
 		9593F8EC1BD4CD7F009FFE7E /* DXPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9593F8EB1BD4CD7F009FFE7E /* DXPickerManager.swift */; settings = {ASSET_TAGS = (); }; };
 		95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95A3F1881BCD441300A43CE1 /* imageResources.xcassets */; settings = {ASSET_TAGS = (); }; };
 		95A3F1951BCD459500A43CE1 /* DXPhototPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */; settings = {ASSET_TAGS = (); }; };
+		95D9571C1BD758420012BD36 /* DXAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D9571B1BD758420012BD36 /* DXAlbum.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		9593F8EB1BD4CD7F009FFE7E /* DXPickerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPickerManager.swift; sourceTree = "<group>"; };
 		95A3F1881BCD441300A43CE1 /* imageResources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = imageResources.xcassets; sourceTree = "<group>"; };
 		95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhototPickerController.swift; sourceTree = "<group>"; };
+		95D9571B1BD758420012BD36 /* DXAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXAlbum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 		9541C6DC1BCD0A00003102FC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				95D9571A1BD752F70012BD36 /* Models */,
 				95A3F1941BCD459500A43CE1 /* DXPhototPickerController.swift */,
 				95146FF01BD0E07A00C8C45C /* DXAlbumTableViewController.swift */,
 				956595C11BCD4E6A00A74B30 /* DXPromptView.swift */,
@@ -205,6 +208,14 @@
 				956595BF1BCD4DCD00A74B30 /* DXPhotoPicker.strings */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		95D9571A1BD752F70012BD36 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				95D9571B1BD758420012BD36 /* DXAlbum.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,6 +357,7 @@
 				9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */,
 				9593F8EC1BD4CD7F009FFE7E /* DXPickerManager.swift in Sources */,
 				95146FF51BD0F49600C8C45C /* DXBadgeLabel.swift in Sources */,
+				95D9571C1BD758420012BD36 /* DXAlbum.swift in Sources */,
 				95A3F1951BCD459500A43CE1 /* DXPhototPickerController.swift in Sources */,
 				95146FF31BD0E16300C8C45C /* DXUnAuthorizedTipsView.swift in Sources */,
 				9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */,
