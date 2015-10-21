@@ -19,7 +19,8 @@ class DXAlbumTableViewController: UITableViewController {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
         assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+        tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+        tableView.tableFooterView = UIView()
     }
 
     // MARK: - Table view data source
@@ -32,17 +33,21 @@ class DXAlbumTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath)
+        let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath) as! DXAlbumCell
         let album = self.assetsCollection![indexPath.row]
-        cell.textLabel?.text = album.name! + "(\(album.count))"
+        cell.titleLabel.text = album.name
+        cell.countLabel.text = "(\(album.count))"
+        DXPickerManager.fetchImageWithAsset(album.results!.firstObject as? PHAsset, targetSize: CGSizeMake(60, 60)) { (image) -> Void in
+            cell.posterImageView.image = image
+        }
         return cell
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64;
+        return 60;
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64
+        return 60
     }
 }

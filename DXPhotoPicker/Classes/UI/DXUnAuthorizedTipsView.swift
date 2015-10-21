@@ -44,6 +44,8 @@ class DXUnAuthorizedTipsView: UIView {
     private func setup() {
         addSubview(imageView)
         addSubview(label)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         let viewBindingsDict = [
             "label": label,
             "imageView": imageView

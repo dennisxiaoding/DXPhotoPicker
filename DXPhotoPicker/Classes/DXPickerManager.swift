@@ -45,7 +45,6 @@ class DXPickerManager {
                     subtype: PHAssetCollectionSubtype.AlbumRegular,
                     options: nil)
             )
-            
             albums.append(
                 PHAssetCollection.fetchAssetCollectionsWithType(
                     PHAssetCollectionType.Album,
@@ -55,7 +54,6 @@ class DXPickerManager {
             return albums
         }
 
-        
         let results = fetchAlbums()
         var list: [DXAlbum] = []
         guard results != nil else {
@@ -65,7 +63,6 @@ class DXPickerManager {
         options.predicate = NSPredicate(
             format: "mediaType = %d", self.fetchTypeViaMediaType(self.mediaType).rawValue
         )
-        
         for (_, result) in results!.enumerate() {
             result.enumerateObjectsUsingBlock({ (collection, index, isStop) -> Void in
                 let album = collection as! PHAssetCollection
@@ -73,7 +70,7 @@ class DXPickerManager {
                 var count = 0
                 switch album.assetCollectionType {
                 case .Album:
-                    count = album.estimatedAssetCount
+                    count = assetResults.count
                 case .SmartAlbum:
                     count = assetResults.count
                 case .Moment:
@@ -89,7 +86,6 @@ class DXPickerManager {
                 }
             })
         }
-        
         return list
     }
     
@@ -107,11 +103,7 @@ class DXPickerManager {
         return type
     }
     
-    func fetchImageWithAssetCollection(collection: PHAssetCollection, targetSize: CGSize, imageResultHandler: (image: UIImage?)->Void) {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let fetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: fetchOptions)
-        let asset = fetchResult.firstObject as? PHAsset
+    class func fetchImageWithAsset(asset: PHAsset?, targetSize: CGSize, imageResultHandler: (image: UIImage?)->Void) {
         guard asset != nil else {
             return
         }
@@ -119,10 +111,13 @@ class DXPickerManager {
         options.resizeMode = PHImageRequestOptionsResizeMode.Exact
         let scale = UIScreen.mainScreen().scale
         let size = CGSizeMake(targetSize.width*scale, targetSize.height*scale);
-        PHImageManager.defaultManager().requestImageForAsset(asset!, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: options) { (result, info) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                 imageResultHandler(image: result)
-            })
+        PHCachingImageManager.defaultManager()
+        PHImageManager.defaultManager().requestImageForAsset(asset!,
+            targetSize: size,
+            contentMode: PHImageContentMode.AspectFill,
+            options: options) {
+                (result, info) -> Void in
+                imageResultHandler(image: result)
         }
     }
     
