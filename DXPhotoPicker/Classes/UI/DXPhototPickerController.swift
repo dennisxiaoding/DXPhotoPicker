@@ -17,14 +17,15 @@ public enum DXPhototPickerMediaType: Int {
 }
 
 @available(iOS 8.0, *)
-@objc protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
+@objc public protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
     optional func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [AnyObject]?, isFullImage: Bool)
+    optional func photoPickerDidCancel(photoPicker: DXPhototPickerController)
 }
 
 @available(iOS 8.0, *)
 public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
-    var isDuringPushAnimating = false
+    public weak var photoPickerDelegate: DXPhototPickerControllerDelegate?
 
     override public func viewDidLoad() {
         super.viewDidLoad()

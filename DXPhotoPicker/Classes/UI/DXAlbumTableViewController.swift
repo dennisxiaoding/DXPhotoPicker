@@ -18,10 +18,23 @@ class DXAlbumTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = DXlocalizedString("albumTitle", comment: "photos")
+        self.createBarButtonItemAtPosition(.Right,
+            text: DXlocalizedString("cancel", comment: "取消"),
+            action: Selector("cancelAction")
+        )
         self.clearsSelectionOnViewWillAppear = false
         assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
         tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
         tableView.tableFooterView = UIView()
+    }
+    
+    // MARK: UIActions
+    
+    @objc private func cancelAction() {
+        let photoPicker = navigationController as! DXPhototPickerController
+        if (photoPicker.photoPickerDelegate != nil && photoPicker.photoPickerDelegate!.respondsToSelector(Selector("photoPickerDidCancel:"))) {
+            photoPicker.photoPickerDelegate!.photoPickerDidCancel!(photoPicker)
+        }
     }
 
     // MARK: - Table view data source
