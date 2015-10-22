@@ -17,6 +17,7 @@ class DXAlbumTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = DXlocalizedString("albumTitle", comment: "photos")
         self.clearsSelectionOnViewWillAppear = false
         assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
         tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
