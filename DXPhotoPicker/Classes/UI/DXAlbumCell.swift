@@ -46,6 +46,9 @@ class DXAlbumCell: UITableViewCell {
     }
     
     private func setup() {
+        
+        self.separatorInset = UIEdgeInsetsMake(0,60,0,0)
+        
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(countLabel)

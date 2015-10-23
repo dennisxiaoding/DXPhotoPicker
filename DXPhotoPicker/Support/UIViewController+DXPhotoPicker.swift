@@ -70,7 +70,9 @@ public extension UIViewController {
             case .Left:
                 self.navigationItem.leftBarButtonItem = barButtonItem
             case .Right:
-                self.navigationItem.rightBarButtonItem = barButtonItem
+                let item = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+                item.width = -10
+                self.navigationItem.rightBarButtonItems = [item ,barButtonItem]
             }
     }
 

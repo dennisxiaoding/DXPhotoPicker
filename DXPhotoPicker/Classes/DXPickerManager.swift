@@ -37,7 +37,7 @@ class DXPickerManager {
         func fetchAlbums() -> [PHFetchResult]? {
             let userAlbumsOptions = PHFetchOptions()
             userAlbumsOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
-            userAlbumsOptions.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+            userAlbumsOptions.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
             var albums: [PHFetchResult] = []
             albums.append(
                 PHAssetCollection.fetchAssetCollectionsWithType(
@@ -63,6 +63,7 @@ class DXPickerManager {
         options.predicate = NSPredicate(
             format: "mediaType = %d", self.fetchTypeViaMediaType(self.mediaType).rawValue
         )
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         for (_, result) in results!.enumerate() {
             result.enumerateObjectsUsingBlock({ (collection, index, isStop) -> Void in
                 let album = collection as! PHAssetCollection
