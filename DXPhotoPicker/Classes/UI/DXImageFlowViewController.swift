@@ -9,7 +9,9 @@
 import UIKit
 import Photos
 
-class DXImageFlowViewController: UIViewController {
+class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
     
     private var currentAlbum: DXAlbum
     private var assetsArray: [PHAsset]
@@ -66,7 +68,7 @@ class DXImageFlowViewController: UIViewController {
         }
         
         func setUpData() {
-            assetsArray = DXPickerManaher.sharedManager
+            assetsArray = DXPickerManager.sharedManager.fetchImageAssetsViaCollectionResults(currentAlbum.results)
         }
     }
 
@@ -79,6 +81,14 @@ class DXImageFlowViewController: UIViewController {
         let navController = navigationController as? DXPhototPickerController
         if (navController != nil && navController!.photoPickerDelegate!.respondsToSelector("photoPickerDidCancel:")) {
             navController!.photoPickerDelegate!.photoPickerDidCancel!(navController!)
+        }
+    }
+    
+// MARK: UICollectionViewDataSource
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(dxAssetCellReuseIdentifier, forIndexPath: indexPath) as! DXAssetCell
+        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: true) { (isSelected, asset) -> Void in
+            <#code#>
         }
     }
 }

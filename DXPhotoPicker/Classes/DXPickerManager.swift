@@ -77,12 +77,14 @@ class DXPickerManager {
                     count = 0
                 }
                 if count > 0 {
-                    let ab = DXAlbum()
-                    ab.count = count
-                    ab.results = assetResults
-                    ab.name = album.localizedTitle
-                    ab.startDate = album.startDate
-                    list.append(ab)
+                    autoreleasepool {
+                        let ab = DXAlbum()
+                        ab.count = count
+                        ab.results = assetResults
+                        ab.name = album.localizedTitle
+                        ab.startDate = album.startDate
+                        list.append(ab)
+                    }
                 }
             })
         }
@@ -121,7 +123,7 @@ class DXPickerManager {
         }
     }
     
-    func fetchImaheAssetsViaCollectionResults(results: PHFetchResult?) -> [PHAsset]{
+    func fetchImageAssetsViaCollectionResults(results: PHFetchResult?) -> [PHAsset]{
         var resutsArray : Array<PHAsset> = []
         guard results != nil else {
             return resutsArray

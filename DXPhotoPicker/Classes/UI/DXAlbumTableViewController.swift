@@ -23,9 +23,9 @@ class DXAlbumTableViewController: UITableViewController {
             action: Selector("cancelAction")
         )
         self.clearsSelectionOnViewWillAppear = false
-        assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
-        tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
-        tableView.tableFooterView = UIView()
+        self.assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
+        self.tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+        self.tableView.tableFooterView = UIView()
     }
     
     // MARK: UIActions
@@ -40,15 +40,15 @@ class DXAlbumTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard self.assetsCollection != nil else {
+        guard assetsCollection != nil else {
             return 0
         }
-        return self.assetsCollection!.count
+        return assetsCollection!.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath) as! DXAlbumCell
-        let album = self.assetsCollection![indexPath.row]
+        let album = assetsCollection![indexPath.row]
         cell.titleLabel.text = album.name
         cell.countLabel.text = "(\(album.count))"
         DXPickerManager.fetchImageWithAsset(album.results!.firstObject as? PHAsset, targetSize: CGSizeMake(60, 60)) { (image) -> Void in
@@ -63,5 +63,13 @@ class DXAlbumTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 60
+    }
+    
+    // MARK: - Table view data delegate
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let album = assetsCollection![indexPath.row]
+        let photosListViewController = DXImageFlowViewController(album: album)
+        navigationController?.pushViewController(photosListViewController, animated: true)
     }
 }
