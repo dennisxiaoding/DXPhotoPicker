@@ -17,8 +17,8 @@ public extension UIViewController {
     
     public func createBarButtonItemAtPosition(
         position: DXPhotoPickerNavigationBarPosition,
-        normalImage: UIImage,
-        highlightImage: UIImage,
+        normalImage: UIImage?,
+        highlightImage: UIImage?,
         action: Selector
         ) {
             let button = UIButton(type: .Custom)

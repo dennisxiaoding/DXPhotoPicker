@@ -14,8 +14,7 @@ let kDXPickerManagerDefaultAlbumName = "com.dennis.kDXPhotoPickerStoredGroup"
 class DXPickerManager {
     
     private static let sharedInstance = DXPickerManager()
-    
-    var photoLibrary: PHPhotoLibrary 
+    private var photoLibrary: PHPhotoLibrary
     
     class var sharedManager: DXPickerManager {
         return sharedInstance
@@ -122,4 +121,14 @@ class DXPickerManager {
         }
     }
     
+    func fetchImaheAssetsViaCollectionResults(results: PHFetchResult?) -> [PHAsset]{
+        var resutsArray : Array<PHAsset> = []
+        guard results != nil else {
+            return resutsArray
+        }
+        results?.enumerateObjectsUsingBlock({ (asset, index, isStop) -> Void in
+            resutsArray.append(asset as! PHAsset)
+        })
+        return resutsArray
+    }
 }
