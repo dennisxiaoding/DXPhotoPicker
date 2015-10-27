@@ -22,7 +22,7 @@ class DXAlbumTableViewController: UITableViewController {
             text: DXlocalizedString("cancel", comment: "取消"),
             action: Selector("cancelAction")
         )
-        self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = true
         self.assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
         self.tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
         self.tableView.tableFooterView = UIView()
