@@ -7,8 +7,19 @@
 //
 
 import UIKit
+import Photos
 
 let kDXBrowserCellReuseIdntifier = "DXBrowserCell"
+
+@objc protocol DXPhotoBroswerDelegate: NSObjectProtocol {
+    
+    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBroswer, currentAsset: PHAsset)
+    func seletedPhotosNumberInPhotoBrowser(photoBrowser: DXPhotoBroswer) -> Int
+    func photoBrowser(photoBrowser: DXPhotoBroswer, currentPhotoAssetIsSeleted asset: PHAsset) -> Bool
+    func photoBrowser(photoBrowser: DXPhotoBroswer, seletedAsset asset: PHAsset) -> Bool
+    func photoBrowser(photoBrowser: DXPhotoBroswer, deseletedAsset asset: PHAsset)
+    func photoBrowser(photoBrowser: DXPhotoBroswer, seleteFullImage fullImage: Bool)
+}
 
 class DXPhotoBroswer: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 

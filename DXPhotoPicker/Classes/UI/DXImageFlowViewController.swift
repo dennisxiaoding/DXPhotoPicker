@@ -105,8 +105,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
                     self.imageFlowCollectionView.reloadData()
-                    let indexPath = NSIndexPath(forItem: self.assetsArray.count-1, inSection: 0)
-                    self.imageFlowCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+                    let indexPath = NSIndexPath(forRow: self.assetsArray.count-1, inSection: 0);
+                    self.imageFlowCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: false);
                 }
             }
         }
@@ -150,6 +150,20 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXImageFlowConfig.dxAssetCellReuseIdentifier, forIndexPath: indexPath) as! DXAssetCell
         cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: false)
+        cell.selectItemBlock {[unowned self] (selected, asset) -> Void in
+            if selected == true {
+                if self.selectedAssetsArray.contains(asset) == false {
+                    self.selectedAssetsArray.append(asset);
+                    self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
+                }
+            } else {
+                if self.selectedAssetsArray.contains(asset) == true {
+                    let index = self.selectedAssetsArray.indexOf(asset)
+                    self.selectedAssetsArray.removeAtIndex(index!)
+                     self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
+                }
+            }
+        }
        return cell
     }
     
