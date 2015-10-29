@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, DXPhotoBroswerDelegate {
     
     struct DXImageFlowConfig {
         static let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
@@ -117,6 +117,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.toolbarHidden = false
+        imageFlowCollectionView.reloadData()
+        sendButton.badgeValue = "\(selectedAssetsArray.count)"
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -139,7 +141,41 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     @objc private func previewAction() {
         DXLog(previewAction)
     }
+// MARK: DXPhotoBroswerDelegate
     
+    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
+    // TODO:  seleted images action
+    }
+    
+    func seletedPhotosNumberInPhotoBrowser(photoBrowser: DXPhotoBrowser) -> Int {
+        return self.selectedAssetsArray.count
+    }
+    
+    func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset) -> Bool {
+        return selectedAssetsArray.contains(asset)
+    }
+    
+    func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool {
+        if self.selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
+            // TODO: show tips
+            return false
+        }
+        selectedAssetsArray.append(asset)
+        return true
+    }
+    
+    func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset) {
+        let index = selectedAssetsArray.indexOf(asset)
+        guard index != nil else {
+            return;
+        }
+        selectedAssetsArray.removeAtIndex(index!)
+    }
+    
+    func photoBrowser(photoBrowser: DXPhotoBrowser, seleteFullImage fullImage: Bool) {
+        isFullImage = fullImage
+    }
+
     
 // MARK: UICollectionViewDataSource
     
