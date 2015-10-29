@@ -43,6 +43,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }()
     
 // MARK: Initializers
+    
     init(album: DXAlbum) {
         currentAlbum = album
         assetsArray = []
@@ -63,7 +64,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         
         func setupView() {
             view.backgroundColor = UIColor.whiteColor()
-            self.title = self.currentAlbum.name
+            title = self.currentAlbum.name
             createBarButtonItemAtPosition(
                 .Left,
                 normalImage: UIImage(named: "back_normal"),
@@ -95,7 +96,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
             let contraintsV = NSLayoutConstraint.constraintsWithVisualFormat(vflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindDic)
             self.view.addConstraints(contraintsH)
             self.view.addConstraints(contraintsV)
-            
         }
         
         func setUpData() {
@@ -105,14 +105,25 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
                     self.imageFlowCollectionView.reloadData()
+                    let indexPath = NSIndexPath(forItem: self.assetsArray.count-1, inSection: 0)
+                    self.imageFlowCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
                 }
             }
-            
         }
         setupView()
         setUpData()
     }
-
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.toolbarHidden = false
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.toolbarHidden = true
+    }
+    
 // MARK: button actons
     @objc private func backButtonAction() {
         navigationController?.popViewControllerAnimated(true)
@@ -124,6 +135,11 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
             navController!.photoPickerDelegate!.photoPickerDidCancel!(navController!)
         }
     }
+    
+    @objc private func previewAction() {
+        DXLog(previewAction)
+    }
+    
     
 // MARK: UICollectionViewDataSource
     

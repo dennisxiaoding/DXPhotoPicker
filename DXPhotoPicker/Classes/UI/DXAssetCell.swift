@@ -37,10 +37,9 @@ class DXAssetCell: UICollectionViewCell {
         return imv
     }()
     
-    override var selected: Bool {
-        set {
-            super.selected = newValue
-            if newValue == true {
+    private var assetSeleted: Bool = false {
+        didSet{
+            if assetSeleted == true {
                 self.checkImageView.image = UIImage(named: "photo_check_selected")
                 UIView.animateWithDuration(0.2,
                     animations: {
@@ -50,14 +49,12 @@ class DXAssetCell: UICollectionViewCell {
                         [unowned self](stop) -> Void in
                         UIView.animateWithDuration(0.2, animations: { [unowned self]() -> Void in
                             self.checkImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                        })
-                })
+                            })
+                    })
             } else {
                 self.checkImageView.image = UIImage(named: "photo_check_default")
             }
-        }
-        get {
-            return super.selected
+
         }
     }
     
@@ -74,6 +71,14 @@ class DXAssetCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        self.assetSeleted = false
+        if (self.imageView.image != nil) {
+            self.imageView.image = nil
+        }
+        if self.asset != nil {
+            self.asset = nil
+        }
+
     }
 
 // MARK: public methods
@@ -84,7 +89,7 @@ class DXAssetCell: UICollectionViewCell {
             [weak self](image) -> Void in
             self!.imageView.image = image
         }
-        self.selected = isAssetSelected
+        self.assetSeleted = isAssetSelected
     }
     
     func selectItemBlock(block: (selectItem: Bool, asset: PHAsset) -> Void) {
@@ -179,10 +184,10 @@ class DXAssetCell: UICollectionViewCell {
     
 // MARK:UI actions
     @objc private func checkButtonAction() {
-        self.selected = !self.selected
+        self.assetSeleted = !self.assetSeleted
         guard self.selectItemBlock != nil else {
             return
         }
-        self.selectItemBlock!(selectItem: self.selected, asset: self.asset!)
+        self.selectItemBlock!(selectItem: self.assetSeleted, asset: self.asset!)
     }
 }

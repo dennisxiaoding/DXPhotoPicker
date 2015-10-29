@@ -51,7 +51,7 @@ class DXAlbumTableViewController: UITableViewController {
         let album = assetsCollection![indexPath.row]
         cell.titleLabel.text = album.name
         cell.countLabel.text = "(\(album.count))"
-        DXPickerManager.fetchImageWithAsset(album.results!.firstObject as? PHAsset, targetSize: CGSizeMake(60, 60)) { (image) -> Void in
+        DXPickerManager.fetchImageWithAsset(album.results!.lastObject as? PHAsset, targetSize: CGSizeMake(60, 60)) { (image) -> Void in
             cell.posterImageView.image = image
         }
         return cell

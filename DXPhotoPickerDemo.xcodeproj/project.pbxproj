@@ -306,7 +306,7 @@
 				TargetAttributes = {
 					9541C6A71BCD080D003102FC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 738UU3Y57V;
+						DevelopmentTeam = 7RQERF84NY;
 					};
 					9541C6BB1BCD080D003102FC = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -546,7 +546,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/DXPhotoPickerDemo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDeN;
 				PRODUCT_NAME = DXPhotoPickerDemo;
 				PROVISIONING_PROFILE = "";
 			};
@@ -560,7 +560,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "$(SRCROOT)/DXPhotoPickerDemo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDeN;
 				PRODUCT_NAME = DXPhotoPickerDemo;
 				PROVISIONING_PROFILE = "";
 			};

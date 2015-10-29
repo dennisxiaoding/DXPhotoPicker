@@ -62,7 +62,7 @@ class DXPickerManager {
         options.predicate = NSPredicate(
             format: "mediaType = %d", self.fetchTypeViaMediaType(self.mediaType).rawValue
         )
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         for (_, result) in results!.enumerate() {
             result.enumerateObjectsUsingBlock({ (collection, index, isStop) -> Void in
                 let album = collection as! PHAssetCollection
