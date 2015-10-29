@@ -87,7 +87,7 @@ class DXAssetCell: UICollectionViewCell {
         self.selected = isAssetSelected
     }
     
-    func selectItemBlock(block: (selectItem: Bool, asset: PHAsset) -> Void) {
+    func selectItemBlock(block: (selected: Bool, asset: PHAsset) -> Void) {
         self.selectItemBlock = block
     }
 
