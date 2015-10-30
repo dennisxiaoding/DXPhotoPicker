@@ -17,3 +17,10 @@ public func DXLog<T>(message: T, file: String = __FILE__, method: String = __FUN
 public func DXlocalizedString(key: String, comment: String) -> String {
     return NSLocalizedString(key, tableName: "DXPhotoPicker", bundle: NSBundle.mainBundle(), value: "", comment: comment)
 }
+
+
+extension Float {
+    func format(f: String) -> String {
+        return NSString(format: "%\(f)f", self) as String
+    }
+}

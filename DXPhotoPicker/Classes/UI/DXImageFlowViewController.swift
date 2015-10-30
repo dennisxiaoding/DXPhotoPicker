@@ -127,6 +127,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
 // MARK: button actons
+    
     @objc private func backButtonAction() {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -139,8 +140,18 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     @objc private func previewAction() {
-        DXLog(previewAction)
+        browserPhotoAsstes(selectedAssetsArray, pageIndex: 0)
     }
+    
+// MARK: priviate 
+    
+    private func browserPhotoAsstes(assets: [PHAsset], pageIndex: Int) {
+        let browser = DXPhotoBrowser(photosArray: assets, currentIndex: pageIndex, isFullImage: isFullImage)
+        browser.delegate = self
+        browser.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(browser, animated: true)
+    }
+    
 // MARK: DXPhotoBroswerDelegate
     
     func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
@@ -216,6 +227,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
 // MARK: UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        DXLog("\(indexPath)")
+        browserPhotoAsstes(assetsArray, pageIndex: indexPath.row)
     }
 }

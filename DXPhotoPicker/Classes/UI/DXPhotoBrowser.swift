@@ -26,31 +26,80 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         static let browserCellReuseIdntifier = "DXBrowserCell"
     }
     
-    var statusBarShouldBeHidden = false
-    var didSavePreviousStateOfNavBar = false
-    var viewIsActive = false
-    var viewHasAppearedInitially = false
-    // Appearance
-    var previousNavBarHidden = false
-    var previousNavBarTranslucent = false
-    var previousNavBarStyle: UIBarStyle = .Default
-    var previousStatusBarStyle: UIStatusBarStyle = .Default
-    var previousNavBarTintColor: UIColor?
-    var previousNavBarBarTintColor: UIColor?
-    var previousViewControllerBackButton: UIBarButtonItem?
-    var previousNavigationBarBackgroundImageDefault: UIImage?
-    var previousNavigationBarBackgroundImageLandscapePhone: UIImage?
+    // MARK: peoperties
+    private var statusBarShouldBeHidden = false
+    private var didSavePreviousStateOfNavBar = false
+    private var viewIsActive = false
+    private var viewHasAppearedInitially = false
+    private var previousNavBarHidden = false
+    private var previousNavBarTranslucent = false
+    private var previousNavBarStyle: UIBarStyle = .Default
+    private var previousStatusBarStyle: UIStatusBarStyle = .Default
+    private var previousNavBarTintColor: UIColor?
+    private var previousNavBarBarTintColor: UIColor?
+    private var previousViewControllerBackButton: UIBarButtonItem?
+    private var previousNavigationBarBackgroundImageDefault: UIImage?
+    private var previousNavigationBarBackgroundImageLandscapePhone: UIImage?
     
-    var photosDataSource: Array<AnyObject>?
-    
+    private var photosDataSource: Array<PHAsset>?
     private var currentIndex = 0
     private var fullImage = false
+    private var requestID: PHImageRequestID?
+    
+    lazy var fullImageButton: DXFullImageButton = {
+        let button = DXFullImageButton(frame: CGRectZero)
+        button .addTarget(self, action: Selector("fullImageButtonAction"))
+        button.selected = self.fullImage
+        return button
+    }()
+    
+    lazy var browserCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .Horizontal
+        var collectionView = UICollectionView(frame: CGRectMake(-10, 0, self.view.dx_width+20, self.view.dx_height))
+        collectionView.backgroundColor = UIColor.blackColor()
+        collectionView .registerClass(DXBrowserCell.self, forCellWithReuseIdentifier: DXPhotoBrowserConfig.browserCellReuseIdntifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.pagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        return collectionView
+    }()
+    
+    lazy var toolBar: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRectMake(0, self.view.dx_height - 44, self.view.dx_width, 44))
+        toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .Default)
+        toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .DefaultPrompt)
+        toolbar.barStyle = .Black
+        toolbar.translucent = true
+        return toolbar
+    }()
+    
+    lazy var checkButton: UIButton = {
+        let button = UIButton(type: .Custom)
+        button.frame = CGRectMake(0, 0, 25, 25)
+        button.setBackgroundImage(UIImage(named: "photo_check_selected"), forState: .Selected)
+        button.setBackgroundImage(UIImage(named: "photo_check_default"), forState: .Normal)
+        button.addTarget(self, action: Selector("checkButtonAction"), forControlEvents: .TouchUpInside)
+        return button
+    }()
+    
+    lazy var sendButton: DXSendButton = {
+        let button = DXSendButton(frame: CGRectZero)
+        button.addTarget(self, action: Selector("sendButtonAction"))
+        return button
+    }()
+    
+    weak var delegate: DXPhotoBroswerDelegate?
     
     // MARK: life time
     required init(photosArray: Array<AnyObject>?, currentIndex: Int, isFullImage: Bool) {
         self.currentIndex = currentIndex
         fullImage = isFullImage
-        photosDataSource = photosArray
+        photosDataSource = photosArray as? Array<PHAsset>
         self.init()
     }
     
@@ -81,7 +130,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         if viewHasAppearedInitially == false {
             viewHasAppearedInitially = true
         }
-        
         browserCollectionView.contentOffset = CGPointMake(browserCollectionView.dx_width * CGFloat(currentIndex), 0)
     }
     
@@ -152,19 +200,112 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         previousNavigationBarBackgroundImageLandscapePhone = navigationController!.navigationBar.backgroundImageForBarMetrics(.Compact)
     }
     
-    // MARK: convenience
-    
     private func setupViews() {
+        
+        func setupBarButtonItems() {
+            let item1 = UIBarButtonItem(customView: fullImageButton)
+            let item2 = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+            let item3 = UIBarButtonItem(customView: sendButton)
+            let item4 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+            item4.width = -10
+            toolBar.items = [item1,item2,item3,item4]
+        }
+        
         automaticallyAdjustsScrollViewInsets = false
         view.clipsToBounds = true
         view.addSubview(browserCollectionView)
         view.addSubview(toolBar)
+        setupBarButtonItems()
+        let rigthBarItem = UIBarButtonItem(customView: checkButton)
+        navigationItem.rightBarButtonItem = rigthBarItem
+    }
+    
+    private func updateNavigationBarAndToolBar() {
+        title = "\(currentIndex + 1)"+"\\" + "\(photosDataSource!.count)"
+        var selectTag = false
+        if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:currentPhotoAssetIsSeleted:"))) {
+            selectTag = self.delegate!.photoBrowser(self, currentPhotoAssetIsSeleted: photosDataSource![currentIndex])
+        }
+        checkButton.selected = selectTag
+        fullImageButton.selected = fullImage
+        if fullImage {
+            let asset = photosDataSource![currentIndex]
+            if requestID != nil {
+                PHImageManager.defaultManager().cancelImageRequest(requestID!)
+            }
+            PHImageManager.defaultManager().requestImageDataForAsset(asset, options: nil, resultHandler: { [unowned self] (data, string, orientation, obj) -> Void in
+                self.requestID = nil
+                guard data != nil else {
+                    self.fullImageButton.text = "0MB"
+                    return
+                }
+                let imageSize = Float(data!.length)
+                if imageSize > 1024 {
+                    let size: Float = imageSize/1024
+                    self.fullImageButton.text = "\(size.format("0.1"))" + "M"
+                } else {
+                    self.fullImageButton.text = "\(imageSize)" + "k"
+                }
+            })
+            
+        }
+    }
+    
+    private func updateSelestedNumber() {
+        if (self.delegate != nil && self.delegate!.respondsToSelector("seletedPhotosNumberInPhotoBrowser:")) {
+            let number = self.delegate!.seletedPhotosNumberInPhotoBrowser(self)
+            self.sendButton.badgeValue = "\(number)"
+        }
+    }
+    
+    private func didScrollToPage(page: Int) {
+        currentIndex = page
+        updateNavigationBarAndToolBar()
     }
     
     // MARK: ui actions
     
-    func checkButtonAction() {
-        
+    @objc private func sendButtonAction() {
+        if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("sendImagesFromPhotoBrowser:currentAsset:"))) {
+            self.delegate!.sendImagesFromPhotoBrowser(self, currentAsset: photosDataSource![currentIndex])
+        }
+    }
+    
+    @objc private func fullImageButtonAction() {
+        fullImageButton.selected = !fullImageButton.selected
+        fullImage = fullImageButton.selected
+        if self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:seleteFullImage:")) {
+            self.delegate!.photoBrowser(self, seleteFullImage: fullImage)
+        }
+    }
+    
+    @objc private func checkButtonAction() {
+        if checkButton.selected {
+            if (self.delegate != nil && self.delegate!.respondsToSelector(Selector(""))) {
+                self.delegate!.photoBrowser(self, deseletedAsset: photosDataSource![currentIndex])
+                checkButton.selected = false
+            } else {
+                checkButton.selected = self.delegate!.photoBrowser(self, seletedAsset: photosDataSource![currentIndex])
+            }
+        }
+    }
+    
+    // MARK: ScrollerViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let deltaOffset = scrollView.contentOffset.x - browserCollectionView.dx_width * CGFloat(currentIndex)
+        if (fabs(deltaOffset) >= browserCollectionView.dx_width/2 ) {
+            fullImageButton.shouldAnimating(true)
+        } else {
+            fullImageButton.shouldAnimating(false)
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.contentOffset.x >= 0 {
+            let page = scrollView.contentOffset.x / browserCollectionView.dx_width
+            didScrollToPage(Int(page))
+        }
     }
     
     // MARK: UICollectionViewDataSource
@@ -179,7 +320,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cell
     }
 
-    
     // MARK: control hide 
 
     private func setControlsHidden(var hidden: Bool, animated: Bool) {
@@ -226,41 +366,4 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private func toggleControls() {
         setControlsHidden(!areControlsHidden(), animated: true)
     }
-    
-    // MARK: lazyload
-    
-
-    lazy var browserCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .Horizontal
-        var collectionView = UICollectionView(frame: CGRectMake(-10, 0, self.view.dx_width+20, self.view.dx_height))
-        collectionView.backgroundColor = UIColor.blackColor()
-        collectionView .registerClass(DXBrowserCell.self, forCellWithReuseIdentifier: DXPhotoBrowserConfig.browserCellReuseIdntifier)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.pagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.showsVerticalScrollIndicator = false
-        return collectionView
-    }()
-    
-    lazy var toolBar: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRectMake(0, self.view.dx_height - 44, self.view.dx_width, 44))
-        toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .Default)
-        toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .DefaultPrompt)
-        toolbar.barStyle = .Black
-        toolbar.translucent = true
-        return toolbar
-        }()
-    
-    lazy var checkButton: UIButton = {
-        let button = UIButton(type: .Custom)
-        button.frame = CGRectMake(0, 0, 25, 25)
-        button.setBackgroundImage(UIImage(named: "photo_check_selected"), forState: .Selected)
-        button.setBackgroundImage(UIImage(named: "photo_check_default"), forState: .Normal)
-        button.addTarget(self, action: Selector("checkButtonAction"), forControlEvents: .TouchUpInside)
-        return button
-        }()
 }
