@@ -48,7 +48,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     lazy var fullImageButton: DXFullImageButton = {
         let button = DXFullImageButton(frame: CGRectZero)
-        button .addTarget(self, action: Selector("fullImageButtonAction"))
+        button.addTarget(self, action: Selector("fullImageButtonAction"))
         button.selected = self.fullImage
         return button
     }()
@@ -58,7 +58,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .Horizontal
-        var collectionView = UICollectionView(frame: CGRectMake(-10, 0, self.view.dx_width+20, self.view.dx_height))
+        let collectionView = UICollectionView(frame: CGRectMake(-10, 0, self.view.dx_width+20, self.view.dx_height), collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.blackColor()
         collectionView .registerClass(DXBrowserCell.self, forCellWithReuseIdentifier: DXPhotoBrowserConfig.browserCellReuseIdntifier)
         collectionView.delegate = self
@@ -97,10 +97,10 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: life time
     required init(photosArray: Array<AnyObject>?, currentIndex: Int, isFullImage: Bool) {
+        self.init()
         self.currentIndex = currentIndex
         fullImage = isFullImage
         photosDataSource = photosArray as? Array<PHAsset>
-        self.init()
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -116,6 +116,8 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        updateNavigationBarAndToolBar()
+        updateSelestedNumber()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -220,7 +222,11 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationItem.rightBarButtonItem = rigthBarItem
     }
     
+    
     private func updateNavigationBarAndToolBar() {
+        guard photosDataSource != nil else {
+            return
+        }
         title = "\(currentIndex + 1)"+"\\" + "\(photosDataSource!.count)"
         var selectTag = false
         if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:currentPhotoAssetIsSeleted:"))) {
@@ -308,6 +314,11 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    // MARK: UICollectionViewDelegateFlowLayout
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSizeMake(self.view.bounds.size.width+20, self.view.bounds.size.height);
+    }
+    
     // MARK: UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -316,7 +327,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXPhotoBrowserConfig.browserCellReuseIdntifier, forIndexPath: indexPath) as! DXBrowserCell
-        // TODO: setup cell
+        cell.asset = photosDataSource![indexPath.row]
         return cell
     }
 

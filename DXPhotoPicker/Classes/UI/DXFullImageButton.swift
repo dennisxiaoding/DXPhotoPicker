@@ -112,6 +112,7 @@ class DXFullImageButton: UIView {
         selected = false
         text = ""
         super.init(frame: frame)
+        setupView()
     }
 
     required init?(coder aDecoder: NSCoder) {

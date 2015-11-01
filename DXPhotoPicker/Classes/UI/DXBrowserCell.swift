@@ -24,7 +24,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     private var requestID: PHImageRequestID?
     
     private lazy var zoomingScrollView: UIScrollView = {
-        let scroll = UIScrollView(frame: CGRectMake(10, 0, self.contentView.dx_width - 20, self.contentView.dx_height))
+        let scroll = UIScrollView(frame: CGRectMake(10, 0, self.dx_width - 20, self.dx_height))
         scroll.delegate = self
         scroll.showsHorizontalScrollIndicator = false
         scroll.showsVerticalScrollIndicator = false
@@ -35,7 +35,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     private lazy var photoImageView: DXTapDetectingImageView = {
         let imageView = DXTapDetectingImageView(frame: CGRectZero)
         imageView.tapDelegate = self
-        imageView.contentMode = .Center
+        imageView.contentMode = UIViewContentMode.ScaleAspectFit
         imageView.backgroundColor = UIColor.blackColor()
         return imageView
     }()
@@ -64,26 +64,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     override func layoutSubviews() {
         super.layoutSubviews()
         // Center the image as it becomes smaller than the size of the screen
-        let boundsSize = zoomingScrollView.bounds.size
-        var frameToCenter = photoImageView.frame
-        // Horizontally
-        if (frameToCenter.size.width < boundsSize.width) {
-            let temp = (boundsSize.width - frameToCenter.size.width) / 2.0
-            frameToCenter.origin.x = floorf(<#T##Float#>)();
-        } else {
-            frameToCenter.origin.x = 0;
-        }
-        
-        // Vertically
-        if (frameToCenter.size.height < boundsSize.height) {
-            frameToCenter.origin.y = floorf((boundsSize.height - frameToCenter.size.height) / 2.0);
-        } else {
-            frameToCenter.origin.y = 0;
-        }
-        
-        // Center
-        if (!CGRectEqualToRect(_photoImageView.frame, frameToCenter))
-        _photoImageView.frame = frameToCenter;
+        photoImageView.center = CGPointMake(photoImageView.dx_width/2, photoImageView.dx_height/2)
     }
     
     // MARK: priviate
@@ -97,12 +78,10 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.maximumZoomScale = 1
         zoomingScrollView.minimumZoomScale = 1;
         zoomingScrollView.zoomScale = 1
-        self.zoomingScrollView.contentSize = CGSizeMake(0, 0);
-        
+        zoomingScrollView.contentSize = CGSizeMake(0, 0);
         requestID = DXPickerManager.fetchImageWithAsset(
             asset,
-            targetSize:
-            zoomingScrollView.dx_size,
+            targetSize: zoomingScrollView.dx_size,
             contentMode: .AspectFit,
             imageResultHandler: { [unowned self](image) -> Void in
                 self.requestID = nil
@@ -110,6 +89,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
                     return
                 }
                 self.photoImageView.image = image
+                self.photoImageView.contentMode = .ScaleAspectFit
                 self.photoImageView.hidden = false
                 var photoImageViewFrame = CGRectZero
                 photoImageViewFrame.origin = CGPointZero;
