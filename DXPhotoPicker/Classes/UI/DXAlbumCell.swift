@@ -14,7 +14,7 @@ class DXAlbumCell: UITableViewCell {
         let imageView = UIImageView(
             image: UIImage(named: "assets_placeholder_picture")
         )
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
         return imageView
     }()
     lazy var titleLabel: UILabel = {

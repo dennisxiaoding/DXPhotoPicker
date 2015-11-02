@@ -227,7 +227,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         guard photosDataSource != nil else {
             return
         }
-        title = "\(currentIndex + 1)"+"\\" + "\(photosDataSource!.count)"
+        title = "\(currentIndex + 1)"+"/" + "\(photosDataSource!.count)"
         var selectTag = false
         if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:currentPhotoAssetIsSeleted:"))) {
             selectTag = self.delegate!.photoBrowser(self, currentPhotoAssetIsSeleted: photosDataSource![currentIndex])
@@ -328,6 +328,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXPhotoBrowserConfig.browserCellReuseIdntifier, forIndexPath: indexPath) as! DXBrowserCell
         cell.asset = photosDataSource![indexPath.row]
+        cell.photoBrowser = self
         return cell
     }
 
@@ -374,7 +375,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         setControlsHidden(true, animated: true)
     }
     
-    private func toggleControls() {
+    @objc func toggleControls() {
         setControlsHidden(!areControlsHidden(), animated: true)
     }
 }

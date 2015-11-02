@@ -35,7 +35,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     private lazy var photoImageView: DXTapDetectingImageView = {
         let imageView = DXTapDetectingImageView(frame: CGRectZero)
         imageView.tapDelegate = self
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = .ScaleAspectFit
         imageView.backgroundColor = UIColor.blackColor()
         return imageView
     }()
@@ -79,6 +79,8 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.minimumZoomScale = 1;
         zoomingScrollView.zoomScale = 1
         zoomingScrollView.contentSize = CGSizeMake(0, 0);
+        photoImageView.frame = zoomingScrollView.bounds
+        DXLog("zonnming = \(zoomingScrollView.dx_size)")
         requestID = DXPickerManager.fetchImageWithAsset(
             asset,
             targetSize: zoomingScrollView.dx_size,
@@ -88,14 +90,10 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
                 guard image != nil else {
                     return
                 }
+                
+                DXLog(image?.size)
                 self.photoImageView.image = image
-                self.photoImageView.contentMode = .ScaleAspectFit
                 self.photoImageView.hidden = false
-                var photoImageViewFrame = CGRectZero
-                photoImageViewFrame.origin = CGPointZero;
-                photoImageViewFrame.size = image!.size;
-                self.photoImageView.frame = photoImageViewFrame;
-                self.zoomingScrollView.contentSize = photoImageViewFrame.size;
                 // Set zoom to minimum zoom
                 self.setMaxMinZoomScalesForCurrentBounds()
                 self.setNeedsLayout()
@@ -161,18 +159,58 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         return zoomScale
     }
     
+    // MARK: UIScrollViewDelegate
+    
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return photoImageView
+    }
+    
+    func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
+        zoomingScrollView.scrollEnabled = true
+    }
+    
+    func scrollViewDidZoom(scrollView: UIScrollView) {
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+    
     // MARK: DXTapDetectingImageView
     
     func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?) {
+        func handleSingleTap(touchPoint: CGPoint) {
+            guard photoBrowser != nil else {
+                return
+            }
+            photoBrowser?.performSelector(Selector("toggleControls"), withObject: nil, afterDelay: 0.2)
+        }
         
+        guard touch != nil else {
+            DXLog("touch error")
+            return
+        }
+        handleSingleTap(touch!.locationInView(imageView))
     }
     
-    func imageView(imageview: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?) {
-        
-    }
-    
-    func imageView(imageView: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?) {
-        
+    func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?) {
+        func handleDoubleTap(touchPoint: CGPoint) {
+            guard photoBrowser != nil else {
+                return
+            }
+            NSObject.cancelPreviousPerformRequestsWithTarget(photoBrowser!)
+            if (zoomingScrollView.zoomScale != zoomingScrollView.minimumZoomScale && zoomingScrollView.zoomScale != initialZoomScaleWithMinScale()) {
+                zoomingScrollView.setZoomScale(zoomingScrollView.minimumZoomScale, animated: true)
+            } else {
+                let newZoomScale = (zoomingScrollView.maximumZoomScale + zoomingScrollView.minimumZoomScale) / 2
+                let xsize = zoomingScrollView.dx_width / newZoomScale
+                let ysize = zoomingScrollView.dx_height / newZoomScale
+                zoomingScrollView.zoomToRect(CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize), animated: true)
+            }
+        }
+        guard touch != nil else {
+            DXLog("touch error")
+            return
+        }
+        handleDoubleTap(touch!.locationInView(imageView))
     }
     
 }
