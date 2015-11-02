@@ -46,9 +46,8 @@ class DXAlbumCell: UITableViewCell {
     }
     
     private func setup() {
-        
+    
         self.separatorInset = UIEdgeInsetsMake(0,60,0,0)
-        
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(countLabel)
@@ -100,7 +99,6 @@ class DXAlbumCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        DXLog("text")
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

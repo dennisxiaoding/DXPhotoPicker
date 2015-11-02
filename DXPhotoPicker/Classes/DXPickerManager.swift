@@ -118,21 +118,6 @@ class DXPickerManager {
      - returns: PHImageRequestID  so that you can cancel the request if needed
      */
     class func fetchImageWithAsset(asset: PHAsset?, targetSize: CGSize, imageResultHandler: (image: UIImage?)->Void) -> PHImageRequestID? {
-        return fetchImageWithAsset(asset, targetSize: targetSize, contentMode: .AspectFill, imageResultHandler: imageResultHandler)
-    }
-    
-    /**
-     Fetch the image
-     
-     - parameter asset:              the asset you want to be requested
-     - parameter targetSize:         the size customed
-     - parameter contentMode:        mode
-     - parameter imageResultHandler: image result
-     @image the parameter image in block is the requested image
-     
-     - returns: PHImageRequestID  so that you can cancel the request if needed
-     */
-    class func fetchImageWithAsset(asset: PHAsset?, targetSize: CGSize, contentMode: PHImageContentMode, imageResultHandler: (image: UIImage?)->Void) -> PHImageRequestID? {
         guard asset != nil else {
             return nil
         }
@@ -142,7 +127,29 @@ class DXPickerManager {
         let size = CGSizeMake(targetSize.width*scale, targetSize.height*scale);
         return PHImageManager.defaultManager().requestImageForAsset(asset!,
             targetSize: size,
-            contentMode: contentMode,
+            contentMode: .AspectFill,
+            options: options) {
+                (result, info) -> Void in
+                imageResultHandler(image: result)
+        }
+    }
+    
+    class func fetchImageWithAsset(asset: PHAsset?, targetSize: CGSize, needHighQuality: Bool,imageResultHandler: (image: UIImage?)->Void) -> PHImageRequestID? {
+        guard asset != nil else {
+            return nil
+        }
+        let options = PHImageRequestOptions()
+        if needHighQuality {
+            options.deliveryMode = .HighQualityFormat
+        } else {
+            options.resizeMode = .Exact
+        }
+        
+        let scale = UIScreen.mainScreen().scale
+        let size = CGSizeMake(targetSize.width*scale, targetSize.height*scale);
+        return PHImageManager.defaultManager().requestImageForAsset(asset!,
+            targetSize: size,
+            contentMode: .AspectFit,
             options: options) {
                 (result, info) -> Void in
                 imageResultHandler(image: result)

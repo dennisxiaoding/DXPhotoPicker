@@ -16,7 +16,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         static let kThumbSizeLength = (UIScreen.mainScreen().bounds.size.width-10)/4
     }
     
-    
     private var currentAlbum: DXAlbum
     private var assetsArray: [PHAsset]
     private var selectedAssetsArray: [PHAsset]
@@ -159,7 +158,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func seletedPhotosNumberInPhotoBrowser(photoBrowser: DXPhotoBrowser) -> Int {
-        return self.selectedAssetsArray.count
+        return selectedAssetsArray.count
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset) -> Bool {
@@ -167,7 +166,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool {
-        if self.selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
+        if selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
             // TODO: show tips
             return false
         }
@@ -196,19 +195,25 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXImageFlowConfig.dxAssetCellReuseIdentifier, forIndexPath: indexPath) as! DXAssetCell
-        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: false)
-        cell.selectItemBlock {[unowned self] (selected, asset) -> Void in
+        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
+        cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
             if selected == true {
+                guard self.selectedAssetsArray.count < DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber else {
+                    return false
+                }
                 if self.selectedAssetsArray.contains(asset) == false {
                     self.selectedAssetsArray.append(asset);
                     self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
+                    return true
                 }
+                return false
             } else {
                 if self.selectedAssetsArray.contains(asset) == true {
                     let index = self.selectedAssetsArray.indexOf(asset)
                     self.selectedAssetsArray.removeAtIndex(index!)
                      self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
                 }
+                return false
             }
         }
        return cell

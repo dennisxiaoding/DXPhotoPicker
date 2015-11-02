@@ -287,11 +287,21 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @objc private func checkButtonAction() {
         if checkButton.selected {
-            if (self.delegate != nil && self.delegate!.respondsToSelector(Selector(""))) {
+            guard self.delegate != nil else {
+                DXLog("do not set the browser's delegate")
+                return
+            }
+            if (self.delegate!.respondsToSelector(Selector("photoBrowser:deseletedAsset:"))) {
                 self.delegate!.photoBrowser(self, deseletedAsset: photosDataSource![currentIndex])
                 checkButton.selected = false
-            } else {
+                updateSelestedNumber()
+            }
+        } else {
+            if self.delegate!.respondsToSelector(Selector("photoBrowser:seletedAsset:")) {
                 checkButton.selected = self.delegate!.photoBrowser(self, seletedAsset: photosDataSource![currentIndex])
+                if checkButton.selected {
+                    updateSelestedNumber()
+                }
             }
         }
     }

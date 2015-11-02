@@ -65,6 +65,31 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         super.layoutSubviews()
         // Center the image as it becomes smaller than the size of the screen
         photoImageView.center = CGPointMake(photoImageView.dx_width/2, photoImageView.dx_height/2)
+        
+        // Center the image as it becomes smaller than the size of the screen
+        let boundsSize = zoomingScrollView.dx_size
+        var frameToCenter = photoImageView.frame
+        
+        // Horizontally
+        if (frameToCenter.size.width < boundsSize.width) {
+            frameToCenter.origin.x = floor((boundsSize.width - frameToCenter.size.width) / 2.0);
+        } else {
+            frameToCenter.origin.x = 0;
+        }
+        
+        // Vertically
+        if (frameToCenter.size.height < boundsSize.height) {
+            frameToCenter.origin.y = floor((boundsSize.height - frameToCenter.size.height) / 2.0);
+        } else {
+            frameToCenter.origin.y = 0;
+        }
+        
+        // Center
+        if (!CGRectEqualToRect(photoImageView.frame, frameToCenter)) {
+            photoImageView.frame = frameToCenter;
+        }
+
+        
     }
     
     // MARK: priviate
@@ -75,30 +100,30 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     }
     
     private func displayImage() {
+        
         zoomingScrollView.maximumZoomScale = 1
         zoomingScrollView.minimumZoomScale = 1;
         zoomingScrollView.zoomScale = 1
         zoomingScrollView.contentSize = CGSizeMake(0, 0);
         photoImageView.frame = zoomingScrollView.bounds
-        DXLog("zonnming = \(zoomingScrollView.dx_size)")
-        requestID = DXPickerManager.fetchImageWithAsset(
-            asset,
-            targetSize: zoomingScrollView.dx_size,
-            contentMode: .AspectFit,
-            imageResultHandler: { [unowned self](image) -> Void in
-                self.requestID = nil
-                guard image != nil else {
-                    return
-                }
-                
-                DXLog(image?.size)
-                self.photoImageView.image = image
-                self.photoImageView.hidden = false
-                // Set zoom to minimum zoom
-                self.setMaxMinZoomScalesForCurrentBounds()
-                self.setNeedsLayout()
+        requestID = DXPickerManager.fetchImageWithAsset(asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
+            self.requestID = nil
+            guard image != nil else {
+                return
             }
-        )
+            self.photoImageView.image = image
+            self.photoImageView.hidden = false
+            DXLog(image?.size)
+            var photoImageViewFrame = CGRectZero
+            photoImageViewFrame.origin = CGPointZero
+            photoImageViewFrame.size = image!.size;
+            self.photoImageView.frame = photoImageViewFrame;
+            self.zoomingScrollView.contentSize = photoImageViewFrame.size;
+            // Set zoom to minimum zoom
+            self.setMaxMinZoomScalesForCurrentBounds()
+            self.setNeedsLayout()
+
+        })
     }
     
     private func setMaxMinZoomScalesForCurrentBounds() {

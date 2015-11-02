@@ -15,7 +15,7 @@ class DXAssetCell: UICollectionViewCell {
 // MARK: properties
     private var asset: PHAsset?
     
-    private var selectItemBlock: ((selectItem: Bool, asset: PHAsset) -> Void)?
+    private var selectItemBlock: ((selectItem: Bool, asset: PHAsset) -> Bool)?
     
     private lazy var imageView: UIImageView = {
         let imv = UIImageView(image: UIImage(named: "assets_placeholder_picture"))
@@ -37,26 +37,7 @@ class DXAssetCell: UICollectionViewCell {
         return imv
     }()
     
-    private var assetSeleted: Bool = false {
-        didSet{
-            if assetSeleted == true {
-                self.checkImageView.image = UIImage(named: "photo_check_selected")
-                UIView.animateWithDuration(0.2,
-                    animations: {
-                        [unowned self] () -> Void in
-                        self.checkImageView.transform = CGAffineTransformMakeScale(1.2, 1.2);},
-                    completion: {
-                        [unowned self](stop) -> Void in
-                        UIView.animateWithDuration(0.2, animations: { [unowned self]() -> Void in
-                            self.checkImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                            })
-                    })
-            } else {
-                self.checkImageView.image = UIImage(named: "photo_check_default")
-            }
-
-        }
-    }
+    private var assetSeleted: Bool = false
     
 // MARK: life time
     
@@ -89,15 +70,37 @@ class DXAssetCell: UICollectionViewCell {
             [weak self](image) -> Void in
             self!.imageView.image = image
         }
-        self.assetSeleted = isAssetSelected
+        assetSeleted = isAssetSelected
+        checkButton(assetSeleted, animated: false)
     }
     
-    func selectItemBlock(block: (selected: Bool, asset: PHAsset) -> Void) {
+    func selectItemBlock(block: (selected: Bool, asset: PHAsset) -> Bool) {
         self.selectItemBlock = block
     }
 
     
 // MARK: convenience
+    
+    func checkButton(selected: Bool, animated: Bool) {
+        if selected {
+            self.checkImageView.image = UIImage(named: "photo_check_selected")
+            if animated == false {
+                return
+            }
+            UIView.animateWithDuration(0.2,
+                animations: {
+                    [unowned self] () -> Void in
+                    self.checkImageView.transform = CGAffineTransformMakeScale(1.2, 1.2);},
+                completion: {
+                    [unowned self](stop) -> Void in
+                    UIView.animateWithDuration(0.2, animations: { [unowned self]() -> Void in
+                        self.checkImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                        })
+                })
+        } else {
+            self.checkImageView.image = UIImage(named: "photo_check_default")
+        }
+    }
     
     private func setupView() {
         contentView.addSubview(imageView)
@@ -180,14 +183,13 @@ class DXAssetCell: UICollectionViewCell {
         addConstraints([checkConstraitRight,checkConstraitTop,checkContraitWidth,checkConsraintHeight])
     }
     
-
-    
 // MARK:UI actions
     @objc private func checkButtonAction() {
-        self.assetSeleted = !self.assetSeleted
-        guard self.selectItemBlock != nil else {
+        assetSeleted = !assetSeleted
+        guard selectItemBlock != nil else {
             return
         }
-        self.selectItemBlock!(selectItem: self.assetSeleted, asset: self.asset!)
+        assetSeleted = selectItemBlock!(selectItem: assetSeleted, asset: asset!)
+        checkButton(assetSeleted, animated: true)
     }
 }
