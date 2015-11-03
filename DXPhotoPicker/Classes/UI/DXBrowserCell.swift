@@ -100,7 +100,6 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     }
     
     private func displayImage() {
-        
         zoomingScrollView.maximumZoomScale = 1
         zoomingScrollView.minimumZoomScale = 1;
         zoomingScrollView.zoomScale = 1
@@ -113,7 +112,6 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             }
             self.photoImageView.image = image
             self.photoImageView.hidden = false
-            DXLog(image?.size)
             var photoImageViewFrame = CGRectZero
             photoImageViewFrame.origin = CGPointZero
             photoImageViewFrame.size = image!.size;

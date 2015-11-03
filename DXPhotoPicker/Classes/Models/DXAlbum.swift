@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class DXAlbum {
+class DXAlbum: NSObject {
     var results: PHFetchResult?
     var count = 0
     var name: String?

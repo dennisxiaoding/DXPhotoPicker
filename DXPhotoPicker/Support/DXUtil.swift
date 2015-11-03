@@ -21,6 +21,6 @@ public func DXlocalizedString(key: String, comment: String) -> String {
 
 extension Float {
     func format(f: String) -> String {
-        return NSString(format: "%\(f)f", self) as String
+        return NSString(format: "%0.1f", self) as String
     }
 }

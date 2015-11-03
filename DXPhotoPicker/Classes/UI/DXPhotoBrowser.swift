@@ -136,7 +136,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewWillDisappear(animated: Bool) {
-        DXLog("viewWillDisappear")
         if (navigationController?.viewControllers.first != self && navigationController?.viewControllers.contains(self) == false) {
             viewIsActive = false
             restorePreviousNavBarAppearance(animated)
@@ -233,25 +232,9 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         fullImageButton.selected = fullImage
         if fullImage {
             let asset = photosDataSource![currentIndex]
-            if requestID != nil {
-                PHImageManager.defaultManager().cancelImageRequest(requestID!)
-            }
-            PHImageManager.defaultManager().requestImageDataForAsset(asset, options: nil, resultHandler: { [unowned self] (data, string, orientation, obj) -> Void in
-                self.requestID = nil
-                guard data != nil else {
-                    self.fullImageButton.text = "0MB"
-                    return
-                }
-                let imageSize = Float(data!.length)
-                if imageSize > 1024*1024 {
-                    let size: Float = imageSize/(1024*1024)
-                    self.fullImageButton.text = "\(size.format("0.1"))" + "M"
-                } else {
-                    let size: Float = imageSize/1024
-                    self.fullImageButton.text = "\(size)" + "k"
-                }
+            DXPickerManager.fetchImageSize(asset, imageSizeResultHandler: {[unowned self] (imageSize, sizeString) -> Void in
+                self.fullImageButton.text = "(\(sizeString))"
             })
-            
         }
     }
     

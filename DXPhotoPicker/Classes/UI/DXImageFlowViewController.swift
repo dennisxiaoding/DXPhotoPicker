@@ -15,7 +15,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         static let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
         static let kThumbSizeLength = (UIScreen.mainScreen().bounds.size.width-10)/4
     }
-    
+
     private var currentAlbum: DXAlbum
     private var assetsArray: [PHAsset]
     private var selectedAssetsArray: [PHAsset]
@@ -40,8 +40,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         let button = DXSendButton(frame: CGRectZero)
         return button
     }()
-    
-// MARK: Initializers
+  
+    // MARK: Initializers
     
     init(album: DXAlbum) {
         currentAlbum = album
@@ -57,7 +57,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         super.init(coder: aDecoder)
     }
 
-// MARK: Life Cycle
+    // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,6 +82,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 target: self,
                 action: Selector("previewAction")
             )
+            item1.tintColor = UIColor.blackColor()
+            item1.enabled = false
             let item2 = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
             let item3 = UIBarButtonItem(customView: self.sendButton)
             let item4 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
@@ -141,7 +143,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     @objc private func previewAction() {
-        browserPhotoAsstes(assetsArray, pageIndex: 0)
+        browserPhotoAsstes(selectedAssetsArray, pageIndex: 0)
     }
     
 // MARK: priviate 
@@ -151,6 +153,37 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         browser.delegate = self
         browser.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(browser, animated: true)
+    }
+    
+    private func addAsset(asset: PHAsset) -> Bool {
+        if selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
+            return false
+        }
+        if selectedAssetsArray.contains(asset) {
+            return false;
+        }
+        selectedAssetsArray.append(asset)
+        sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
+        if selectedAssetsArray.count > 0 {
+            toolbarItems!.first!.enabled = true
+        }
+        return true
+    }
+    
+    private func deleteAsset(asset: PHAsset) -> Bool {
+        if selectedAssetsArray.contains(asset) {
+            let index = selectedAssetsArray.indexOf(asset)
+            guard index != nil else {
+                return false
+            }
+            selectedAssetsArray.removeAtIndex(index!)
+            sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
+            if selectedAssetsArray.count <= 0 {
+                toolbarItems!.first!.enabled = false
+            }
+            return true
+        }
+        return false
     }
     
 // MARK: DXPhotoBroswerDelegate
@@ -168,25 +201,11 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool {
-        if selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
-            // TODO: show tips
-            return false
-        }
-        
-        if selectedAssetsArray.contains(asset) {
-            return false
-        } else {
-            selectedAssetsArray.append(asset)
-            return true
-        }
+        return addAsset(asset)
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset) {
-        let index = selectedAssetsArray.indexOf(asset)
-        guard index != nil else {
-            return;
-        }
-        selectedAssetsArray.removeAtIndex(index!)
+        deleteAsset(asset)
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seleteFullImage fullImage: Bool) {
@@ -205,21 +224,9 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
         cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
             if selected == true {
-                guard self.selectedAssetsArray.count < DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber else {
-                    return false
-                }
-                if self.selectedAssetsArray.contains(asset) == false {
-                    self.selectedAssetsArray.append(asset);
-                    self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
-                    return true
-                }
-                return false
+                return self.addAsset(asset)
             } else {
-                if self.selectedAssetsArray.contains(asset) == true {
-                    let index = self.selectedAssetsArray.indexOf(asset)
-                    self.selectedAssetsArray.removeAtIndex(index!)
-                     self.sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
-                }
+                self.deleteAsset(asset)
                 return false
             }
         }

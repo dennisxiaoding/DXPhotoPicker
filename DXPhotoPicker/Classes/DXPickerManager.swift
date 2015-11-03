@@ -11,7 +11,7 @@ import Photos
 
 let kDXPickerManagerDefaultAlbumName = "com.dennis.kDXPhotoPickerStoredGroup"
 
-class DXPickerManager {
+class DXPickerManager: NSObject {
     
     private static let sharedInstance = DXPickerManager()
     private var photoLibrary: PHPhotoLibrary
@@ -20,8 +20,9 @@ class DXPickerManager {
         return sharedInstance
     }
     
-    init() {
+    override init() {
         photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
+        super.init()
     }
     
     var mediaType: DXPhototPickerMediaType = DXPhototPickerMediaType.Image
@@ -154,6 +155,34 @@ class DXPickerManager {
                 (result, info) -> Void in
                 imageResultHandler(image: result)
         }
+    }
+    
+    class func fetchImageSize(
+        asset: PHAsset?,
+        imageSizeResultHandler: ((imageSize: Float, sizeString: String) -> Void)) {
+        guard asset != nil else {
+            return
+        }
+        PHImageManager.defaultManager().requestImageDataForAsset(asset!,
+            options: nil,
+            resultHandler: {(data, string, orientation, obj) -> Void in
+            var string = "0M"
+            var imageSize: Float = 0.0
+            guard data != nil else {
+                imageSizeResultHandler(imageSize: imageSize, sizeString: string)
+                return
+            }
+            imageSize = Float(data!.length)
+            if imageSize > 1024*1024 {
+                let size: Float = imageSize/(1024*1024)
+                string = "\(size.format("0.1"))" + "M"
+                imageSizeResultHandler(imageSize: imageSize, sizeString: string)
+            } else {
+                let size: Float = imageSize/1024
+                string = "\(size.format("0.1"))" + "K"
+                imageSizeResultHandler(imageSize: imageSize, sizeString: string)
+            }
+        })
     }
     
     func fetchImageAssetsViaCollectionResults(results: PHFetchResult?) -> [PHAsset]{

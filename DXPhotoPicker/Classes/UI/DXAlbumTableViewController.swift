@@ -22,7 +22,6 @@ class DXAlbumTableViewController: UITableViewController {
             text: DXlocalizedString("cancel", comment: "取消"),
             action: Selector("cancelAction")
         )
-        self.clearsSelectionOnViewWillAppear = true
         self.assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
         self.tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
         self.tableView.tableFooterView = UIView()
@@ -71,5 +70,6 @@ class DXAlbumTableViewController: UITableViewController {
         let album = assetsCollection![indexPath.row]
         let photosListViewController = DXImageFlowViewController(album: album)
         navigationController?.pushViewController(photosListViewController, animated: true)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }

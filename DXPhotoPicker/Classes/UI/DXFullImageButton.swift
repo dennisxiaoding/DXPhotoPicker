@@ -72,6 +72,11 @@ class DXFullImageButton: UIView {
     var selected: Bool {
         didSet {
             imageSizeLabel.hidden = !selected
+            if selected {
+                imageView.image = UIImage(named: "photo_full_image_selected")
+            } else {
+                imageView.image = UIImage(named: "photo_full_image_unselected")
+            }
         }
     }
     
@@ -110,7 +115,7 @@ class DXFullImageButton: UIView {
         
         let btVflH = "H:|-0-[fullImageButton]-0-|"
         let btVflV = "V:|-0-[fullImageButton]-0-|"
-        let vflH = "H:|-0-[imageView(20)]-5-[nameLabel(>=2)]-5-[imageSizeLabel(40)]-0-[indicatorView(26)]"
+        let vflH = "H:|-0-[imageView(20)]-5-[nameLabel(>=2)]-5-[imageSizeLabel(80)]"
         let constraintsVflH = NSLayoutConstraint.constraintsWithVisualFormat(vflH, options: .AlignAllCenterY, metrics: nil, views: viewBindingsDict)
         let btContstraintsH = NSLayoutConstraint.constraintsWithVisualFormat(btVflH, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
         let btContstraintsV = NSLayoutConstraint.constraintsWithVisualFormat(btVflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
@@ -118,11 +123,16 @@ class DXFullImageButton: UIView {
         let imageViewHeight = NSLayoutConstraint(item: imageView, attribute: .Height, relatedBy: .Equal, toItem: imageView, attribute: .Width, multiplier: 1, constant: 0)
         let nameLabelHeight = NSLayoutConstraint(item: nameLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
         let imageSizeLabelHeight = NSLayoutConstraint(item: imageSizeLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
+        let indicatorViewWidth = NSLayoutConstraint(item: indicatorView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 26)
+        let indicatorViewLeading = NSLayoutConstraint(item: indicatorView, attribute: .Leading, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .Leading, multiplier: 1, constant: 0)
+        let indicatorViewCenterY = NSLayoutConstraint(item: indicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .CenterY, multiplier: 1, constant: 0)
         let indicatorViewHeight = NSLayoutConstraint(item: indicatorView, attribute: .Height, relatedBy: .Equal, toItem: indicatorView, attribute: .Width, multiplier: 1, constant: 0)
+
+        
         addConstraints(btContstraintsH)
         addConstraints(btContstraintsV)
         addConstraints(constraintsVflH)
-        addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewHeight])
+        addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewCenterY,indicatorViewLeading,indicatorViewWidth,indicatorViewHeight])
     }
     
 // MARK: init 
