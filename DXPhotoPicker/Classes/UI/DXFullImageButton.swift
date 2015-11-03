@@ -11,7 +11,7 @@ import UIKit
 class DXFullImageButton: UIView {
     
     struct DXFullImageButtonParam {
-        static let buttonPadding: CGFloat = 10
+        static let buttonPadding: CGFloat = 20
         static let buttonImageWidth: CGFloat = 16
         static let buttonFont = UIFont.systemFontOfSize(13)
     }
@@ -20,23 +20,23 @@ class DXFullImageButton: UIView {
     
     private lazy var fullImageButton: UIButton = {
         let button = UIButton(type: .Custom)
-        button.dx_width = self.fullImageButtonWidth()
-        button.dx_height = 28
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = self.backgroundColor
-        button.setTitle(DXlocalizedString("fullImage", comment: "原图"), forState: .Normal)
-        button.titleLabel?.font = DXFullImageButtonParam.buttonFont
-        button.setTitleColor(UIColor.whiteColor(), forState: .Selected)
-        button.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        button.setImage(UIImage(named: "photo_full_image_unselected"), forState: .Normal)
-        button.setImage(UIImage(named: "photo_full_image_selected"), forState: .Selected)
-        button.contentVerticalAlignment = .Bottom
-        button.titleEdgeInsets = UIEdgeInsetsMake(0 ,DXFullImageButtonParam.buttonPadding - DXFullImageButtonParam.buttonImageWidth, 6, 0)
-        button.imageEdgeInsets = UIEdgeInsetsMake(6, 0, 6, self.fullImageButtonWidth() - DXFullImageButtonParam.buttonImageWidth)
+        self.addSubview(button)
         return button
     }()
     
-    private lazy var imageSizeLabel: UILabel = {
-        let label = UILabel(frame: CGRectMake(100,4,self.dx_width-100,20))
+    private lazy var imageView: UIImageView = {
+        let imv = UIImageView(frame: CGRectZero)
+        imv.translatesAutoresizingMaskIntoConstraints = false
+        imv.backgroundColor = self.backgroundColor
+        return imv
+    }()
+    
+    private lazy var nameLabel: UILabel = {
+        let label = UILabel(frame: CGRectZero)
+        label.text = DXlocalizedString("fullImage", comment: "原图")
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = self.backgroundColor
         label.font = UIFont.systemFontOfSize(14)
         label.textAlignment = .Left
@@ -44,8 +44,19 @@ class DXFullImageButton: UIView {
         return label
     }()
     
+    private lazy var imageSizeLabel: UILabel = {
+        let label = UILabel(frame: CGRectZero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = self.backgroundColor
+        label.font = UIFont.systemFontOfSize(13)
+        label.textAlignment = .Left
+        label.textColor = UIColor.whiteColor()
+        return label
+    }()
+    
     private lazy var indicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(frame: CGRectMake(self.fullImageButton.dx_width,2,26,26))
+        let view = UIActivityIndicatorView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.hidesWhenStopped = true
         view.stopAnimating()
         return view
@@ -60,12 +71,6 @@ class DXFullImageButton: UIView {
     
     var selected: Bool {
         didSet {
-            fullImageButton.selected = selected
-            fullImageButton.dx_width = fullImageButtonWidth()
-            fullImageButton.titleEdgeInsets = UIEdgeInsetsMake(0, DXFullImageButtonParam.buttonPadding - DXFullImageButtonParam.buttonImageWidth, 6, 0)
-            fullImageButton.imageEdgeInsets = UIEdgeInsetsMake(6, 0, 6, fullImageButton.dx_width - DXFullImageButtonParam.buttonImageWidth)
-            imageSizeLabel.dx_left = fullImageButton.dx_width
-            imageSizeLabel.dx_width = self.dx_width - fullImageButton.dx_width
             imageSizeLabel.hidden = !selected
         }
     }
@@ -89,22 +94,35 @@ class DXFullImageButton: UIView {
     
     private func setupView() {
         backgroundColor = UIColor.clearColor()
-        self.dx_height = 28
-        self.dx_width = CGRectGetWidth(UIScreen.mainScreen().bounds)/2 - 20
         addSubview(fullImageButton)
+        addSubview(imageView)
+        addSubview(nameLabel)
         addSubview(imageSizeLabel)
         addSubview(indicatorView)
-    }
-    
-    private func fullImageButtonWidth() -> CGFloat {
-        let string = DXlocalizedString("fullImage", comment: "原图") as NSString
-        let rect = string.boundingRectWithSize(
-            CGSizeMake(200, 20),
-            options: .TruncatesLastVisibleLine,
-            attributes: [NSFontAttributeName: DXFullImageButtonParam.buttonFont],
-            context: nil
-        )
-        return CGRectGetWidth(rect)
+        imageView.image = UIImage(named: "photo_full_image_unselected")
+        let viewBindingsDict = [
+            "fullImageButton":fullImageButton,
+            "imageView": imageView,
+            "nameLabel": nameLabel,
+            "imageSizeLabel": imageSizeLabel,
+            "indicatorView": indicatorView
+        ]
+        
+        let btVflH = "H:|-0-[fullImageButton]-0-|"
+        let btVflV = "V:|-0-[fullImageButton]-0-|"
+        let vflH = "H:|-0-[imageView(20)]-5-[nameLabel(>=2)]-5-[imageSizeLabel(40)]-0-[indicatorView(26)]"
+        let constraintsVflH = NSLayoutConstraint.constraintsWithVisualFormat(vflH, options: .AlignAllCenterY, metrics: nil, views: viewBindingsDict)
+        let btContstraintsH = NSLayoutConstraint.constraintsWithVisualFormat(btVflH, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
+        let btContstraintsV = NSLayoutConstraint.constraintsWithVisualFormat(btVflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
+        let imageCenter = NSLayoutConstraint(item: imageView, attribute: .CenterY, relatedBy: .Equal, toItem: fullImageButton, attribute: .CenterY, multiplier: 1, constant: 0)
+        let imageViewHeight = NSLayoutConstraint(item: imageView, attribute: .Height, relatedBy: .Equal, toItem: imageView, attribute: .Width, multiplier: 1, constant: 0)
+        let nameLabelHeight = NSLayoutConstraint(item: nameLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
+        let imageSizeLabelHeight = NSLayoutConstraint(item: imageSizeLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
+        let indicatorViewHeight = NSLayoutConstraint(item: indicatorView, attribute: .Height, relatedBy: .Equal, toItem: indicatorView, attribute: .Width, multiplier: 1, constant: 0)
+        addConstraints(btContstraintsH)
+        addConstraints(btContstraintsV)
+        addConstraints(constraintsVflH)
+        addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewHeight])
     }
     
 // MARK: init 
@@ -118,6 +136,6 @@ class DXFullImageButton: UIView {
     required init?(coder aDecoder: NSCoder) {
         selected = false
         text = ""
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
 }

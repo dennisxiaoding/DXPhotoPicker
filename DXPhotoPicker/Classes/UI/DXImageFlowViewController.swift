@@ -114,6 +114,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     override func viewWillAppear(animated: Bool) {
+        DXLog("viewWillAppear")
         super.viewWillAppear(animated)
         navigationController?.toolbarHidden = false
         imageFlowCollectionView.reloadData()
@@ -121,8 +122,9 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
+        DXLog("viewWillDisappear")
         navigationController?.toolbarHidden = true
+        super.viewWillDisappear(animated)
     }
     
 // MARK: button actons
@@ -139,7 +141,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     @objc private func previewAction() {
-        browserPhotoAsstes(selectedAssetsArray, pageIndex: 0)
+        browserPhotoAsstes(assetsArray, pageIndex: 0)
     }
     
 // MARK: priviate 
@@ -170,8 +172,13 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
             // TODO: show tips
             return false
         }
-        selectedAssetsArray.append(asset)
-        return true
+        
+        if selectedAssetsArray.contains(asset) {
+            return false
+        } else {
+            selectedAssetsArray.append(asset)
+            return true
+        }
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset) {

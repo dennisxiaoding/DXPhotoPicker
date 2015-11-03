@@ -143,7 +143,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         // caculate Max
         var maxScale: CGFloat = 1.5
         if UI_USER_INTERFACE_IDIOM() == .Pad {
-            maxScale = 4
+            maxScale = 3
         }
         // Image is smaller than screen so no zooming!
         if (xScale >= 1 && yScale >= 1) {

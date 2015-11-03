@@ -47,7 +47,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private var requestID: PHImageRequestID?
     
     lazy var fullImageButton: DXFullImageButton = {
-        let button = DXFullImageButton(frame: CGRectZero)
+        let button = DXFullImageButton(frame: CGRectMake(0, 0, self.view.dx_width/2,28))
         button.addTarget(self, action: Selector("fullImageButtonAction"))
         button.selected = self.fullImage
         return button
@@ -72,7 +72,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     lazy var toolBar: UIToolbar = {
         let toolbar = UIToolbar(frame: CGRectMake(0, self.view.dx_height - 44, self.view.dx_width, 44))
         toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .Default)
-        toolbar.setBackgroundImage(nil, forToolbarPosition: .Any, barMetrics: .DefaultPrompt)
         toolbar.barStyle = .Black
         toolbar.translucent = true
         return toolbar
@@ -108,7 +107,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     // MARK: life cycle
@@ -121,6 +120,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewWillAppear(animated: Bool) {
+        DXLog("viewWillAppear")
         super.viewWillAppear(animated)
         previousStatusBarStyle = UIApplication.sharedApplication().statusBarStyle
         UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: animated)
@@ -136,6 +136,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewWillDisappear(animated: Bool) {
+        DXLog("viewWillDisappear")
         if (navigationController?.viewControllers.first != self && navigationController?.viewControllers.contains(self) == false) {
             viewIsActive = false
             restorePreviousNavBarAppearance(animated)
@@ -148,13 +149,9 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewDidAppear(animated: Bool) {
+        DXLog("viewDidAppear")
         super.viewDidAppear(animated)
         viewIsActive = true
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        viewIsActive = false
-        super.viewDidDisappear(animated)
     }
     
     // MARK: priviate
@@ -220,8 +217,8 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         setupBarButtonItems()
         let rigthBarItem = UIBarButtonItem(customView: checkButton)
         navigationItem.rightBarButtonItem = rigthBarItem
+        createBarButtonItemAtPosition(.Left, normalImage: UIImage(named: "back_normal"), highlightImage: UIImage(named: "back_highlight"), action: Selector("backButtonAction"))
     }
-    
     
     private func updateNavigationBarAndToolBar() {
         guard photosDataSource != nil else {
@@ -246,11 +243,12 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     return
                 }
                 let imageSize = Float(data!.length)
-                if imageSize > 1024 {
-                    let size: Float = imageSize/1024
+                if imageSize > 1024*1024 {
+                    let size: Float = imageSize/(1024*1024)
                     self.fullImageButton.text = "\(size.format("0.1"))" + "M"
                 } else {
-                    self.fullImageButton.text = "\(imageSize)" + "k"
+                    let size: Float = imageSize/1024
+                    self.fullImageButton.text = "\(size)" + "k"
                 }
             })
             
@@ -271,6 +269,10 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: ui actions
     
+    @objc private func backButtonAction() {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
     @objc private func sendButtonAction() {
         if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("sendImagesFromPhotoBrowser:currentAsset:"))) {
             self.delegate!.sendImagesFromPhotoBrowser(self, currentAsset: photosDataSource![currentIndex])
@@ -280,8 +282,18 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc private func fullImageButtonAction() {
         fullImageButton.selected = !fullImageButton.selected
         fullImage = fullImageButton.selected
-        if self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:seleteFullImage:")) {
+        guard delegate != nil else {
+            return
+        }
+        if self.delegate!.respondsToSelector(Selector("photoBrowser:seleteFullImage:")) {
             self.delegate!.photoBrowser(self, seleteFullImage: fullImage)
+        }
+        
+        if fullImageButton.selected {
+            if delegate!.photoBrowser(self, seletedAsset: photosDataSource![currentIndex]) {
+                updateSelestedNumber()
+            }
+            updateNavigationBarAndToolBar()
         }
     }
     
@@ -322,6 +334,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
             let page = scrollView.contentOffset.x / browserCollectionView.dx_width
             didScrollToPage(Int(page))
         }
+        fullImageButton.shouldAnimating(false)
     }
     
     // MARK: UICollectionViewDelegateFlowLayout

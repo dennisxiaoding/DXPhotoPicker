@@ -26,7 +26,7 @@ public enum DXPhototPickerMediaType: Int {
 public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     public weak var photoPickerDelegate: DXPhototPickerControllerDelegate?
-
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.interactivePopGestureRecognizer?.delegate = self
