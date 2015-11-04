@@ -30,6 +30,12 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
             self.viewControllers = [viewController]
         }
         
+        func showImageFlow() {
+            let rootVC = DXAlbumTableViewController()
+            let imageFlowVC = DXImageFlowViewController(identifier: DXPickerManager.sharedManager.defultAlbumIdentifier)
+            self.viewControllers = [rootVC,imageFlowVC]
+        }
+        
         func chargeAuthorizationStatus(status: PHAuthorizationStatus) {
             
             let viewController = viewControllers.first as? DXAlbumTableViewController
@@ -67,7 +73,7 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
                 showAlbumList()
                 chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
             } else {
-                
+                showImageFlow()
             }
         }
         

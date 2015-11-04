@@ -15,8 +15,9 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         static let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
         static let kThumbSizeLength = (UIScreen.mainScreen().bounds.size.width-10)/4
     }
-
+    
     private var currentAlbum: DXAlbum?
+    private var albumIdentifier: String?
     private var assetsArray: [PHAsset]
     private var selectedAssetsArray: [PHAsset]
     private var isFullImage = false
@@ -41,7 +42,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         button.addTarget(self, action: Selector("sendImage"))
         return button
     }()
-  
+    
     // MARK: Initializers
     
     init(album: DXAlbum?) {
@@ -51,26 +52,25 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         super.init(nibName: nil, bundle: nil)
     }
     
-    init(){
+    init(identifier: String?){
+        albumIdentifier = identifier
         assetsArray = []
         selectedAssetsArray = []
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         currentAlbum = DXAlbum()
         assetsArray = []
         selectedAssetsArray = []
         super.init(coder: aDecoder)
     }
-
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         func setupView() {
             view.backgroundColor = UIColor.whiteColor()
-            title = self.currentAlbum!.name
             createBarButtonItemAtPosition(
                 .Left,
                 normalImage: UIImage(named: "back_normal"),
@@ -107,6 +107,10 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         }
         
         func setUpData() {
+            if currentAlbum == nil && albumIdentifier != nil {
+                currentAlbum = DXPickerManager.sharedManager.fetchAlbum()
+            }
+            title = currentAlbum?.name
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 [unowned self] in
                 self.assetsArray = DXPickerManager.sharedManager.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
@@ -125,7 +129,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.toolbarHidden = false
-        imageFlowCollectionView.reloadData()
         sendButton.badgeValue = "\(selectedAssetsArray.count)"
     }
     
@@ -134,7 +137,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         super.viewWillDisappear(animated)
     }
     
-// MARK: button actons
+    // MARK: button actons
     
     @objc private func sendImage() {
         let photoPicker = navigationController as? DXPhototPickerController
@@ -162,7 +165,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         browserPhotoAsstes(selectedAssetsArray, pageIndex: 0)
     }
     
-// MARK: priviate 
+    // MARK: priviate
     
     private func browserPhotoAsstes(assets: [PHAsset], pageIndex: Int) {
         let browser = DXPhotoBrowser(photosArray: assets, currentIndex: pageIndex, isFullImage: isFullImage)
@@ -206,13 +209,13 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     private func showTips() {
         let alert = UIAlertController(title: DXlocalizedString("alertTitle", comment: ""), message: DXlocalizedString("alertContent", comment: ""), preferredStyle: .Alert)
         let action = UIAlertAction(title: DXlocalizedString("alertButton", comment: ""), style: .Cancel) { (action) -> Void in
-          alert.dismissViewControllerAnimated(true, completion: nil)
+            alert.dismissViewControllerAnimated(true, completion: nil)
         }
         alert.addAction(action)
         navigationController?.presentViewController(alert, animated: true, completion: nil)
     }
     
-// MARK: DXPhotoBroswerDelegate
+    // MARK: DXPhotoBroswerDelegate
     
     func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
         sendImage()
@@ -227,19 +230,30 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool {
-        return addAsset(asset)
+        let index = assetsArray.indexOf(asset)
+        guard index != nil else {
+            return false
+        }
+        let success = addAsset(asset)
+        imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
+        return success
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset) {
+        let index = assetsArray.indexOf(asset)
+        guard index != nil else {
+            return
+        }
         deleteAsset(asset)
+        imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seleteFullImage fullImage: Bool) {
         isFullImage = fullImage
     }
-
     
-// MARK: UICollectionViewDataSource
+    
+    // MARK: UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetsArray.count
@@ -256,10 +270,10 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 return false
             }
         }
-       return cell
+        return cell
     }
     
-// MARK: UICollectionViewDelegateFlowLayout
+    // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(DXImageFlowConfig.kThumbSizeLength, DXImageFlowConfig.kThumbSizeLength)
@@ -268,8 +282,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(2, 2, 2, 2)
     }
-
-// MARK: UICollectionViewDelegate
+    
+    // MARK: UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         browserPhotoAsstes(assetsArray, pageIndex: indexPath.row)

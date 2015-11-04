@@ -18,6 +18,7 @@ class DXSelectedImageViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController!.interactivePopGestureRecognizer?.enabled = true
         createBarButtonItemAtPosition(.Left, normalImage: UIImage(named: "back_normal"), highlightImage: UIImage(named: "back_highlight"), action: Selector("back"))
     }
     

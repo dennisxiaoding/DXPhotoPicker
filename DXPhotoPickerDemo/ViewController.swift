@@ -12,7 +12,6 @@ import Photos
 class ViewController: UIViewController, DXPhototPickerControllerDelegate {
 // MARK: ui actions
     @IBAction func addPhotos(sender: UIButton) {
-        DXLog(sender)
         let picker = DXPhototPickerController()
         picker.photoPickerDelegate = self
         self.presentViewController(picker, animated: true, completion: nil)

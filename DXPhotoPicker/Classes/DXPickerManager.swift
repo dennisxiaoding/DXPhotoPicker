@@ -49,7 +49,7 @@ class DXPickerManager: NSObject {
             format: "mediaType = %d", PHAssetMediaType.Image.rawValue
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let result = PHAssetCollection.fetchAssetCollectionsWithLocalIdentifiers([identifier!], options: options)
+        let result = PHAssetCollection.fetchAssetCollectionsWithLocalIdentifiers([identifier!], options: nil)
         if result.count <= 0 {
             return album
         }

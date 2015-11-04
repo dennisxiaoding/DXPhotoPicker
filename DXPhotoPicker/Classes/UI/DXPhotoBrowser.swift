@@ -120,7 +120,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewWillAppear(animated: Bool) {
-        DXLog("viewWillAppear")
         super.viewWillAppear(animated)
         previousStatusBarStyle = UIApplication.sharedApplication().statusBarStyle
         UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: animated)
@@ -148,7 +147,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     override func viewDidAppear(animated: Bool) {
-        DXLog("viewDidAppear")
         super.viewDidAppear(animated)
         viewIsActive = true
     }
@@ -283,7 +281,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc private func checkButtonAction() {
         if checkButton.selected {
             guard self.delegate != nil else {
-                DXLog("do not set the browser's delegate")
+                DXLog("have not set the browser's delegate")
                 return
             }
             if (self.delegate!.respondsToSelector(Selector("photoBrowser:deseletedAsset:"))) {

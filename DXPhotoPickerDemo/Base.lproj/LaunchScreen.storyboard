@@ -16,13 +16,41 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back" translatesAutoresizingMaskIntoConstraints="NO" id="Xyu-sH-TZs">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <animations/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default" translatesAutoresizingMaskIntoConstraints="NO" id="v7i-x6-JiQ">
+                                <rect key="frame" x="116" y="45.5" width="369" height="509"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="369" id="JDC-ut-hhJ"/>
+                                    <constraint firstAttribute="height" constant="509" id="vis-Xm-sdz"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Xyu-sH-TZs" secondAttribute="bottom" id="4gq-py-rXV"/>
+                            <constraint firstItem="Xyu-sH-TZs" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="CH7-gE-kMn"/>
+                            <constraint firstItem="Xyu-sH-TZs" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="LBp-qU-rt2"/>
+                            <constraint firstItem="v7i-x6-JiQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="W49-4k-uKt"/>
+                            <constraint firstItem="v7i-x6-JiQ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="hnr-pI-d6Z"/>
+                            <constraint firstAttribute="trailing" secondItem="Xyu-sH-TZs" secondAttribute="trailing" id="rBb-2g-nUI"/>
+                        </constraints>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="419" y="333"/>
+            <point key="canvasLocation" x="327" y="340"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="back" width="480" height="586"/>
+        <image name="default" width="480" height="586"/>
+    </resources>
 </document>
