@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		95146FF71BD0F62900C8C45C /* UIView+DXFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */; };
+		9518B3921BE9ED1C00B37E49 /* DXSelectedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9518B3911BE9ED1C00B37E49 /* DXSelectedImageViewController.swift */; };
+		9518B3941BE9ED3D00B37E49 /* DXSelectedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9518B3931BE9ED3D00B37E49 /* DXSelectedImageCell.swift */; };
 		9541C6AC1BCD080D003102FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6AB1BCD080D003102FC /* AppDelegate.swift */; };
 		9541C6AE1BCD080D003102FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6AD1BCD080D003102FC /* ViewController.swift */; };
 		9541C6B11BCD080D003102FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6AF1BCD080D003102FC /* Main.storyboard */; };
@@ -57,6 +59,8 @@
 
 /* Begin PBXFileReference section */
 		95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DXFrame.swift"; sourceTree = "<group>"; };
+		9518B3911BE9ED1C00B37E49 /* DXSelectedImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXSelectedImageViewController.swift; sourceTree = "<group>"; };
+		9518B3931BE9ED3D00B37E49 /* DXSelectedImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXSelectedImageCell.swift; sourceTree = "<group>"; };
 		9541C6A81BCD080D003102FC /* DXPhotoPickerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DXPhotoPickerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9541C6AB1BCD080D003102FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9541C6AD1BCD080D003102FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +151,8 @@
 			children = (
 				9541C6AB1BCD080D003102FC /* AppDelegate.swift */,
 				9541C6AD1BCD080D003102FC /* ViewController.swift */,
+				9518B3911BE9ED1C00B37E49 /* DXSelectedImageViewController.swift */,
+				9518B3931BE9ED3D00B37E49 /* DXSelectedImageCell.swift */,
 				9541C6AF1BCD080D003102FC /* Main.storyboard */,
 				9541C6B21BCD080D003102FC /* Assets.xcassets */,
 				9541C6B41BCD080D003102FC /* LaunchScreen.storyboard */,
@@ -392,7 +398,9 @@
 				95E8C64F1BD7CB5E00C73512 /* DXAlbumTableViewController.swift in Sources */,
 				95E8C6501BD7CB5E00C73512 /* DXBadgeLabel.swift in Sources */,
 				95E8C6591BD7CBB500C73512 /* DXAlbumCell.swift in Sources */,
+				9518B3941BE9ED3D00B37E49 /* DXSelectedImageCell.swift in Sources */,
 				9541C6AC1BCD080D003102FC /* AppDelegate.swift in Sources */,
+				9518B3921BE9ED1C00B37E49 /* DXSelectedImageViewController.swift in Sources */,
 				95E8C6511BD7CB5E00C73512 /* DXBrowserCell.swift in Sources */,
 				95D786A51BD931E900C7A5A8 /* UIViewController+DXPhotoPicker.swift in Sources */,
 				95E8C6561BD7CB5E00C73512 /* DXTapDetectingImageView.swift in Sources */,

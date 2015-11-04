@@ -11,7 +11,7 @@ import Photos
 
 @available(iOS 8.0, *)
 @objc public protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
-    optional func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [AnyObject]?, isFullImage: Bool)
+    optional func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
     optional func photoPickerDidCancel(photoPicker: DXPhototPickerController)
 }
 
@@ -58,7 +58,19 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
             }
 
         }
-        showAlbumList()
-        chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
+        
+        if DXPickerManager.sharedManager.defultAlbumIdentifier == nil {
+            showAlbumList()
+            chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
+        } else {
+            if DXPickerManager.sharedManager.defultAlbumIdentifier!.isEmpty {
+                showAlbumList()
+                chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
+            } else {
+                
+            }
+        }
+        
+        
     }
 }

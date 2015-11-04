@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class ViewController: UIViewController, DXPhototPickerControllerDelegate {
 // MARK: ui actions
@@ -26,8 +27,12 @@ class ViewController: UIViewController, DXPhototPickerControllerDelegate {
         photoPicker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [AnyObject]?, isFullImage: Bool) {
-        DXLog("\(__FUNCTION__)")
+    func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
+        photosPicker?.dismissViewControllerAnimated(true, completion: nil)
+        let vc = storyboard?.instantiateViewControllerWithIdentifier("DXSelectedImageViewController") as! DXSelectedImageViewController
+        vc.selectedImages = sendImages
+        vc.isFullImage = isFullImage
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

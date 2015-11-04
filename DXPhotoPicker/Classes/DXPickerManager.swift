@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-let kDXPickerManagerDefaultAlbumName = "com.dennis.kDXPhotoPickerStoredGroup"
+private let kDXPickerManagerDefaultAlbumIdentifier = "com.dennis.kDXPhotoPickerStoredGroup"
 
 class DXPickerManager: NSObject {
     
@@ -25,10 +25,43 @@ class DXPickerManager: NSObject {
         super.init()
     }
 
-    lazy var defultAlbum: String? = {
-        let string = NSUserDefaults.standardUserDefaults().objectForKey(kDXPickerManagerDefaultAlbumName) as? String
+    lazy var defultAlbumIdentifier: String? = {
+        let string = NSUserDefaults.standardUserDefaults().objectForKey(kDXPickerManagerDefaultAlbumIdentifier) as? String
         return string
     }()
+    
+    func saveIdentifier(identifier: String?) {
+        guard identifier != nil else {
+            return
+        }
+        NSUserDefaults.standardUserDefaults().setObject(identifier!, forKey: kDXPickerManagerDefaultAlbumIdentifier)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func fetchAlbum() -> DXAlbum {
+        let album = DXAlbum()
+        let identifier = self.defultAlbumIdentifier
+        guard identifier != nil else {
+            return album
+        }
+        let options = PHFetchOptions()
+        options.predicate = NSPredicate(
+            format: "mediaType = %d", PHAssetMediaType.Image.rawValue
+        )
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        let result = PHAssetCollection.fetchAssetCollectionsWithLocalIdentifiers([identifier!], options: options)
+        if result.count <= 0 {
+            return album
+        }
+        let collection = result.firstObject as? PHAssetCollection
+        let requestResult = PHAsset.fetchAssetsInAssetCollection(collection!, options: options)
+        album.name = collection?.localizedTitle
+        album.results = requestResult
+        album.count = requestResult.count
+        album.startDate = collection?.startDate
+        album.identifier = collection?.localIdentifier
+        return album
+    }
     
     func fetchAlbumList() -> [DXAlbum]? {
         
@@ -82,6 +115,7 @@ class DXPickerManager: NSObject {
                         ab.results = assetResults
                         ab.name = album.localizedTitle
                         ab.startDate = album.startDate
+                        ab.identifier = album.localIdentifier
                         list.append(ab)
                     }
                 }

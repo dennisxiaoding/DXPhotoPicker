@@ -16,7 +16,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         static let kThumbSizeLength = (UIScreen.mainScreen().bounds.size.width-10)/4
     }
 
-    private var currentAlbum: DXAlbum
+    private var currentAlbum: DXAlbum?
     private var assetsArray: [PHAsset]
     private var selectedAssetsArray: [PHAsset]
     private var isFullImage = false
@@ -38,13 +38,20 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }()
     private lazy var sendButton: DXSendButton = {
         let button = DXSendButton(frame: CGRectZero)
+        button.addTarget(self, action: Selector("sendImage"))
         return button
     }()
   
     // MARK: Initializers
     
-    init(album: DXAlbum) {
+    init(album: DXAlbum?) {
         currentAlbum = album
+        assetsArray = []
+        selectedAssetsArray = []
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(){
         assetsArray = []
         selectedAssetsArray = []
         super.init(nibName: nil, bundle: nil)
@@ -63,7 +70,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         
         func setupView() {
             view.backgroundColor = UIColor.whiteColor()
-            title = self.currentAlbum.name
+            title = self.currentAlbum!.name
             createBarButtonItemAtPosition(
                 .Left,
                 normalImage: UIImage(named: "back_normal"),
@@ -102,7 +109,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         func setUpData() {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 [unowned self] in
-                self.assetsArray = DXPickerManager.sharedManager.fetchImageAssetsViaCollectionResults(self.currentAlbum.results)
+                self.assetsArray = DXPickerManager.sharedManager.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
                     self.imageFlowCollectionView.reloadData()
@@ -128,6 +135,17 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
 // MARK: button actons
+    
+    @objc private func sendImage() {
+        let photoPicker = navigationController as? DXPhototPickerController
+        guard (photoPicker != nil && photoPicker!.photoPickerDelegate != nil) else {
+            return
+        }
+        if (photoPicker!.photoPickerDelegate!.respondsToSelector(Selector("photoPickerController:sendImages:isFullImage:"))) {
+            DXPickerManager.sharedManager.saveIdentifier(currentAlbum!.identifier)
+            photoPicker!.photoPickerDelegate!.photoPickerController!(photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
+        }
+    }
     
     @objc private func backButtonAction() {
         navigationController?.popViewControllerAnimated(true)
@@ -155,6 +173,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     
     private func addAsset(asset: PHAsset) -> Bool {
         if selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
+            showTips()
             return false
         }
         if selectedAssetsArray.contains(asset) {
@@ -184,10 +203,19 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         return false
     }
     
+    private func showTips() {
+        let alert = UIAlertController(title: DXlocalizedString("alertTitle", comment: ""), message: DXlocalizedString("alertContent", comment: ""), preferredStyle: .Alert)
+        let action = UIAlertAction(title: DXlocalizedString("alertButton", comment: ""), style: .Cancel) { (action) -> Void in
+          alert.dismissViewControllerAnimated(true, completion: nil)
+        }
+        alert.addAction(action)
+        navigationController?.presentViewController(alert, animated: true, completion: nil)
+    }
+    
 // MARK: DXPhotoBroswerDelegate
     
     func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
-    // TODO:  seleted images action
+        sendImage()
     }
     
     func seletedPhotosNumberInPhotoBrowser(photoBrowser: DXPhotoBrowser) -> Int {

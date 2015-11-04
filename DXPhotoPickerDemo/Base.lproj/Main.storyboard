@@ -47,10 +47,81 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="DXPhotosPicker" id="5ji-uK-ms6"/>
+                    <connections>
+                        <segue destination="6SA-0k-3h3" kind="show" id="pZA-oy-k5c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="146" y="462"/>
+            <point key="canvasLocation" x="477" y="124"/>
+        </scene>
+        <!--SelectedImages-->
+        <scene sceneID="FN4-Tk-Bt8">
+            <objects>
+                <collectionViewController storyboardIdentifier="DXSelectedImageViewController" title="SelectedImages" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6SA-0k-3h3" customClass="DXSelectedImageViewController" customModule="DXPhotoPickerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="i6g-Wg-d7S">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="yi5-gN-iUz">
+                            <size key="itemSize" width="150" height="150"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DXSelectedImageCell" id="Vtc-Xc-w6G" customClass="DXSelectedImageCell" customModule="DXPhotoPickerDemo" customModuleProvider="target">
+                                <rect key="frame" x="10" y="74" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gx6-ZU-6ej">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                            <animations/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5LC-gr-th4">
+                                            <rect key="frame" x="0.0" y="121" width="150" height="21"/>
+                                            <animations/>
+                                            <color key="backgroundColor" red="0.57740542763157898" green="0.56972142269736847" blue="0.96975226151315785" alpha="0.63080658783783783" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="lEr-Rj-lRB"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <animations/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstItem="gx6-ZU-6ej" firstAttribute="top" secondItem="Vtc-Xc-w6G" secondAttribute="top" id="4fr-pg-WPy"/>
+                                    <constraint firstAttribute="trailing" secondItem="5LC-gr-th4" secondAttribute="trailing" id="L6m-e2-2Jy"/>
+                                    <constraint firstItem="5LC-gr-th4" firstAttribute="leading" secondItem="Vtc-Xc-w6G" secondAttribute="leading" id="Q1q-hY-7Qp"/>
+                                    <constraint firstItem="gx6-ZU-6ej" firstAttribute="leading" secondItem="Vtc-Xc-w6G" secondAttribute="leading" id="a7b-x2-U3b"/>
+                                    <constraint firstAttribute="bottom" secondItem="gx6-ZU-6ej" secondAttribute="bottom" id="pzl-Oe-Jat"/>
+                                    <constraint firstAttribute="bottom" secondItem="5LC-gr-th4" secondAttribute="bottom" constant="8" id="rE9-Xg-hqh"/>
+                                    <constraint firstAttribute="trailing" secondItem="gx6-ZU-6ej" secondAttribute="trailing" id="zbz-Lz-JO2"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="infoLabel" destination="5LC-gr-th4" id="3rI-Ek-xTm"/>
+                                    <outlet property="selectedImageView" destination="gx6-ZU-6ej" id="McF-6C-6Ws"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="6SA-0k-3h3" id="qpH-iI-PsA"/>
+                            <outlet property="delegate" destination="6SA-0k-3h3" id="URR-oq-VAI"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fMd-Yz-RRV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="617" y="380"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SJM-co-Nor">
@@ -67,7 +138,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rgK-lP-eMO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-601" y="462"/>
+            <point key="canvasLocation" x="-117" y="669"/>
         </scene>
     </scenes>
 </document>
