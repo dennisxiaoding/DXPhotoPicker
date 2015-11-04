@@ -116,7 +116,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     override func viewWillAppear(animated: Bool) {
-        DXLog("viewWillAppear")
         super.viewWillAppear(animated)
         navigationController?.toolbarHidden = false
         imageFlowCollectionView.reloadData()
@@ -124,7 +123,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     override func viewWillDisappear(animated: Bool) {
-        DXLog("viewWillDisappear")
         navigationController?.toolbarHidden = true
         super.viewWillDisappear(animated)
     }

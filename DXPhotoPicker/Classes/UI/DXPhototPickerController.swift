@@ -9,13 +9,6 @@
 import UIKit
 import Photos
 
-public enum DXPhototPickerMediaType: Int {
-    case Unknow
-    case Image
-    case Video
-    case All
-}
-
 @available(iOS 8.0, *)
 @objc public protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
     optional func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [AnyObject]?, isFullImage: Bool)
@@ -31,15 +24,41 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
         super.viewDidLoad()
         self.interactivePopGestureRecognizer?.delegate = self
         self.interactivePopGestureRecognizer?.enabled = true
-           DXLog("\(PHPhotoLibrary.authorizationStatus()) !")
         
-        if DXPickerManager.sharedManager.defultAlbum == nil {
-            showAlbumList()
+        func showAlbumList() {
+            let viewController = DXAlbumTableViewController()
+            self.viewControllers = [viewController]
         }
-    }
+        
+        func chargeAuthorizationStatus(status: PHAuthorizationStatus) {
+            
+            let viewController = viewControllers.first as? DXAlbumTableViewController
+            guard viewController != nil else {
+                showAlbumList()
+                return
+            }
+            switch (status) {
+                case .Authorized:
+                    viewController!.reloadTableView()
+                case .Denied:
+                    viewController!.showUnAuthorizedTipsView()
+                    break
+                case .Restricted:
+                    viewController!.showUnAuthorizedTipsView()
+                    break
+            case .NotDetermined:
+                    PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+                        guard status != .NotDetermined else {
+                            return
+                        }
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            chargeAuthorizationStatus(status)
+                        })
+                    })
+            }
 
-    private func showAlbumList() {
-        let viewController = DXAlbumTableViewController()
-        self.viewControllers = [viewController]
+        }
+        showAlbumList()
+        chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
     }
 }

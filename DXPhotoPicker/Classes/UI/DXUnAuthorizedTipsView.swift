@@ -18,10 +18,17 @@ class DXUnAuthorizedTipsView: UIView {
     
     lazy var label: UILabel! = {
         let lb = UILabel(frame: CGRectZero)
-        let text = DXlocalizedString("UnAuthorizedTip", comment: "UnAuthorizedTip")
+        let text = DXlocalizedString("UnAuthorizedTip", comment: "UnAuthorizedTip") as NSString
         let infoDic = NSBundle.mainBundle().infoDictionary
-        let tipString = infoDic!["CFBundleDisplayName"] as! String + text
-        lb.text = tipString
+        var displayName = infoDic!["CFBundleDisplayName"] as? NSString
+        if displayName == nil {
+            displayName = infoDic!["CFBundleName"] as? NSString
+            if displayName == nil {
+                displayName = ""
+            }
+        }
+        let tipString = NSString(format: text, displayName!)
+        lb.text = tipString as String
         lb.textColor = UIColor.blackColor()
         lb.font = UIFont.systemFontOfSize(14.0)
         lb.textAlignment = NSTextAlignment.Center

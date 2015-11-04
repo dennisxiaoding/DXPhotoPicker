@@ -9,6 +9,8 @@
 import UIKit
 import Photos
 
+ // @note use this model to store the album's 'result, 'count, 'name, 'startDate to avoid request and reserve too much times
+
 class DXAlbum: NSObject {
     var results: PHFetchResult?
     var count = 0

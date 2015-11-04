@@ -17,14 +17,25 @@ class DXAlbumTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = DXlocalizedString("albumTitle", comment: "photos")
-        self.createBarButtonItemAtPosition(.Right,
+        title = DXlocalizedString("albumTitle", comment: "photos")
+        createBarButtonItemAtPosition(.Right,
             text: DXlocalizedString("cancel", comment: "取消"),
             action: Selector("cancelAction")
         )
-        self.assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
-        self.tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
-        self.tableView.tableFooterView = UIView()
+        assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
+        tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+        tableView.tableFooterView = UIView()
+    }
+    
+    // MARK: public
+    
+    func reloadTableView() {
+        assetsCollection = DXPickerManager.sharedManager.fetchAlbumList()
+        tableView.reloadData()
+    }
+    
+    func showUnAuthorizedTipsView() {
+        tableView.backgroundView = DXUnAuthorizedTipsView(frame: self.tableView.bounds)
     }
     
     // MARK: UIActions

@@ -24,15 +24,13 @@ class DXPickerManager: NSObject {
         photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
         super.init()
     }
-    
-    var mediaType: DXPhototPickerMediaType = DXPhototPickerMediaType.Image
 
     lazy var defultAlbum: String? = {
         let string = NSUserDefaults.standardUserDefaults().objectForKey(kDXPickerManagerDefaultAlbumName) as? String
         return string
     }()
     
-    func fetchAlbumList() -> [DXAlbum] {
+    func fetchAlbumList() -> [DXAlbum]? {
         
         func fetchAlbums() -> [PHFetchResult]? {
             let userAlbumsOptions = PHFetchOptions()
@@ -57,11 +55,11 @@ class DXPickerManager: NSObject {
         let results = fetchAlbums()
         var list: [DXAlbum] = []
         guard results != nil else {
-            return list
+            return nil
         }
         let options = PHFetchOptions()
         options.predicate = NSPredicate(
-            format: "mediaType = %d", self.fetchTypeViaMediaType(self.mediaType).rawValue
+            format: "mediaType = %d", PHAssetMediaType.Image.rawValue
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         for (_, result) in results!.enumerate() {
@@ -91,21 +89,6 @@ class DXPickerManager: NSObject {
         }
         return list
     }
-    
-    private func fetchTypeViaMediaType(meidaType: DXPhototPickerMediaType) -> PHAssetMediaType {
-        var type: PHAssetMediaType = PHAssetMediaType.Unknown
-        switch (meidaType) {
-        case .Unknow:
-            type = .Unknown
-        case .Image:
-            type = .Image
-        case .Video:
-            type = .Video
-        case .All: break
-        }
-        return type
-    }
-
     /**
      Fetch the image with the default mode AspectFill 
      'call the method fetchImageWithAsset: targetSize: contentMode: imageResultHandler: 
