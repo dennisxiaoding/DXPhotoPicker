@@ -17,7 +17,7 @@ import Photos
 
 @available(iOS 8.0, *)
 public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
-
+    
     public weak var photoPickerDelegate: DXPhototPickerControllerDelegate?
     
     override public func viewDidLoad() {
@@ -32,7 +32,7 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
         
         func showImageFlow() {
             let rootVC = DXAlbumTableViewController()
-            let imageFlowVC = DXImageFlowViewController(identifier: DXPickerManager.sharedManager.defultAlbumIdentifier)
+            let imageFlowVC = DXImageFlowViewController(identifier: DXPickerHelper.fetchAlbumIdentifier())
             self.viewControllers = [rootVC,imageFlowVC]
         }
         
@@ -44,39 +44,37 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
                 return
             }
             switch (status) {
-                case .Authorized:
-                    viewController!.reloadTableView()
-                case .Denied:
-                    viewController!.showUnAuthorizedTipsView()
-                    break
-                case .Restricted:
-                    viewController!.showUnAuthorizedTipsView()
-                    break
+            case .Authorized:
+                viewController!.reloadTableView()
+            case .Denied:
+                viewController!.showUnAuthorizedTipsView()
+                break
+            case .Restricted:
+                viewController!.showUnAuthorizedTipsView()
+                break
             case .NotDetermined:
-                    PHPhotoLibrary.requestAuthorization({ (status) -> Void in
-                        guard status != .NotDetermined else {
-                            return
-                        }
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            chargeAuthorizationStatus(status)
-                        })
+                PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+                    guard status != .NotDetermined else {
+                        return
+                    }
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        chargeAuthorizationStatus(status)
                     })
+                })
             }
-
+            
         }
         
-        if DXPickerManager.sharedManager.defultAlbumIdentifier == nil {
+        if DXPickerHelper.fetchAlbumIdentifier() == nil {
             showAlbumList()
             chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
         } else {
-            if DXPickerManager.sharedManager.defultAlbumIdentifier!.isEmpty {
+            if DXPickerHelper.fetchAlbumIdentifier()!.isEmpty {
                 showAlbumList()
                 chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
             } else {
                 showImageFlow()
             }
         }
-        
-        
     }
 }

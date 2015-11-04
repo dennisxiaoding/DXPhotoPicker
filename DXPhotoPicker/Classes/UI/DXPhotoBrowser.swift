@@ -20,7 +20,7 @@ import Photos
 }
 
 class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     struct DXPhotoBrowserConfig {
         static let maxSeletedNumber = 9
         static let browserCellReuseIdntifier = "DXBrowserCell"
@@ -230,9 +230,9 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         fullImageButton.selected = fullImage
         if fullImage {
             let asset = photosDataSource![currentIndex]
-            DXPickerManager.fetchImageSize(asset, imageSizeResultHandler: {[unowned self] (imageSize, sizeString) -> Void in
+            DXPickerHelper.fetchImageSize(asset, imageSizeResultHandler: {[unowned self] (imageSize, sizeString) -> Void in
                 self.fullImageButton.text = "(\(sizeString))"
-            })
+                })
         }
     }
     
@@ -335,9 +335,9 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.photoBrowser = self
         return cell
     }
-
-    // MARK: control hide 
-
+    
+    // MARK: control hide
+    
     private func setControlsHidden(var hidden: Bool, animated: Bool) {
         if (photosDataSource == nil || photosDataSource!.count == 0) {
             hidden = false
@@ -347,7 +347,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         statusBarShouldBeHidden = hidden
         UIView.animateWithDuration(animationDuration, animations: {[unowned self] () -> Void in
             self.setNeedsStatusBarAppearanceUpdate()
-        })
+            })
         let frame = CGRectIntegral(CGRectMake(0, view.dx_height - 44, view.dx_width, 44))
         if areControlsHidden() && hidden == false && animated {
             toolBar.frame = CGRectOffset(frame, 0, animationOffSet)
@@ -362,7 +362,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.toolBar.alpha = alpha
         }
     }
-   
+    
     override func prefersStatusBarHidden() -> Bool {
         return statusBarShouldBeHidden
     }

@@ -127,7 +127,7 @@ class DXFullImageButton: UIView {
         let indicatorViewLeading = NSLayoutConstraint(item: indicatorView, attribute: .Leading, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .Leading, multiplier: 1, constant: 0)
         let indicatorViewCenterY = NSLayoutConstraint(item: indicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .CenterY, multiplier: 1, constant: 0)
         let indicatorViewHeight = NSLayoutConstraint(item: indicatorView, attribute: .Height, relatedBy: .Equal, toItem: indicatorView, attribute: .Width, multiplier: 1, constant: 0)
-
+        
         
         addConstraints(btContstraintsH)
         addConstraints(btContstraintsV)
@@ -135,14 +135,14 @@ class DXFullImageButton: UIView {
         addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewCenterY,indicatorViewLeading,indicatorViewWidth,indicatorViewHeight])
     }
     
-// MARK: init 
+    // MARK: init
     override init(frame: CGRect) {
         selected = false
         text = ""
         super.init(frame: frame)
         setupView()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         selected = false
         text = ""

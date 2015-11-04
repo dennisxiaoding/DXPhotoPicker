@@ -18,8 +18,6 @@ class DXSelectedImageViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController!.interactivePopGestureRecognizer?.enabled = true
-        createBarButtonItemAtPosition(.Left, normalImage: UIImage(named: "back_normal"), highlightImage: UIImage(named: "back_highlight"), action: Selector("back"))
     }
     
     @objc private func back() {
@@ -42,12 +40,12 @@ class DXSelectedImageViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! DXSelectedImageCell
-        DXPickerManager.fetchImageWithAsset(selectedImages![indexPath.row], targetSize: CGSizeMake(150, 150)) { (image) -> Void in
+        DXPickerHelper.fetchImageWithAsset(selectedImages![indexPath.row], targetSize: CGSizeMake(150, 150)) { (image) -> Void in
             cell.selectedImageView.image = image
         }
         
         if isFullImage {
-            DXPickerManager.fetchImageSize(selectedImages![indexPath.row]) { (imageSize, sizeString) -> Void in
+            DXPickerHelper.fetchImageSize(selectedImages![indexPath.row]) { (imageSize, sizeString) -> Void in
                 cell.infoLabel.text = "imageSize: " + sizeString
             }
         } else {

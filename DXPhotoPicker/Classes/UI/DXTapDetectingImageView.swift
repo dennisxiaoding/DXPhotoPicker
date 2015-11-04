@@ -20,7 +20,7 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     weak var tapDelegate: DXTapDetectingImageViewDelegate?
     
     // MARK: initialize
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.userInteractionEnabled = true

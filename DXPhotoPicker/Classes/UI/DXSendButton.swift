@@ -49,7 +49,7 @@ class DXSendButton: UIView {
                     self.backGroudView.transform = CGAffineTransformMakeScale(1.1, 1.1)
                     }, completion: { [unowned self] (completed) -> Void in
                         self.backGroudView.transform = CGAffineTransformMakeScale(1.0, 1.0)
-                })
+                    })
             } else {
                 hideBadgeValue()
             }
@@ -61,7 +61,7 @@ class DXSendButton: UIView {
         self.frame = CGRectMake(0, 0, 56, 26)
         setupViews()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupViews()
@@ -101,7 +101,7 @@ class DXSendButton: UIView {
     }()
     
     private lazy var sendButton: UIButton = {
-       let button = UIButton(type: UIButtonType.Custom)
+        let button = UIButton(type: UIButtonType.Custom)
         button.frame = self.bounds
         button.setTitle(DXlocalizedString("send", comment: "发送"), forState: UIControlState.Normal)
         button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintNormalColor), forState: UIControlState.Normal)

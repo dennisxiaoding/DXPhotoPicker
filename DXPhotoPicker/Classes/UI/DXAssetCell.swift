@@ -11,8 +11,8 @@ import Photos
 
 @available(iOS 8.0, *)
 class DXAssetCell: UICollectionViewCell {
-
-// MARK: properties
+    
+    // MARK: properties
     private var asset: PHAsset?
     
     private var selectItemBlock: ((selectItem: Bool, asset: PHAsset) -> Bool)?
@@ -39,13 +39,13 @@ class DXAssetCell: UICollectionViewCell {
     
     private var assetSeleted: Bool = false
     
-// MARK: life time
+    // MARK: life time
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupView()
@@ -59,14 +59,14 @@ class DXAssetCell: UICollectionViewCell {
         if self.asset != nil {
             self.asset = nil
         }
-
+        
     }
-
-// MARK: public methods
-
+    
+    // MARK: public methods
+    
     func fillWithAsset(asset: PHAsset, isAssetSelected: Bool) {
         self.asset = asset
-        DXPickerManager.fetchImageWithAsset(self.asset, targetSize: self.imageView.frame.size) {
+        DXPickerHelper.fetchImageWithAsset(self.asset, targetSize: self.imageView.frame.size) {
             [weak self](image) -> Void in
             self!.imageView.image = image
         }
@@ -77,9 +77,9 @@ class DXAssetCell: UICollectionViewCell {
     func selectItemBlock(block: (selected: Bool, asset: PHAsset) -> Bool) {
         self.selectItemBlock = block
     }
-
     
-// MARK: convenience
+    
+    // MARK: convenience
     
     func checkButton(selected: Bool, animated: Bool) {
         if selected {
@@ -183,7 +183,7 @@ class DXAssetCell: UICollectionViewCell {
         addConstraints([checkConstraitRight,checkConstraitTop,checkContraitWidth,checkConsraintHeight])
     }
     
-// MARK:UI actions
+    // MARK:UI actions
     @objc private func checkButtonAction() {
         assetSeleted = !assetSeleted
         guard selectItemBlock != nil else {

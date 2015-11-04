@@ -108,12 +108,12 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         
         func setUpData() {
             if currentAlbum == nil && albumIdentifier != nil {
-                currentAlbum = DXPickerManager.sharedManager.fetchAlbum()
+                currentAlbum = DXPickerHelper.fetchAlbum()
             }
             title = currentAlbum?.name
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 [unowned self] in
-                self.assetsArray = DXPickerManager.sharedManager.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
+                self.assetsArray = DXPickerHelper.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
                     self.imageFlowCollectionView.reloadData()
@@ -145,7 +145,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
             return
         }
         if (photoPicker!.photoPickerDelegate!.respondsToSelector(Selector("photoPickerController:sendImages:isFullImage:"))) {
-            DXPickerManager.sharedManager.saveIdentifier(currentAlbum!.identifier)
+            DXPickerHelper.saveIdentifier(currentAlbum!.identifier)
+            DXLog(currentAlbum!.identifier)
             photoPicker!.photoPickerDelegate!.photoPickerController!(photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
         }
     }

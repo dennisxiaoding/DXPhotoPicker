@@ -46,7 +46,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         self.contentView
         setupView()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupView()
@@ -88,8 +88,6 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         if (!CGRectEqualToRect(photoImageView.frame, frameToCenter)) {
             photoImageView.frame = frameToCenter;
         }
-
-        
     }
     
     // MARK: priviate
@@ -105,7 +103,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.zoomScale = 1
         zoomingScrollView.contentSize = CGSizeMake(0, 0);
         photoImageView.frame = zoomingScrollView.bounds
-        requestID = DXPickerManager.fetchImageWithAsset(asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
+        requestID = DXPickerHelper.fetchImageWithAsset(asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
             self.requestID = nil
             guard image != nil else {
                 return
@@ -116,12 +114,12 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             photoImageViewFrame.origin = CGPointZero
             photoImageViewFrame.size = image!.size;
             self.photoImageView.frame = photoImageViewFrame;
+            DXLog(image!.size)
             self.zoomingScrollView.contentSize = photoImageViewFrame.size;
             // Set zoom to minimum zoom
             self.setMaxMinZoomScalesForCurrentBounds()
             self.setNeedsLayout()
-
-        })
+            })
     }
     
     private func setMaxMinZoomScalesForCurrentBounds() {

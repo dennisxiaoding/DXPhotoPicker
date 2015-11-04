@@ -9,7 +9,7 @@
 import UIKit
 
 class DXAlbumCell: UITableViewCell {
-
+    
     lazy var posterImageView: UIImageView = {
         let imageView = UIImageView(
             image: UIImage(named: "assets_placeholder_picture")
@@ -39,14 +39,14 @@ class DXAlbumCell: UITableViewCell {
         accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
         self.setup()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
     
     private func setup() {
-    
+        
         self.separatorInset = UIEdgeInsetsMake(0,60,0,0)
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
@@ -63,7 +63,7 @@ class DXAlbumCell: UITableViewCell {
         let mertic = [
             "imageLength": 60
         ]
-
+        
         let vflH = "H:|-0-[posterImageView(imageLength)]-10-[titleLabel(10@750)]-5-[countLabel]-0-|"
         let imageVFLV = "V:|-0-[posterImageView(imageLength)]"
         let contstraintsH: Array = NSLayoutConstraint.constraintsWithVisualFormat(vflH,
@@ -100,9 +100,9 @@ class DXAlbumCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
+    
 }

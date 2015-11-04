@@ -42,7 +42,7 @@ class DXUnAuthorizedTipsView: UIView {
         super.init(frame: frame)
         self.setup()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
@@ -56,7 +56,7 @@ class DXUnAuthorizedTipsView: UIView {
         let viewBindingsDict = [
             "label": label,
             "imageView": imageView
-            ]
+        ]
         let mertic = [
             "imageLength": 130,
             "labelHeight": 60
