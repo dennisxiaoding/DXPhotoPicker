@@ -114,7 +114,6 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             photoImageViewFrame.origin = CGPointZero
             photoImageViewFrame.size = image!.size;
             self.photoImageView.frame = photoImageViewFrame;
-            DXLog(image!.size)
             self.zoomingScrollView.contentSize = photoImageViewFrame.size;
             // Set zoom to minimum zoom
             self.setMaxMinZoomScalesForCurrentBounds()

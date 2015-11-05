@@ -32,7 +32,7 @@
 		95E8C6501BD7CB5E00C73512 /* DXBadgeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C6471BD7CB5E00C73512 /* DXBadgeLabel.swift */; };
 		95E8C6511BD7CB5E00C73512 /* DXBrowserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C6481BD7CB5E00C73512 /* DXBrowserCell.swift */; };
 		95E8C6521BD7CB5E00C73512 /* DXPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C6491BD7CB5E00C73512 /* DXPhotoBrowser.swift */; };
-		95E8C6531BD7CB5E00C73512 /* DXPhototPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C64A1BD7CB5E00C73512 /* DXPhototPickerController.swift */; };
+		95E8C6531BD7CB5E00C73512 /* DXPhotoPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C64A1BD7CB5E00C73512 /* DXPhotoPickerController.swift */; };
 		95E8C6541BD7CB5E00C73512 /* DXPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C64B1BD7CB5E00C73512 /* DXPromptView.swift */; };
 		95E8C6551BD7CB5E00C73512 /* DXSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C64C1BD7CB5E00C73512 /* DXSendButton.swift */; };
 		95E8C6561BD7CB5E00C73512 /* DXTapDetectingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C64D1BD7CB5E00C73512 /* DXTapDetectingImageView.swift */; };
@@ -90,7 +90,7 @@
 		95E8C6471BD7CB5E00C73512 /* DXBadgeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXBadgeLabel.swift; sourceTree = "<group>"; };
 		95E8C6481BD7CB5E00C73512 /* DXBrowserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXBrowserCell.swift; sourceTree = "<group>"; };
 		95E8C6491BD7CB5E00C73512 /* DXPhotoBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhotoBrowser.swift; sourceTree = "<group>"; };
-		95E8C64A1BD7CB5E00C73512 /* DXPhototPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhototPickerController.swift; sourceTree = "<group>"; };
+		95E8C64A1BD7CB5E00C73512 /* DXPhotoPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPhotoPickerController.swift; sourceTree = "<group>"; };
 		95E8C64B1BD7CB5E00C73512 /* DXPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXPromptView.swift; sourceTree = "<group>"; };
 		95E8C64C1BD7CB5E00C73512 /* DXSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXSendButton.swift; sourceTree = "<group>"; };
 		95E8C64D1BD7CB5E00C73512 /* DXTapDetectingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXTapDetectingImageView.swift; sourceTree = "<group>"; };
@@ -230,7 +230,7 @@
 		95E8C6331BD7CAFA00C73512 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				95E8C64A1BD7CB5E00C73512 /* DXPhototPickerController.swift */,
+				95E8C64A1BD7CB5E00C73512 /* DXPhotoPickerController.swift */,
 				95E8C6461BD7CB5E00C73512 /* DXAlbumTableViewController.swift */,
 				95E8C6581BD7CBB500C73512 /* DXAlbumCell.swift */,
 				95A1EEA61BDA373200AFDC15 /* DXImageFlowViewController.swift */,
@@ -387,7 +387,7 @@
 				95A1EEA71BDA373200AFDC15 /* DXImageFlowViewController.swift in Sources */,
 				95E8C6521BD7CB5E00C73512 /* DXPhotoBrowser.swift in Sources */,
 				95D9571C1BD758420012BD36 /* DXAlbum.swift in Sources */,
-				95E8C6531BD7CB5E00C73512 /* DXPhototPickerController.swift in Sources */,
+				95E8C6531BD7CB5E00C73512 /* DXPhotoPickerController.swift in Sources */,
 				95E8C6571BD7CB5E00C73512 /* DXUnAuthorizedTipsView.swift in Sources */,
 				95B585271BE27C2600D1EECB /* DXFullImageButton.swift in Sources */,
 				95E8C6541BD7CB5E00C73512 /* DXPromptView.swift in Sources */,

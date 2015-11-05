@@ -10,15 +10,15 @@ import UIKit
 import Photos
 
 @available(iOS 8.0, *)
-@objc public protocol DXPhototPickerControllerDelegate: NSObjectProtocol {
-    optional func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
-    optional func photoPickerDidCancel(photoPicker: DXPhototPickerController)
+@objc public protocol DXPhotoPickerControllerDelegate: NSObjectProtocol {
+    optional func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
+    optional func photoPickerDidCancel(photoPicker: DXPhotoPickerController)
 }
 
 @available(iOS 8.0, *)
-public class DXPhototPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+public class DXPhotoPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
-    public weak var photoPickerDelegate: DXPhototPickerControllerDelegate?
+    public weak var photoPickerDelegate: DXPhotoPickerControllerDelegate?
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ public class DXPhototPickerController: UINavigationController, UINavigationContr
         }
         
         func chargeAuthorizationStatus(status: PHAuthorizationStatus) {
-            
+    
             let viewController = viewControllers.first as? DXAlbumTableViewController
             guard viewController != nil else {
                 showAlbumList()

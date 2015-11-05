@@ -116,9 +116,12 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 self.assetsArray = DXPickerHelper.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
+                    self.imageFlowCollectionView.hidden = true
                     self.imageFlowCollectionView.reloadData()
-                    let indexPath = NSIndexPath(forRow: self.assetsArray.count-1, inSection: 0);
-                    self.imageFlowCollectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: false);
+                    let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
+                    let lastItemIndex = NSIndexPath(forItem: item-1, inSection: 0)
+                    self.imageFlowCollectionView.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: .Bottom, animated: false)
+                    self.imageFlowCollectionView.hidden = false
                 }
             }
         }
@@ -140,7 +143,8 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     // MARK: button actons
     
     @objc private func sendImage() {
-        let photoPicker = navigationController as? DXPhototPickerController
+        
+        let photoPicker = navigationController as? DXPhotoPickerController
         guard (photoPicker != nil && photoPicker!.photoPickerDelegate != nil) else {
             return
         }
@@ -156,7 +160,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     @objc private func cancelAction() {
-        let navController = navigationController as? DXPhototPickerController
+        let navController = navigationController as? DXPhotoPickerController
         if (navController != nil && navController!.photoPickerDelegate!.respondsToSelector("photoPickerDidCancel:")) {
             navController!.photoPickerDelegate!.photoPickerDidCancel!(navController!)
         }

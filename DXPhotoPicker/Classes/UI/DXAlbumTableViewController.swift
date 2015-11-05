@@ -41,7 +41,7 @@ class DXAlbumTableViewController: UITableViewController {
     // MARK: UIActions
     
     @objc private func cancelAction() {
-        let photoPicker = navigationController as! DXPhototPickerController
+        let photoPicker = navigationController as! DXPhotoPickerController
         if (photoPicker.photoPickerDelegate != nil && photoPicker.photoPickerDelegate!.respondsToSelector(Selector("photoPickerDidCancel:"))) {
             photoPicker.photoPickerDelegate!.photoPickerDidCancel!(photoPicker)
         }

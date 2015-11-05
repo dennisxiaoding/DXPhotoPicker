@@ -9,10 +9,10 @@
 import UIKit
 import Photos
 
-class ViewController: UIViewController, DXPhototPickerControllerDelegate {
+class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
 // MARK: ui actions
     @IBAction func addPhotos(sender: UIButton) {
-        let picker = DXPhototPickerController()
+        let picker = DXPhotoPickerController()
         picker.photoPickerDelegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }
@@ -21,12 +21,15 @@ class ViewController: UIViewController, DXPhototPickerControllerDelegate {
         super.viewDidLoad()
     }
     
+    @IBAction func aboutAction(sender: UIButton) {
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://weibo.com/GreatDingXiao")!)
+    }
     // MARK: DXPhototPickerControllerDelegate
-    func photoPickerDidCancel(photoPicker: DXPhototPickerController) {
+    func photoPickerDidCancel(photoPicker: DXPhotoPickerController) {
         photoPicker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func photoPickerController(photosPicker: DXPhototPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
+    func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
         photosPicker?.dismissViewControllerAnimated(true, completion: nil)
         let vc = storyboard?.instantiateViewControllerWithIdentifier("DXSelectedImageViewController") as! DXSelectedImageViewController
         vc.selectedImages = sendImages

@@ -37,10 +37,24 @@
                                     <action selector="addPhotos:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mEm-ab-gON"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWS-f4-gZx">
+                                <rect key="frame" x="270" y="543" width="60" height="44"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="lYU-KT-Wdq"/>
+                                    <constraint firstAttribute="height" constant="44" id="sLN-qv-1ae"/>
+                                </constraints>
+                                <state key="normal" title="About"/>
+                                <connections>
+                                    <action selector="aboutAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pAE-df-NtV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="hWS-f4-gZx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="P73-Ai-WXh"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hWS-f4-gZx" secondAttribute="bottom" constant="13" id="Xav-0x-QJF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="uNJ-AI-wUK" secondAttribute="trailing" constant="30" id="mPu-Uq-e3r"/>
                             <constraint firstItem="uNJ-AI-wUK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="30" id="nBA-8F-0fG"/>
                             <constraint firstItem="uNJ-AI-wUK" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="ylh-ge-sVu"/>
@@ -50,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="477" y="124"/>
+            <point key="canvasLocation" x="564" y="392"/>
         </scene>
         <!--SelectedImages-->
         <scene sceneID="FN4-Tk-Bt8">
