@@ -21,6 +21,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     private var assetsArray: [PHAsset]
     private var selectedAssetsArray: [PHAsset]
     private var isFullImage = false
+    private var imageManager: PHCachingImageManager?
     
     private lazy var imageFlowCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -64,6 +65,10 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         assetsArray = []
         selectedAssetsArray = []
         super.init(coder: aDecoder)
+    }
+    
+    deinit {
+        imageManager?.stopCachingImagesForAllAssets()
     }
     
     // MARK: Life Cycle
@@ -116,6 +121,12 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 self.assetsArray = DXPickerHelper.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
+                    self.imageManager = PHCachingImageManager()
+                    let options = PHImageRequestOptions()
+                    options.resizeMode = PHImageRequestOptionsResizeMode.Exact
+                    let scale = UIScreen.mainScreen().scale
+                    let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
+                    self.imageManager?.startCachingImagesForAssets(self.assetsArray, targetSize: size, contentMode: .AspectFill, options: options)
                     self.imageFlowCollectionView.hidden = true
                     self.imageFlowCollectionView.reloadData()
                     let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
@@ -220,6 +231,25 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         navigationController?.presentViewController(alert, animated: true, completion: nil)
     }
     
+    private func displayImageInCell(cell: DXAssetCell, indexPath: NSIndexPath) {
+        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
+        let options = PHImageRequestOptions()
+        options.resizeMode = PHImageRequestOptionsResizeMode.Exact
+        let scale = UIScreen.mainScreen().scale
+        let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
+        imageManager?.requestImageForAsset(assetsArray[indexPath.row], targetSize: size, contentMode: .AspectFill, options: options, resultHandler: { (image, obj) -> Void in
+            cell.imageView.image = image
+        })
+        cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
+            if selected == true {
+                return self.addAsset(asset)
+            } else {
+                self.deleteAsset(asset)
+                return false
+            }
+        }
+    }
+    
     // MARK: DXPhotoBroswerDelegate
     
     func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
@@ -266,15 +296,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXImageFlowConfig.dxAssetCellReuseIdentifier, forIndexPath: indexPath) as! DXAssetCell
-        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
-        cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
-            if selected == true {
-                return self.addAsset(asset)
-            } else {
-                self.deleteAsset(asset)
-                return false
-            }
-        }
+        displayImageInCell(cell, indexPath: indexPath)
         return cell
     }
     

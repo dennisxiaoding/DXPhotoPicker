@@ -162,10 +162,10 @@
 		9554A0291BEB2B2000DD6F6B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9554A0431BEB2BC500DD6F6B /* DXPhotoPickerController.swift */,
 				9554A0401BEB2BC500DD6F6B /* DXAlbumTableViewController.swift */,
 				9554A0411BEB2BC500DD6F6B /* DXImageFlowViewController.swift */,
 				9554A0421BEB2BC500DD6F6B /* DXPhotoBrowser.swift */,
-				9554A0431BEB2BC500DD6F6B /* DXPhotoPickerController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

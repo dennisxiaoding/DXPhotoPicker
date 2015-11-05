@@ -132,7 +132,7 @@ class DXPickerHelper: NSObject {
         options.resizeMode = PHImageRequestOptionsResizeMode.Exact
         let scale = UIScreen.mainScreen().scale
         let size = CGSizeMake(targetSize.width*scale, targetSize.height*scale);
-        return PHImageManager.defaultManager().requestImageForAsset(asset!,
+        return PHCachingImageManager.defaultManager().requestImageForAsset(asset!,
             targetSize: size,
             contentMode: .AspectFill,
             options: options) {

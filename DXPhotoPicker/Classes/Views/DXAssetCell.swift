@@ -17,7 +17,7 @@ class DXAssetCell: UICollectionViewCell {
     
     private var selectItemBlock: ((selectItem: Bool, asset: PHAsset) -> Bool)?
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imv = UIImageView(image: UIImage(named: "assets_placeholder_picture"))
         imv.translatesAutoresizingMaskIntoConstraints = false
         return imv
@@ -66,10 +66,6 @@ class DXAssetCell: UICollectionViewCell {
     
     func fillWithAsset(asset: PHAsset, isAssetSelected: Bool) {
         self.asset = asset
-        DXPickerHelper.fetchImageWithAsset(self.asset, targetSize: self.imageView.frame.size) {
-            [weak self](image) -> Void in
-            self!.imageView.image = image
-        }
         assetSeleted = isAssetSelected
         checkButton(assetSeleted, animated: false)
     }

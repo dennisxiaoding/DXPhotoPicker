@@ -11,7 +11,18 @@ import Photos
 
 @available(iOS 8.0, *)
 @objc public protocol DXPhotoPickerControllerDelegate: NSObjectProtocol {
-    optional func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
+    /**
+     seletced call back
+     
+     - parameter photosPicker: the photoPicker
+     - parameter sendImages:   selected images
+     - parameter isFullImage:  if the selected image is high quality
+     */
+    optional func photoPickerController(photoPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
+    
+    /**
+     cancel selected
+     */
     optional func photoPickerDidCancel(photoPicker: DXPhotoPickerController)
 }
 
