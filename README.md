@@ -1,6 +1,6 @@
 # DXPhotoPickerController
 
-![logo](https://github.com/AwesomeDennis/DXPhotoPicker/tree/master/ScreenShot/Icon.png)
+![logo](https://github.com/AwesomeDennis/DXPhotoPicker/blob/master/ScreenShot/Icon.png)
 
 ## About
 DXPhotoPickerController is a component that funtioned like imagepicker in WeChat. It's very similar to UIImagePickerController which makes its usage simple and concise.
@@ -9,7 +9,7 @@ DXPhotoPickerController is a swift version of [DXImagePicker](https://github.com
 
 I have not make it as a pod because of the flexible UI requirements. I make it as a simple demo and you can customize your own style picker.
 
-<center> ![image](https://github.com/AwesomeDennis/DXPhotoPicker/tree/master/ScreenShot/ScreenShot.gif) </center>
+<center> ![image](https://github.com/AwesomeDennis/DXPhotoPicker/blob/master/ScreenShot/ScreenShot.gif) </center>
 
 ## Usage
 `DXPhotoPickerController` is similar to `UIImagePickerController` in its usage.
@@ -42,5 +42,5 @@ ImagePickerSheetController is written in Swift and links against `Photos.framewo
 
 ## Inspired
 [JKImagePicker](https://github.com/pjk1129/JKImagePicker) 
-and [mwaterfall/MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser) gave a great help!
+and [mwaterfall/MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser) gave a me great help!
 
