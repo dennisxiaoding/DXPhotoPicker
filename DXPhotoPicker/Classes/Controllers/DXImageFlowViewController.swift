@@ -126,13 +126,11 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                     options.resizeMode = PHImageRequestOptionsResizeMode.Exact
                     let scale = UIScreen.mainScreen().scale
                     let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
-                    self.imageManager?.startCachingImagesForAssets(self.assetsArray, targetSize: size, contentMode: .AspectFill, options: options)
-                    self.imageFlowCollectionView.hidden = true
+                    self.imageManager?.startCachingImagesForAssets(self.assetsArray, targetSize: size, contentMode: .AspectFill, options: options) 
                     self.imageFlowCollectionView.reloadData()
                     let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
                     let lastItemIndex = NSIndexPath(forItem: item-1, inSection: 0)
                     self.imageFlowCollectionView.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: .Bottom, animated: false)
-                    self.imageFlowCollectionView.hidden = false
                 }
             }
         }
