@@ -34,7 +34,7 @@ I don't make it as a pod because of the flexible UI requirements. Only supported
 The call back delegte methods `func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages:   	[PHAsset]?, isFullImage: Bool)` param `isFullImage` suggested if the image you choose is the high quality image.
 
 ## Requirements
-ImagePickerSheetController is written in Swift and links against `Photos.framework`. It therefore requires iOS 8 or later.
+DXPhotoPickerController is written in Swift and links against `Photos.framework`. It therefore requires iOS 8 or later.
 
 ## Author
 我叫丁晓， [Weibo](http://weibo.com/GreatDingXiao).
