@@ -15,8 +15,6 @@
 		9541C6B11BCD080D003102FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6AF1BCD080D003102FC /* Main.storyboard */; };
 		9541C6B31BCD080D003102FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6B21BCD080D003102FC /* Assets.xcassets */; };
 		9541C6B61BCD080D003102FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6B41BCD080D003102FC /* LaunchScreen.storyboard */; };
-		9541C6C11BCD080D003102FC /* DXPhotosPickerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6C01BCD080D003102FC /* DXPhotosPickerDemoTests.swift */; };
-		9541C6CC1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6CB1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift */; };
 		9541C6DB1BCD084C003102FC /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541C6DA1BCD084C003102FC /* Photos.framework */; };
 		9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */; };
 		95643B311BCF54FF0091ACE8 /* DXUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95643B301BCF54FF0091ACE8 /* DXUtil.swift */; };
@@ -40,23 +38,6 @@
 		95E8C6591BD7CBB500C73512 /* DXAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E8C6581BD7CBB500C73512 /* DXAlbumCell.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		9541C6BD1BCD080D003102FC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9541C6A01BCD080D003102FC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9541C6A71BCD080D003102FC;
-			remoteInfo = DXPhotosPickerDemo;
-		};
-		9541C6C81BCD080D003102FC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9541C6A01BCD080D003102FC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9541C6A71BCD080D003102FC;
-			remoteInfo = DXPhotosPickerDemo;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		95146FF61BD0F62900C8C45C /* UIView+DXFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+DXFrame.swift"; sourceTree = "<group>"; };
 		9518B3911BE9ED1C00B37E49 /* DXSelectedImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXSelectedImageViewController.swift; sourceTree = "<group>"; };
@@ -68,10 +49,8 @@
 		9541C6B21BCD080D003102FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9541C6B51BCD080D003102FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9541C6B71BCD080D003102FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9541C6BC1BCD080D003102FC /* DXPhotoPickerDemo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DXPhotoPickerDemo.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9541C6C01BCD080D003102FC /* DXPhotosPickerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXPhotosPickerDemoTests.swift; sourceTree = "<group>"; };
 		9541C6C21BCD080D003102FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9541C6C71BCD080D003102FC /* DXPhotoPickerDemo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DXPhotoPickerDemo.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9541C6CB1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXPhotosPickerDemoUITests.swift; sourceTree = "<group>"; };
 		9541C6CD1BCD080D003102FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9541C6DA1BCD084C003102FC /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
@@ -107,20 +86,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9541C6B91BCD080D003102FC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9541C6C41BCD080D003102FC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -140,8 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				9541C6A81BCD080D003102FC /* DXPhotoPickerDemo.app */,
-				9541C6BC1BCD080D003102FC /* DXPhotoPickerDemo.xctest */,
-				9541C6C71BCD080D003102FC /* DXPhotoPickerDemo.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -267,42 +230,6 @@
 			productReference = 9541C6A81BCD080D003102FC /* DXPhotoPickerDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9541C6BB1BCD080D003102FC /* DXPhotoPickerDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9541C6D31BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotoPickerDemoTests" */;
-			buildPhases = (
-				9541C6B81BCD080D003102FC /* Sources */,
-				9541C6B91BCD080D003102FC /* Frameworks */,
-				9541C6BA1BCD080D003102FC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9541C6BE1BCD080D003102FC /* PBXTargetDependency */,
-			);
-			name = DXPhotoPickerDemoTests;
-			productName = DXPhotosPickerDemoTests;
-			productReference = 9541C6BC1BCD080D003102FC /* DXPhotoPickerDemo.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		9541C6C61BCD080D003102FC /* DXPhotoPickerDemoUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9541C6D61BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotoPickerDemoUITests" */;
-			buildPhases = (
-				9541C6C31BCD080D003102FC /* Sources */,
-				9541C6C41BCD080D003102FC /* Frameworks */,
-				9541C6C51BCD080D003102FC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9541C6C91BCD080D003102FC /* PBXTargetDependency */,
-			);
-			name = DXPhotoPickerDemoUITests;
-			productName = DXPhotosPickerDemoUITests;
-			productReference = 9541C6C71BCD080D003102FC /* DXPhotoPickerDemo.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -316,14 +243,6 @@
 					9541C6A71BCD080D003102FC = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = 7RQERF84NY;
-					};
-					9541C6BB1BCD080D003102FC = {
-						CreatedOnToolsVersion = 7.0.1;
-						TestTargetID = 9541C6A71BCD080D003102FC;
-					};
-					9541C6C61BCD080D003102FC = {
-						CreatedOnToolsVersion = 7.0.1;
-						TestTargetID = 9541C6A71BCD080D003102FC;
 					};
 				};
 			};
@@ -342,8 +261,6 @@
 			projectRoot = "";
 			targets = (
 				9541C6A71BCD080D003102FC /* DXPhotoPickerDemo */,
-				9541C6BB1BCD080D003102FC /* DXPhotoPickerDemoTests */,
-				9541C6C61BCD080D003102FC /* DXPhotoPickerDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -358,20 +275,6 @@
 				9541C6B31BCD080D003102FC /* Assets.xcassets in Resources */,
 				9541C6B11BCD080D003102FC /* Main.storyboard in Resources */,
 				956595BD1BCD4DCD00A74B30 /* DXPhotoPicker.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9541C6BA1BCD080D003102FC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9541C6C51BCD080D003102FC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,36 +311,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9541C6B81BCD080D003102FC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9541C6C11BCD080D003102FC /* DXPhotosPickerDemoTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9541C6C31BCD080D003102FC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9541C6CC1BCD080D003102FC /* DXPhotosPickerDemoUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9541C6BE1BCD080D003102FC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9541C6A71BCD080D003102FC /* DXPhotoPickerDemo */;
-			targetProxy = 9541C6BD1BCD080D003102FC /* PBXContainerItemProxy */;
-		};
-		9541C6C91BCD080D003102FC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9541C6A71BCD080D003102FC /* DXPhotoPickerDemo */;
-			targetProxy = 9541C6C81BCD080D003102FC /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9541C6AF1BCD080D003102FC /* Main.storyboard */ = {
@@ -578,54 +452,6 @@
 			};
 			name = Release;
 		};
-		9541C6D41BCD080D003102FC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = DXPhotosPickerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotosPickerDemoTests;
-				PRODUCT_NAME = DXPhotoPickerDemo;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DXPhotoPickerDemo.app/DXPhotoPickerDemo";
-			};
-			name = Debug;
-		};
-		9541C6D51BCD080D003102FC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = DXPhotosPickerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotosPickerDemoTests;
-				PRODUCT_NAME = DXPhotoPickerDemo;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DXPhotoPickerDemo.app/DXPhotoPickerDemo";
-			};
-			name = Release;
-		};
-		9541C6D71BCD080D003102FC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = DXPhotosPickerDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotosPickerDemoUITests;
-				PRODUCT_NAME = DXPhotoPickerDemo;
-				TEST_TARGET_NAME = DXPhotosPickerDemo;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		9541C6D81BCD080D003102FC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = DXPhotosPickerDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotosPickerDemoUITests;
-				PRODUCT_NAME = DXPhotoPickerDemo;
-				TEST_TARGET_NAME = DXPhotosPickerDemo;
-				USES_XCTRUNNER = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -643,24 +469,6 @@
 			buildConfigurations = (
 				9541C6D11BCD080D003102FC /* Debug */,
 				9541C6D21BCD080D003102FC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9541C6D31BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotoPickerDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9541C6D41BCD080D003102FC /* Debug */,
-				9541C6D51BCD080D003102FC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9541C6D61BCD080D003102FC /* Build configuration list for PBXNativeTarget "DXPhotoPickerDemoUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9541C6D71BCD080D003102FC /* Debug */,
-				9541C6D81BCD080D003102FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
