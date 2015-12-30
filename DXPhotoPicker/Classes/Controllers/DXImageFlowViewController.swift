@@ -236,7 +236,9 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         let scale = UIScreen.mainScreen().scale
         let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
         imageManager?.requestImageForAsset(assetsArray[indexPath.row], targetSize: size, contentMode: .AspectFill, options: options, resultHandler: { (image, obj) -> Void in
-            cell.imageView.image = image
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                cell.imageView.image = image
+            })
         })
         cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
             if selected == true {
