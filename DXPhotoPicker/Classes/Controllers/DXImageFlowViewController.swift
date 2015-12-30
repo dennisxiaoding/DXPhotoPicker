@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, DXPhotoBroswerDelegate {
+class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, DXPhotoBroswerDelegate {
     
     struct DXImageFlowConfig {
         static let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
@@ -22,6 +22,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     private var selectedAssetsArray: [PHAsset]
     private var isFullImage = false
     private var imageManager: PHCachingImageManager?
+    private var previousPreheatRect: CGRect = CGRectZero
     
     private lazy var imageFlowCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -68,7 +69,7 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     deinit {
-        imageManager?.stopCachingImagesForAllAssets()
+        resetCachedAssets()
     }
     
     // MARK: Life Cycle
@@ -122,11 +123,6 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
                     self.imageManager = PHCachingImageManager()
-                    let options = PHImageRequestOptions()
-                    options.resizeMode = PHImageRequestOptionsResizeMode.Exact
-                    let scale = UIScreen.mainScreen().scale
-                    let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
-                    self.imageManager?.startCachingImagesForAssets(self.assetsArray, targetSize: size, contentMode: .AspectFill, options: options) 
                     self.imageFlowCollectionView.reloadData()
                     let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
                     let lastItemIndex = NSIndexPath(forItem: item-1, inSection: 0)
@@ -142,6 +138,11 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
         super.viewWillAppear(animated)
         navigationController?.toolbarHidden = false
         sendButton.badgeValue = "\(selectedAssetsArray.count)"
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        updateCachedAssets()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -315,4 +316,115 @@ class DXImageFlowViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         browserPhotoAsstes(assetsArray, pageIndex: indexPath.row)
     }
+    
+    // MARK: UIScrollViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        updateCachedAssets()
+    }
+    
+    // MARK:  Asset Caching
+    
+    private func resetCachedAssets() {
+        imageManager?.stopCachingImagesForAllAssets()
+        previousPreheatRect = CGRectZero
+    }
+    
+    private func updateCachedAssets() {
+        let isViewVisible = self.isViewLoaded() && (self.view.window != nil)
+        if isViewVisible == false {
+            return
+        }
+        // The preheat window is twice the height of the visible rect.
+        var preheatRect = self.imageFlowCollectionView.bounds
+        preheatRect = CGRectInset(preheatRect, 0.0, -0.5 * CGRectGetHeight(preheatRect))
+        /*
+        Check if the collection view is showing an area that is significantly
+        different to the last preheated area.
+        */
+        let delta = fabs(CGRectGetMidY(preheatRect) - CGRectGetMidY(self.previousPreheatRect))
+        if (delta > CGRectGetHeight(self.imageFlowCollectionView.bounds) / 3.0) {
+            // Compute the assets to start caching and to stop caching.
+            var addedIndexPaths = [NSIndexPath]()
+            var removedIndexPaths = [NSIndexPath]()
+            computeDifferenceBetweenRect(previousPreheatRect,
+                newRect: preheatRect,
+                removedHandler: {[unowned self] (removedRect) ->Void in
+                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(removedRect)
+                    if indexPaths != nil {
+                        removedIndexPaths.appendContentsOf(indexPaths!)
+                    }
+                },
+                addedHandler: {[unowned self] (addedRect) -> Void in
+                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(addedRect)
+                    if indexPaths != nil {
+                      addedIndexPaths.appendContentsOf(indexPaths!)
+                    }
+            })
+            
+            let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths)
+            let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths)
+            // Update the assets the PHCachingImageManager is caching.
+            let options = PHImageRequestOptions()
+            options.resizeMode = PHImageRequestOptionsResizeMode.Exact
+            let scale = UIScreen.mainScreen().scale
+            let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
+            
+            if assetsToStartCaching != nil {
+                self.imageManager?.startCachingImagesForAssets(assetsToStartCaching!, targetSize: size, contentMode: .AspectFill, options: options)
+            }
+            if assetsToStopCaching != nil {
+                 self.imageManager?.stopCachingImagesForAssets(assetsToStartCaching!, targetSize: size, contentMode: .AspectFill, options: options)
+            }
+            // Store the preheat rect to compare against in the future.
+            self.previousPreheatRect = preheatRect;
+        }
+
+    }
+    
+    private func computeDifferenceBetweenRect(
+        oldRect: CGRect,
+        newRect: CGRect,
+        removedHandler:(removedRect: CGRect)-> Void,
+        addedHandler:(addedRect: CGRect)->Void) {
+            if CGRectIntersectsRect(newRect, oldRect) {
+                let oldMaxY = CGRectGetMaxY(oldRect)
+                let oldMinY = CGRectGetMinY(oldRect)
+                let newMaxY = CGRectGetMaxY(newRect)
+                let newMinY = CGRectGetMinY(newRect)
+                if newMaxY > oldMaxY {
+                    let rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY))
+                    addedHandler(addedRect: rectToAdd)
+                }
+                
+                if oldMinY > newMinY {
+                    let rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY))
+                    addedHandler(addedRect: rectToAdd)
+                }
+                if newMaxY < oldMaxY {
+                    let rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY))
+                    removedHandler(removedRect: rectToRemove)
+                }
+                if oldMinY < newMinY {
+                    let rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY))
+                    removedHandler(removedRect: rectToRemove)
+                }
+            } else {
+                addedHandler(addedRect: newRect)
+                removedHandler(removedRect: oldRect)
+            }
+    }
+    
+    private func assetsAtIndexPaths(indexPaths: [NSIndexPath]) -> [PHAsset]? {
+        if indexPaths.count == 0 {
+            return nil;
+        }
+        var assets = [PHAsset]()
+        for (_, results) in indexPaths.enumerate() {
+            let asset = assetsArray[results.item]
+            assets.append(asset)
+        }
+        return assets
+    }
+
 }
