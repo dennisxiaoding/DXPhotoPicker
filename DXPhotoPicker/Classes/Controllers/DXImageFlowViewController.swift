@@ -370,11 +370,11 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
             let scale = UIScreen.mainScreen().scale
             let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
             
-            if assetsToStartCaching != nil {
+            if assetsToStartCaching != nil && assetsToStartCaching?.count > 0 {
                 self.imageManager?.startCachingImagesForAssets(assetsToStartCaching!, targetSize: size, contentMode: .AspectFill, options: options)
             }
-            if assetsToStopCaching != nil {
-                 self.imageManager?.stopCachingImagesForAssets(assetsToStartCaching!, targetSize: size, contentMode: .AspectFill, options: options)
+            if assetsToStopCaching != nil && assetsToStopCaching?.count > 0 {
+                 self.imageManager?.stopCachingImagesForAssets(assetsToStopCaching!, targetSize: size, contentMode: .AspectFill, options: options)
             }
             // Store the preheat rect to compare against in the future.
             self.previousPreheatRect = preheatRect;
