@@ -5,7 +5,7 @@
 ## About
 DXPhotoPickerController is a component that funtioned like imagepicker in WeChat. It's very similar to UIImagePickerController which makes its usage simple and concise.
 
-DXPhotoPickerController is a swift version of [DXImagePicker](https://github.com/AwesomeDennis/DNImagePicker).
+DXPhotoPickerController is a swift version of [DNImagePicker](https://github.com/AwesomeDennis/DNImagePicker).
 
 I don't make it as a pod because of the flexible UI requirements. Only supported the simple demo and you can customize your own style.
 
