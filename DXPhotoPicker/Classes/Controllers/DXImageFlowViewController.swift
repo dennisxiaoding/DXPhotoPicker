@@ -190,7 +190,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     }
     
     private func addAsset(asset: PHAsset) -> Bool {
-        if selectedAssetsArray.count >= DXPhotoBrowser.DXPhotoBrowserConfig.maxSeletedNumber {
+        if selectedAssetsArray.count >= DXPhotoPickerController.DXPhotoPickerConfig.maxSeletedNumber {
             showTips()
             return false
         }
@@ -222,7 +222,8 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     }
     
     private func showTips() {
-        let alert = UIAlertController(title: DXlocalizedString("alertTitle", comment: ""), message: DXlocalizedString("alertContent", comment: ""), preferredStyle: .Alert)
+        let alertString = NSString(format: DXlocalizedString("alertContent", comment: ""), NSNumber(integer: DXPhotoPickerController.DXPhotoPickerConfig.maxSeletedNumber))
+        let alert = UIAlertController(title: DXlocalizedString("alertTitle", comment: ""), message: alertString as String, preferredStyle: .Alert)
         let action = UIAlertAction(title: DXlocalizedString("alertButton", comment: ""), style: .Cancel) { (action) -> Void in
             alert.dismissViewControllerAnimated(true, completion: nil)
         }

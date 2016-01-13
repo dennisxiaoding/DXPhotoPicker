@@ -22,7 +22,6 @@ import Photos
 class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     struct DXPhotoBrowserConfig {
-        static let maxSeletedNumber = 9
         static let browserCellReuseIdntifier = "DXBrowserCell"
     }
     

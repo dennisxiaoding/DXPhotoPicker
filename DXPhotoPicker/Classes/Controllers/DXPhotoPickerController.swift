@@ -29,6 +29,12 @@ import Photos
 @available(iOS 8.0, *)
 public class DXPhotoPickerController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
+    struct DXPhotoPickerConfig {
+        /// set the max selected number
+        static let maxSeletedNumber = 9
+    }
+
+    
     public weak var photoPickerDelegate: DXPhotoPickerControllerDelegate?
     
     override public func viewDidLoad() {
