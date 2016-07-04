@@ -45,21 +45,15 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         func handleSingleTap(touch: UITouch?) {
-            if (self.tapDelegate != nil && self.tapDelegate!.respondsToSelector(Selector("imageView:singleTapDetected:"))) {
-                self.tapDelegate?.imageView!(self, singleTapDetected: touch)
-            }
+            tapDelegate?.imageView?(self, singleTapDetected: touch)
         }
         
         func handleDoubleTap(touch: UITouch?) {
-            if (self.tapDelegate != nil && self.tapDelegate!.respondsToSelector(Selector("imageView:doubleTapDetected:"))) {
-                self.tapDelegate?.imageView!(self, doubleTapDetected: touch)
-            }
+            tapDelegate?.imageView?(self, doubleTapDetected: touch)
         }
         
         func handleTripleTap(touch: UITouch?) {
-            if (self.tapDelegate != nil && self.tapDelegate!.respondsToSelector(Selector("imageView:tripleTapDetected:"))) {
-                self.tapDelegate?.imageView!(self, tripleTapDetected: touch)
-            }
+            tapDelegate?.imageView?(self, tripleTapDetected: touch)
         }
         
         let touch = touches.first

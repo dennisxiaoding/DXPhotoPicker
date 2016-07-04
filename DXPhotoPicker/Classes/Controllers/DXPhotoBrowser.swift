@@ -11,11 +11,11 @@ import Photos
 
 @objc protocol DXPhotoBroswerDelegate: NSObjectProtocol {
     
-    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset)
+    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset?)
     func seletedPhotosNumberInPhotoBrowser(photoBrowser: DXPhotoBrowser) -> Int
-    func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset) -> Bool
-    func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool
-    func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset)
+    func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset?) -> Bool
+    func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset?) -> Bool
+    func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset?)
     func photoBrowser(photoBrowser: DXPhotoBrowser, seleteFullImage fullImage: Bool)
 }
 
@@ -47,7 +47,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     lazy var fullImageButton: DXFullImageButton = {
         let button = DXFullImageButton(frame: CGRectMake(0, 0, self.view.dx_width/2,28))
-        button.addTarget(self, action: Selector("fullImageButtonAction"))
+        button.addTarget(self, action: #selector(DXPhotoBrowser.fullImageButtonAction))
         button.selected = self.fullImage
         return button
     }()
@@ -81,13 +81,13 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         button.frame = CGRectMake(0, 0, 25, 25)
         button.setBackgroundImage(UIImage(named: "photo_check_selected"), forState: .Selected)
         button.setBackgroundImage(UIImage(named: "photo_check_default"), forState: .Normal)
-        button.addTarget(self, action: Selector("checkButtonAction"), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(DXPhotoBrowser.checkButtonAction), forControlEvents: .TouchUpInside)
         return button
     }()
     
     lazy var sendButton: DXSendButton = {
         let button = DXSendButton(frame: CGRectZero)
-        button.addTarget(self, action: Selector("sendButtonAction"))
+        button.addTarget(self, action: #selector(DXPhotoBrowser.sendButtonAction))
         return button
     }()
     
@@ -174,10 +174,6 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.setNavigationBarHidden(false, animated: animated)
         let navBar = navigationController!.navigationBar
         navBar.tintColor = UIColor.whiteColor()
-        if navBar.respondsToSelector(Selector("setBarTintColor:")) {
-            navBar.barTintColor = nil
-            navBar.shadowImage = nil
-        }
         navBar.translucent = true
         navBar.barStyle = .BlackTranslucent
         navBar.setBackgroundImage(nil, forBarMetrics: .Default)
@@ -213,7 +209,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         setupBarButtonItems()
         let rigthBarItem = UIBarButtonItem(customView: checkButton)
         navigationItem.rightBarButtonItem = rigthBarItem
-        createBarButtonItemAtPosition(.Left, normalImage: UIImage(named: "back_normal"), highlightImage: UIImage(named: "back_highlight"), action: Selector("backButtonAction"))
+        createBarButtonItemAtPosition(.Left, normalImage: UIImage(named: "back_normal"), highlightImage: UIImage(named: "back_highlight"), action: #selector(DXPhotoBrowser.backButtonAction))
     }
     
     private func updateNavigationBarAndToolBar() {
@@ -221,11 +217,13 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
             return
         }
         title = "\(currentIndex + 1)"+"/" + "\(photosDataSource!.count)"
-        var selectTag = false
-        if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("photoBrowser:currentPhotoAssetIsSeleted:"))) {
-            selectTag = self.delegate!.photoBrowser(self, currentPhotoAssetIsSeleted: photosDataSource![currentIndex])
+        let selected = self.delegate?.photoBrowser(self, currentPhotoAssetIsSeleted: photosDataSource?[currentIndex])
+        if selected == nil {
+            checkButton.selected = false
+        } else {
+            checkButton.selected = selected!
         }
-        checkButton.selected = selectTag
+
         fullImageButton.selected = fullImage
         if fullImage {
             let asset = photosDataSource![currentIndex]
@@ -236,10 +234,11 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     private func updateSelestedNumber() {
-        if (self.delegate != nil && self.delegate!.respondsToSelector("seletedPhotosNumberInPhotoBrowser:")) {
-            let number = self.delegate!.seletedPhotosNumberInPhotoBrowser(self)
-            self.sendButton.badgeValue = "\(number)"
+        let number = self.delegate?.seletedPhotosNumberInPhotoBrowser(self)
+        if (number != nil) {
+            self.sendButton.badgeValue = "\(number!)"
         }
+        
     }
     
     private func didScrollToPage(page: Int) {
@@ -254,46 +253,35 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @objc private func sendButtonAction() {
-        if (self.delegate != nil && self.delegate!.respondsToSelector(Selector("sendImagesFromPhotoBrowser:currentAsset:"))) {
-            self.delegate!.sendImagesFromPhotoBrowser(self, currentAsset: photosDataSource![currentIndex])
-        }
+        delegate?.sendImagesFromPhotoBrowser(self, currentAsset: photosDataSource![currentIndex])
     }
     
     @objc private func fullImageButtonAction() {
         fullImageButton.selected = !fullImageButton.selected
         fullImage = fullImageButton.selected
-        guard delegate != nil else {
-            return
-        }
-        if self.delegate!.respondsToSelector(Selector("photoBrowser:seleteFullImage:")) {
-            self.delegate!.photoBrowser(self, seleteFullImage: fullImage)
-        }
-        
+        self.delegate?.photoBrowser(self, seleteFullImage: fullImage)
         if fullImageButton.selected {
-            if delegate!.photoBrowser(self, seletedAsset: photosDataSource![currentIndex]) {
-                updateSelestedNumber()
+            if ((delegate?.photoBrowser(self, seletedAsset: photosDataSource?[currentIndex])) != nil){
+                updateNavigationBarAndToolBar()
             }
-            updateNavigationBarAndToolBar()
         }
     }
     
     @objc private func checkButtonAction() {
         if checkButton.selected {
-            guard self.delegate != nil else {
-                DXLog("have not set the browser's delegate")
-                return
-            }
-            if (self.delegate!.respondsToSelector(Selector("photoBrowser:deseletedAsset:"))) {
-                self.delegate!.photoBrowser(self, deseletedAsset: photosDataSource![currentIndex])
-                checkButton.selected = false
-                updateSelestedNumber()
-            }
+            delegate?.photoBrowser(self, deseletedAsset: photosDataSource?[currentIndex])
+            checkButton.selected = false
+            updateSelestedNumber()
         } else {
-            if self.delegate!.respondsToSelector(Selector("photoBrowser:seletedAsset:")) {
-                checkButton.selected = self.delegate!.photoBrowser(self, seletedAsset: photosDataSource![currentIndex])
-                if checkButton.selected {
-                    updateSelestedNumber()
-                }
+            let selected = delegate?.photoBrowser(self, seletedAsset: photosDataSource?[currentIndex])
+            if selected == nil {
+                checkButton.selected = false
+            } else {
+                checkButton.selected = selected!
+            }
+            
+            if checkButton.selected {
+                updateSelestedNumber()
             }
         }
     }
@@ -337,25 +325,26 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: control hide
     
-    private func setControlsHidden(var hidden: Bool, animated: Bool) {
+    private func setControlsHidden(hidden: Bool, animated: Bool) {
+        var hide = hidden
         if (photosDataSource == nil || photosDataSource!.count == 0) {
-            hidden = false
+            hide = false
         }
         let animationOffSet: CGFloat = 20
         let animationDuration = (animated ? 0.35 : 0)
-        statusBarShouldBeHidden = hidden
+        statusBarShouldBeHidden = hide
         UIView.animateWithDuration(animationDuration, animations: {[unowned self] () -> Void in
             self.setNeedsStatusBarAppearanceUpdate()
             })
         let frame = CGRectIntegral(CGRectMake(0, view.dx_height - 44, view.dx_width, 44))
-        if areControlsHidden() && hidden == false && animated {
+        if areControlsHidden() && hide == false && animated {
             toolBar.frame = CGRectOffset(frame, 0, animationOffSet)
         }
         UIView.animateWithDuration(animationDuration) {[unowned self] () -> Void in
-            let alpha: CGFloat = hidden ? 0 : 1
+            let alpha: CGFloat = hide ? 0 : 1
             self.navigationController?.navigationBar.alpha = alpha
             self.toolBar.frame = frame
-            if hidden {
+            if hide {
                 self.toolBar.frame = CGRectOffset(self.toolBar.frame, 0, animationOffSet)
             }
             self.toolBar.alpha = alpha

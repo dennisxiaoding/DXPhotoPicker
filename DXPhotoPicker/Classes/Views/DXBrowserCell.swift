@@ -201,7 +201,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             guard photoBrowser != nil else {
                 return
             }
-            photoBrowser?.performSelector(Selector("toggleControls"), withObject: nil, afterDelay: 0.2)
+            photoBrowser?.performSelector(#selector(DXPhotoBrowser.toggleControls), withObject: nil, afterDelay: 0.2)
         }
         
         guard touch != nil else {

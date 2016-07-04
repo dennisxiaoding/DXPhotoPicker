@@ -41,7 +41,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     }()
     private lazy var sendButton: DXSendButton = {
         let button = DXSendButton(frame: CGRectZero)
-        button.addTarget(self, action: Selector("sendImage"))
+        button.addTarget(self, action: #selector(DXImageFlowViewController.sendImage))
         return button
     }()
     
@@ -81,19 +81,19 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
                 .Left,
                 normalImage: UIImage(named: "back_normal"),
                 highlightImage: UIImage(named: "back_highlight"),
-                action: Selector("backButtonAction")
+                action: #selector(DXImageFlowViewController.backButtonAction)
             )
             createBarButtonItemAtPosition(
                 .Right,
                 text: DXlocalizedString("cancel", comment: "取消"),
-                action: Selector("cancelAction")
+                action: #selector(DXImageFlowViewController.cancelAction)
             )
             
             let item1 = UIBarButtonItem(
                 title: DXlocalizedString("preview", comment: "预览"),
                 style: .Plain,
                 target: self,
-                action: Selector("previewAction")
+                action: #selector(DXImageFlowViewController.previewAction)
             )
             item1.tintColor = UIColor.blackColor()
             item1.enabled = false
@@ -158,14 +158,12 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     @objc private func sendImage() {
         
         let photoPicker = navigationController as? DXPhotoPickerController
-        guard (photoPicker != nil && photoPicker!.photoPickerDelegate != nil) else {
+        guard (photoPicker != nil ) else {
             return
         }
-        if (photoPicker!.photoPickerDelegate!.respondsToSelector(Selector("photoPickerController:sendImages:isFullImage:"))) {
-            DXPickerHelper.saveIdentifier(currentAlbum!.identifier)
-            DXLog(currentAlbum!.identifier)
-            photoPicker!.photoPickerDelegate!.photoPickerController!(photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
-        }
+        DXPickerHelper.saveIdentifier(currentAlbum?.identifier)
+        DXLog(currentAlbum?.identifier)
+        photoPicker!.photoPickerDelegate?.photoPickerController?(photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
     }
     
     @objc private func backButtonAction() {
@@ -174,9 +172,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     
     @objc private func cancelAction() {
         let navController = navigationController as? DXPhotoPickerController
-        if (navController != nil && navController!.photoPickerDelegate!.respondsToSelector("photoPickerDidCancel:")) {
-            navController!.photoPickerDelegate!.photoPickerDidCancel!(navController!)
-        }
+        navController?.photoPickerDelegate?.photoPickerDidCancel?(navController!)
     }
     
     @objc private func previewAction() {
@@ -257,7 +253,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     
     // MARK: DXPhotoBroswerDelegate
     
-    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset) {
+    func sendImagesFromPhotoBrowser(photoBrowser: DXPhotoBrowser, currentAsset: PHAsset?) {
         sendImage()
     }
     
@@ -265,26 +261,37 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         return selectedAssetsArray.count
     }
     
-    func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset) -> Bool {
-        return selectedAssetsArray.contains(asset)
+    func photoBrowser(photoBrowser: DXPhotoBrowser, currentPhotoAssetIsSeleted asset: PHAsset?) -> Bool {
+        guard asset != nil else {
+            return false
+        }
+        
+        return selectedAssetsArray.contains(asset!)
     }
     
-    func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset) -> Bool {
-        let index = assetsArray.indexOf(asset)
+    func photoBrowser(photoBrowser: DXPhotoBrowser, seletedAsset asset: PHAsset?) -> Bool {
+        guard asset != nil else {
+            return false
+        }
+        let index = assetsArray.indexOf(asset!)
         guard index != nil else {
             return false
         }
-        let success = addAsset(asset)
+        let success = addAsset(asset!)
         imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
         return success
     }
     
-    func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset) {
-        let index = assetsArray.indexOf(asset)
+    func photoBrowser(photoBrowser: DXPhotoBrowser, deseletedAsset asset: PHAsset?) {
+        guard asset != nil else {
+            return
+        }
+        
+        let index = assetsArray.indexOf(asset!)
         guard index != nil else {
             return
         }
-        deleteAsset(asset)
+        deleteAsset(asset!)
         imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
     }
     

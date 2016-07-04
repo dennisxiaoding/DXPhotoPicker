@@ -8,7 +8,7 @@
 
 import Foundation
 
-public func DXLog<T>(message: T, file: String = __FILE__, method: String = __FUNCTION__,line: Int = __LINE__) {
+public func DXLog<T>(message: T, file: String = #file, method: String = #function,line: Int = #line) {
     #if DEBUG
         print("\((file as NSString).lastPathComponent)[line:\(line)], \(method): \(message)")
     #endif

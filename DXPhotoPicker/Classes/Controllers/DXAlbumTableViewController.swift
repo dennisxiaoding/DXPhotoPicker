@@ -20,7 +20,7 @@ class DXAlbumTableViewController: UITableViewController {
         title = DXlocalizedString("albumTitle", comment: "photos")
         createBarButtonItemAtPosition(.Right,
             text: DXlocalizedString("cancel", comment: "取消"),
-            action: Selector("cancelAction")
+            action: #selector(DXAlbumTableViewController.cancelAction)
         )
         assetsCollection = DXPickerHelper.fetchAlbumList()
         tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
@@ -35,16 +35,14 @@ class DXAlbumTableViewController: UITableViewController {
     }
     
     func showUnAuthorizedTipsView() {
-        tableView.backgroundView = DXUnAuthorizedTipsView(frame: self.tableView.bounds)
+        tableView.backgroundView = DXUnAuthorizedTipsView(frame: tableView.bounds)
     }
     
     // MARK: UIActions
     
     @objc private func cancelAction() {
         let photoPicker = navigationController as! DXPhotoPickerController
-        if (photoPicker.photoPickerDelegate != nil && photoPicker.photoPickerDelegate!.respondsToSelector(Selector("photoPickerDidCancel:"))) {
-            photoPicker.photoPickerDelegate!.photoPickerDidCancel!(photoPicker)
-        }
+        photoPicker.photoPickerDelegate?.photoPickerDidCancel?(photoPicker)
     }
     
     // MARK: - Table view data source

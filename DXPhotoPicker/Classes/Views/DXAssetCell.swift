@@ -26,7 +26,7 @@ class DXAssetCell: UICollectionViewCell {
     private lazy var checkButton: UIButton = {
         let button = UIButton(type: .Custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: Selector("checkButtonAction"), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(DXAssetCell.checkButtonAction), forControlEvents: .TouchUpInside)
         return button
     }()
     
