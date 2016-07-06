@@ -65,10 +65,8 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
                 viewController!.reloadTableView()
             case .Denied:
                 viewController!.showUnAuthorizedTipsView()
-                break
             case .Restricted:
                 viewController!.showUnAuthorizedTipsView()
-                break
             case .NotDetermined:
                 PHPhotoLibrary.requestAuthorization({ (status) -> Void in
                     guard status != .NotDetermined else {
