@@ -122,12 +122,13 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
                 self.assetsArray = DXPickerHelper.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
                 dispatch_async(dispatch_get_main_queue()) {
                     [unowned self] in
+
+                    self.imageManager = PHCachingImageManager()
+                    self.imageFlowCollectionView.reloadData()
                     let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
                     guard item != 0 else {
                         return
                     }
-                    self.imageManager = PHCachingImageManager()
-                    self.imageFlowCollectionView.reloadData()
                     let lastItemIndex = NSIndexPath(forItem: item-1, inSection: 0)
                     self.imageFlowCollectionView.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: .Bottom, animated: false)
                 }
