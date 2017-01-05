@@ -13,7 +13,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     
     struct DXImageFlowConfig {
         static let dxAssetCellReuseIdentifier = "dxAssetCellReuseIdentifier"
-        static let kThumbSizeLength = (UIScreen.mainScreen().bounds.size.width-10)/4
+        static let kThumbSizeLength = (UIScreen.main.bounds.size.width-10)/4
     }
     
     private var currentAlbum: DXAlbum?
@@ -22,26 +22,26 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     private var selectedAssetsArray: [PHAsset]
     private var isFullImage = false
     private var imageManager: PHCachingImageManager?
-    private var previousPreheatRect: CGRect = CGRectZero
+    private var previousPreheatRect: CGRect = CGRect.zero
     
     private lazy var imageFlowCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 2.0
         flowLayout.minimumInteritemSpacing = 2.0
-        flowLayout.scrollDirection = .Vertical;
-        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
+        flowLayout.scrollDirection = .vertical;
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         collectionView.showsHorizontalScrollIndicator = true
-        collectionView.backgroundColor = UIColor.whiteColor()
-        collectionView.registerClass(DXAssetCell.self, forCellWithReuseIdentifier: DXImageFlowConfig.dxAssetCellReuseIdentifier)
+        collectionView.backgroundColor = UIColor.white
+        collectionView.register(DXAssetCell.self, forCellWithReuseIdentifier: DXImageFlowConfig.dxAssetCellReuseIdentifier)
         return collectionView;
     }()
     private lazy var sendButton: DXSendButton = {
-        let button = DXSendButton(frame: CGRectZero)
-        button.addTarget(self, action: #selector(DXImageFlowViewController.sendImage))
+        let button = DXSendButton(frame: CGRect.zero)
+        button.addTarget(target: self, action: #selector(DXImageFlowViewController.sendImage))
         return button
     }()
     
@@ -76,38 +76,40 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         func setupView() {
-            view.backgroundColor = UIColor.whiteColor()
-            createBarButtonItemAtPosition(
-                .Left,
-                normalImage: UIImage(named: "back_normal"),
-                highlightImage: UIImage(named: "back_highlight"),
-                action: #selector(DXImageFlowViewController.backButtonAction)
-            )
-            createBarButtonItemAtPosition(
-                .Right,
-                text: DXlocalizedString("cancel", comment: "取消"),
-                action: #selector(DXImageFlowViewController.cancelAction)
-            )
+            view.backgroundColor = UIColor.white
+            self.createBarButtonItemAt(position: .left,
+                                       normalImage:  UIImage(named: "back_normal"),
+                                       highlightImage: UIImage(named: "back_highlight"),
+                                       action: #selector(DXImageFlowViewController.backButtonAction))
+            self.createBarButtonItemAt(position: .right,
+                                       text: DXlocalized(string: "cancel", comment: "取消"),
+                                       action: #selector(DXImageFlowViewController.cancelAction))
             
             let item1 = UIBarButtonItem(
-                title: DXlocalizedString("preview", comment: "预览"),
-                style: .Plain,
+                title: DXlocalized(string: "preview", comment: "预览"),
+                style: .plain,
                 target: self,
                 action: #selector(DXImageFlowViewController.previewAction)
             )
-            item1.tintColor = UIColor.blackColor()
-            item1.enabled = false
-            let item2 = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+            item1.tintColor = UIColor.black
+            item1.isEnabled = false
+            let item2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
             let item3 = UIBarButtonItem(customView: self.sendButton)
-            let item4 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+            let item4 = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             item4.width = -10
             setToolbarItems([item1,item2,item3,item4], animated: false)
             self.view.addSubview(imageFlowCollectionView)
             let viewBindDic = ["imageFlowCollectionView":imageFlowCollectionView]
             let vflH = "H:|-0-[imageFlowCollectionView]-0-|"
             let vflV = "V:|-0-[imageFlowCollectionView]-0-|"
-            let contraintsH = NSLayoutConstraint.constraintsWithVisualFormat(vflH, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindDic)
-            let contraintsV = NSLayoutConstraint.constraintsWithVisualFormat(vflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindDic)
+            let contraintsH = NSLayoutConstraint.constraints(withVisualFormat: vflH,
+                                                             options: NSLayoutFormatOptions(rawValue: 0),
+                                                             metrics: nil,
+                                                             views: viewBindDic)
+            let contraintsV = NSLayoutConstraint.constraints(withVisualFormat: vflV,
+                                                             options: NSLayoutFormatOptions(rawValue: 0),
+                                                             metrics: nil,
+                                                             views: viewBindDic)
             self.view.addConstraints(contraintsH)
             self.view.addConstraints(contraintsV)
         }
@@ -116,21 +118,19 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
             if currentAlbum == nil && albumIdentifier != nil {
                 currentAlbum = DXPickerHelper.fetchAlbum()
             }
-            title = currentAlbum?.name
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                [unowned self] in
-                self.assetsArray = DXPickerHelper.fetchImageAssetsViaCollectionResults(self.currentAlbum!.results)
-                dispatch_async(dispatch_get_main_queue()) {
-                    [unowned self] in
-
+            self.title = currentAlbum?.name
+            
+            DispatchQueue.global().async {
+                self.assetsArray = DXPickerHelper.fetchImageAssets(inCollectionResults: self.currentAlbum!.results)
+                DispatchQueue.main.async {
                     self.imageManager = PHCachingImageManager()
                     self.imageFlowCollectionView.reloadData()
-                    let item = self.imageFlowCollectionView.numberOfItemsInSection(0)
+                    let item = self.imageFlowCollectionView.numberOfItems(inSection: 0)
                     guard item != 0 else {
                         return
                     }
-                    let lastItemIndex = NSIndexPath(forItem: item-1, inSection: 0)
-                    self.imageFlowCollectionView.scrollToItemAtIndexPath(lastItemIndex, atScrollPosition: .Bottom, animated: false)
+                    let lastItemIndex = IndexPath(item: item-1, section: 0)
+                    self.imageFlowCollectionView.scrollToItem(at: lastItemIndex, at: .bottom, animated: false)
                 }
             }
         }
@@ -138,19 +138,19 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         setUpData()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.toolbarHidden = false
+        navigationController?.isToolbarHidden = false
         sendButton.badgeValue = "\(selectedAssetsArray.count)"
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateCachedAssets()
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        navigationController?.toolbarHidden = true
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.isToolbarHidden = true
         super.viewWillDisappear(animated)
     }
     
@@ -162,22 +162,22 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         guard (photoPicker != nil ) else {
             return
         }
-        DXPickerHelper.saveIdentifier(currentAlbum?.identifier)
+        DXPickerHelper.save(identifier: currentAlbum?.identifier)
         DXLog(currentAlbum?.identifier)
-        photoPicker!.photoPickerDelegate?.photoPickerController?(photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
+        photoPicker!.photoPickerDelegate?.photoPickerController?(photoPicker: photoPicker, sendImages: selectedAssetsArray, isFullImage: isFullImage)
     }
     
     @objc private func backButtonAction() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func cancelAction() {
         let navController = navigationController as? DXPhotoPickerController
-        navController?.photoPickerDelegate?.photoPickerDidCancel?(navController!)
+        navController?.photoPickerDelegate?.photoPickerDidCancel?(photoPicker: navController!)
     }
     
     @objc private func previewAction() {
-        browserPhotoAsstes(selectedAssetsArray, pageIndex: 0)
+        browserPhotoAsstes(assets: selectedAssetsArray, pageIndex: 0)
     }
     
     // MARK: priviate
@@ -200,21 +200,21 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         selectedAssetsArray.append(asset)
         sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
         if selectedAssetsArray.count > 0 {
-            toolbarItems!.first!.enabled = true
+            toolbarItems!.first!.isEnabled = true
         }
         return true
     }
     
     private func deleteAsset(asset: PHAsset) -> Bool {
         if selectedAssetsArray.contains(asset) {
-            let index = selectedAssetsArray.indexOf(asset)
+            let index = selectedAssetsArray.index(of: asset)
             guard index != nil else {
                 return false
             }
-            selectedAssetsArray.removeAtIndex(index!)
+            selectedAssetsArray.remove(at: index!)
             sendButton.badgeValue = "\(self.selectedAssetsArray.count)"
             if selectedAssetsArray.count <= 0 {
-                toolbarItems!.first!.enabled = false
+                toolbarItems!.first!.isEnabled = false
             }
             return true
         }
@@ -222,31 +222,31 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     }
     
     private func showTips() {
-        let alertString = NSString(format: DXlocalizedString("alertContent", comment: ""), NSNumber(integer: DXPhotoPickerController.DXPhotoPickerConfig.maxSeletedNumber))
-        let alert = UIAlertController(title: DXlocalizedString("alertTitle", comment: ""), message: alertString as String, preferredStyle: .Alert)
-        let action = UIAlertAction(title: DXlocalizedString("alertButton", comment: ""), style: .Cancel) { (action) -> Void in
-            alert.dismissViewControllerAnimated(true, completion: nil)
+        let alertString = NSString(format: DXlocalized(string: "alertContent", comment: "") as NSString, NSNumber(value: DXPhotoPickerController.DXPhotoPickerConfig.maxSeletedNumber))
+        let alert = UIAlertController(title: DXlocalized(string: "alertTitle", comment: ""), message: alertString as String, preferredStyle: .alert)
+        let action = UIAlertAction(title: DXlocalized(string: "alertButton", comment: ""), style: .cancel) { (action) -> Void in
+            alert.dismiss(animated: true, completion: nil)
         }
         alert.addAction(action)
-        navigationController?.presentViewController(alert, animated: true, completion: nil)
+        navigationController?.present(alert, animated: true, completion: nil)
     }
     
     private func displayImageInCell(cell: DXAssetCell, indexPath: NSIndexPath) {
-        cell.fillWithAsset(assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
+        cell.fillWithAsset(asset: assetsArray[indexPath.row], isAssetSelected: selectedAssetsArray.contains(assetsArray[indexPath.row]))
         let options = PHImageRequestOptions()
-        options.resizeMode = PHImageRequestOptionsResizeMode.Exact
-        let scale = UIScreen.mainScreen().scale
-        let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
-        imageManager?.requestImageForAsset(assetsArray[indexPath.row], targetSize: size, contentMode: .AspectFill, options: options, resultHandler: { (image, obj) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        options.resizeMode = PHImageRequestOptionsResizeMode.exact
+        let scale = UIScreen.main.scale
+        let size = CGSize(width: DXImageFlowConfig.kThumbSizeLength*scale, height: DXImageFlowConfig.kThumbSizeLength*scale);
+        imageManager?.requestImage(for: assetsArray[indexPath.row], targetSize: size, contentMode: .aspectFill, options: options, resultHandler: { (image, obj) -> Void in
+            DispatchQueue.main.async {
                 cell.imageView.image = image
-            })
+            }
         })
         cell.selectItemBlock {[unowned self] (selected, asset) -> Bool in
             if selected == true {
-                return self.addAsset(asset)
+                return self.addAsset(asset: asset)
             } else {
-                self.deleteAsset(asset)
+                self.deleteAsset(asset: asset)
                 return false
             }
         }
@@ -274,12 +274,12 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         guard asset != nil else {
             return false
         }
-        let index = assetsArray.indexOf(asset!)
+        let index = assetsArray.index(of: asset!)
         guard index != nil else {
             return false
         }
-        let success = addAsset(asset!)
-        imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
+        let success = addAsset(asset: asset!)
+        imageFlowCollectionView.reloadItems(at: [IndexPath(item: index!, section: 0)])
         return success
     }
     
@@ -288,12 +288,12 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
             return
         }
         
-        let index = assetsArray.indexOf(asset!)
+        let index = assetsArray.index(of: asset!)
         guard index != nil else {
             return
         }
-        deleteAsset(asset!)
-        imageFlowCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index!, inSection: 0)])
+        deleteAsset(asset: asset!)
+        imageFlowCollectionView.reloadItems(at: [IndexPath(item: index!, section: 0)])
     }
     
     func photoBrowser(photoBrowser: DXPhotoBrowser, seleteFullImage fullImage: Bool) {
@@ -303,35 +303,35 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     
     // MARK: UICollectionViewDataSource
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetsArray.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(DXImageFlowConfig.dxAssetCellReuseIdentifier, forIndexPath: indexPath) as! DXAssetCell
-        displayImageInCell(cell, indexPath: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DXImageFlowConfig.dxAssetCellReuseIdentifier, for: indexPath) as! DXAssetCell
+        displayImageInCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(DXImageFlowConfig.kThumbSizeLength, DXImageFlowConfig.kThumbSizeLength)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: DXImageFlowConfig.kThumbSizeLength, height: DXImageFlowConfig.kThumbSizeLength)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(2, 2, 2, 2)
     }
     
     // MARK: UICollectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        browserPhotoAsstes(assetsArray, pageIndex: indexPath.row)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        browserPhotoAsstes(assets: assetsArray, pageIndex: indexPath.row)
     }
     
     // MARK: UIScrollViewDelegate
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateCachedAssets()
     }
     
@@ -339,54 +339,55 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     
     private func resetCachedAssets() {
         imageManager?.stopCachingImagesForAllAssets()
-        previousPreheatRect = CGRectZero
+        previousPreheatRect = CGRect.zero
     }
     
     private func updateCachedAssets() {
-        let isViewVisible = self.isViewLoaded() && (self.view.window != nil)
+        let isViewVisible = self.isViewLoaded && (self.view.window != nil)
         if isViewVisible == false {
             return
         }
         // The preheat window is twice the height of the visible rect.
         var preheatRect = self.imageFlowCollectionView.bounds
-        preheatRect = CGRectInset(preheatRect, 0.0, -0.5 * CGRectGetHeight(preheatRect))
+        preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
         /*
         Check if the collection view is showing an area that is significantly
         different to the last preheated area.
         */
-        let delta = fabs(CGRectGetMidY(preheatRect) - CGRectGetMidY(self.previousPreheatRect))
-        if (delta > CGRectGetHeight(self.imageFlowCollectionView.bounds) / 3.0) {
+        let delta = fabs(preheatRect.midY - self.previousPreheatRect.midY)
+        
+        if (delta > self.imageFlowCollectionView.bounds.height / 3.0) {
             // Compute the assets to start caching and to stop caching.
             var addedIndexPaths = [NSIndexPath]()
             var removedIndexPaths = [NSIndexPath]()
-            computeDifferenceBetweenRect(previousPreheatRect,
+            computeDifferenceBetweenRect(oldRect: previousPreheatRect,
                 newRect: preheatRect,
                 removedHandler: {[unowned self] (removedRect) ->Void in
-                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(removedRect)
+                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(rect: removedRect)
                     if indexPaths != nil {
-                        removedIndexPaths.appendContentsOf(indexPaths!)
+                        removedIndexPaths.append(contentsOf: indexPaths!)
                     }
                 },
                 addedHandler: {[unowned self] (addedRect) -> Void in
-                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(addedRect)
+                    let indexPaths = self.imageFlowCollectionView.aapl_indexPathsForElementsInRect(rect: addedRect)
                     if indexPaths != nil {
-                      addedIndexPaths.appendContentsOf(indexPaths!)
+                      addedIndexPaths.append(contentsOf: indexPaths!)
                     }
             })
             
-            let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths)
-            let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths)
+            let assetsToStartCaching = assetsAtIndexPaths(indexPaths: addedIndexPaths)
+            let assetsToStopCaching = assetsAtIndexPaths(indexPaths: removedIndexPaths)
             // Update the assets the PHCachingImageManager is caching.
             let options = PHImageRequestOptions()
-            options.resizeMode = PHImageRequestOptionsResizeMode.Exact
-            let scale = UIScreen.mainScreen().scale
-            let size = CGSizeMake(DXImageFlowConfig.kThumbSizeLength*scale, DXImageFlowConfig.kThumbSizeLength*scale);
+            options.resizeMode = PHImageRequestOptionsResizeMode.exact
+            let scale = UIScreen.main.scale
+            let size = CGSize(width: DXImageFlowConfig.kThumbSizeLength*scale, height: DXImageFlowConfig.kThumbSizeLength*scale);
             
-            if assetsToStartCaching != nil && assetsToStartCaching?.count > 0 {
-                self.imageManager?.startCachingImagesForAssets(assetsToStartCaching!, targetSize: size, contentMode: .AspectFill, options: options)
+            if assetsToStartCaching != nil && (assetsToStartCaching?.count)! > 0 {
+                self.imageManager?.startCachingImages(for: assetsToStartCaching!, targetSize: size, contentMode: .aspectFill, options: options)
             }
-            if assetsToStopCaching != nil && assetsToStopCaching?.count > 0 {
-                 self.imageManager?.stopCachingImagesForAssets(assetsToStopCaching!, targetSize: size, contentMode: .AspectFill, options: options)
+            if assetsToStopCaching != nil && (assetsToStopCaching?.count)! > 0 {
+                 self.imageManager?.stopCachingImages(for: assetsToStopCaching!, targetSize: size, contentMode: .aspectFill, options: options)
             }
             // Store the preheat rect to compare against in the future.
             self.previousPreheatRect = preheatRect;
@@ -397,33 +398,33 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     private func computeDifferenceBetweenRect(
         oldRect: CGRect,
         newRect: CGRect,
-        removedHandler:(removedRect: CGRect)-> Void,
-        addedHandler:(addedRect: CGRect)->Void) {
-            if CGRectIntersectsRect(newRect, oldRect) {
-                let oldMaxY = CGRectGetMaxY(oldRect)
-                let oldMinY = CGRectGetMinY(oldRect)
-                let newMaxY = CGRectGetMaxY(newRect)
-                let newMinY = CGRectGetMinY(newRect)
+        removedHandler:(_ removedRect: CGRect)-> Void,
+        addedHandler:(_ addedRect: CGRect)->Void) {
+            if newRect.intersects(oldRect) {
+                let oldMaxY = oldRect.maxY
+                let oldMinY = oldRect.minY
+                let newMaxY = newRect.maxY
+                let newMinY = newRect.minY
                 if newMaxY > oldMaxY {
-                    let rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY))
-                    addedHandler(addedRect: rectToAdd)
+                    let rectToAdd = CGRect(x: newRect.origin.x, y: oldMaxY, width: newRect.size.width, height: (newMaxY - oldMaxY))
+                    addedHandler(rectToAdd)
                 }
                 
                 if oldMinY > newMinY {
-                    let rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY))
-                    addedHandler(addedRect: rectToAdd)
+                    let rectToAdd = CGRect(x: newRect.origin.x, y: newMinY, width: newRect.size.width, height: (oldMinY - newMinY))
+                    addedHandler(rectToAdd)
                 }
                 if newMaxY < oldMaxY {
-                    let rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY))
-                    removedHandler(removedRect: rectToRemove)
+                    let rectToRemove = CGRect(x: newRect.origin.x, y: newMaxY, width: newRect.size.width, height: (oldMaxY - newMaxY))
+                    removedHandler(rectToRemove)
                 }
                 if oldMinY < newMinY {
-                    let rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY))
-                    removedHandler(removedRect: rectToRemove)
+                    let rectToRemove = CGRect(x: newRect.origin.x, y: oldMinY, width: newRect.size.width, height: (newMinY - oldMinY))
+                    removedHandler(rectToRemove)
                 }
             } else {
-                addedHandler(addedRect: newRect)
-                removedHandler(removedRect: oldRect)
+                addedHandler(newRect)
+                removedHandler(oldRect)
             }
     }
     
@@ -432,7 +433,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
             return nil;
         }
         var assets = [PHAsset]()
-        for (_, results) in indexPaths.enumerate() {
+        for (_, results) in indexPaths.enumerated() {
             let asset = assetsArray[results.item]
             assets.append(asset)
         }

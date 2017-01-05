@@ -14,29 +14,29 @@ class DXAlbumCell: UITableViewCell {
         let imageView = UIImageView(
             image: UIImage(named: "assets_placeholder_picture")
         )
-        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        imageView.contentMode = UIViewContentMode.scaleAspectFill
         return imageView
     }()
     lazy var titleLabel: UILabel = {
-        var label = UILabel(frame: CGRectZero)
-        label.backgroundColor = UIColor.whiteColor()
-        label.textColor = UIColor.darkTextColor()
-        label.textAlignment = NSTextAlignment.Left
-        label.font = UIFont.boldSystemFontOfSize(16.0)
+        var label = UILabel(frame: CGRect.zero)
+        label.backgroundColor = UIColor.white
+        label.textColor = UIColor.darkText
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
         return label
     }()
     lazy var countLabel: UILabel = {
-        var label = UILabel(frame: CGRectZero)
-        label.backgroundColor = UIColor.whiteColor()
-        label.textColor = UIColor.lightGrayColor()
-        label.textAlignment = NSTextAlignment.Left
-        label.font = UIFont.systemFontOfSize(14.0)
+        var label = UILabel(frame: CGRect.zero)
+        label.backgroundColor = UIColor.white
+        label.textColor = UIColor.lightGray
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.systemFont(ofSize: 14.0)
         return label
     }()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+        accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         self.setup()
     }
     
@@ -59,36 +59,36 @@ class DXAlbumCell: UITableViewCell {
             "posterImageView":posterImageView,
             "titleLabel": titleLabel,
             "countLabel": countLabel
-        ]
+        ] as [String : Any]
         let mertic = [
             "imageLength": 60
         ]
         
         let vflH = "H:|-0-[posterImageView(imageLength)]-10-[titleLabel(10@750)]-5-[countLabel]-0-|"
         let imageVFLV = "V:|-0-[posterImageView(imageLength)]"
-        let contstraintsH: Array = NSLayoutConstraint.constraintsWithVisualFormat(vflH,
-            options: NSLayoutFormatOptions.AlignAllCenterY,
+        let contstraintsH: Array = NSLayoutConstraint.constraints(withVisualFormat: vflH,
+            options: NSLayoutFormatOptions.alignAllCenterY,
             metrics: mertic,
             views: viewBindingsDict)
-        let imageContstraintsV: Array =  NSLayoutConstraint.constraintsWithVisualFormat(imageVFLV,
+        let imageContstraintsV: Array =  NSLayoutConstraint.constraints(withVisualFormat: imageVFLV,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: mertic,
             views: viewBindingsDict)
         let titleLabelHeightConstraint = NSLayoutConstraint(
             item: titleLabel,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.height,
+            relatedBy: NSLayoutRelation.equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: NSLayoutAttribute.notAnAttribute,
             multiplier: 1,
             constant: 40
         )
         let countLabelHeightConstraint = NSLayoutConstraint(
             item: countLabel,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.height,
+            relatedBy: NSLayoutRelation.equal,
             toItem: titleLabel,
-            attribute: NSLayoutAttribute.Height,
+            attribute: NSLayoutAttribute.height,
             multiplier: 1,
             constant: 0
         )
@@ -101,7 +101,7 @@ class DXAlbumCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     

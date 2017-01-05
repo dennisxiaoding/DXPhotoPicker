@@ -17,13 +17,13 @@ class DXAlbumTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = DXlocalizedString("albumTitle", comment: "photos")
-        createBarButtonItemAtPosition(.Right,
-            text: DXlocalizedString("cancel", comment: "取消"),
+        title = DXlocalized(string: "albumTitle", comment: "photos")
+        createBarButtonItemAt(position: .right,
+                              text: DXlocalized(string: "cancel", comment: "取消"),
             action: #selector(DXAlbumTableViewController.cancelAction)
         )
         assetsCollection = DXPickerHelper.fetchAlbumList()
-        tableView.registerClass(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+        tableView.register(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
         tableView.tableFooterView = UIView()
     }
     
@@ -42,43 +42,43 @@ class DXAlbumTableViewController: UITableViewController {
     
     @objc private func cancelAction() {
         let photoPicker = navigationController as! DXPhotoPickerController
-        photoPicker.photoPickerDelegate?.photoPickerDidCancel?(photoPicker)
+        photoPicker.photoPickerDelegate?.photoPickerDidCancel?(photoPicker: photoPicker)
     }
     
     // MARK: - Table view data source
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard assetsCollection != nil else {
             return 0
         }
         return assetsCollection!.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView .dequeueReusableCellWithIdentifier(dxalbumTableViewCellReuseIdentifier, forIndexPath: indexPath) as! DXAlbumCell
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView .dequeueReusableCell(withIdentifier: dxalbumTableViewCellReuseIdentifier, for: indexPath as IndexPath) as! DXAlbumCell
         let album = assetsCollection![indexPath.row]
         cell.titleLabel.text = album.name
         cell.countLabel.text = "(\(album.count))"
-        DXPickerHelper.fetchImageWithAsset(album.results!.lastObject as? PHAsset, targetSize: CGSizeMake(60, 60)) { (image) -> Void in
+        DXPickerHelper.fetchImage(viaAsset: album.results!.lastObject as? PHAsset, targetSize: CGSize(width:60, height:60)) { (image) -> Void in
             cell.posterImageView.image = image
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 60;
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 60
     }
     
     // MARK: - Table view data delegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let album = assetsCollection![indexPath.row]
         let photosListViewController = DXImageFlowViewController(album: album)
         navigationController?.pushViewController(photosListViewController, animated: true)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
 }

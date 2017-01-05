@@ -12,7 +12,7 @@ public class DXPromptView: UIWindow {
 
     convenience init(imageName: String?, message: String?) {
         self.init()
-        self.hidden = false
+        self.isHidden = false
         self.alpha = 1.0
         self.windowLevel = UIWindowLevelStatusBar + 1.0
         self.backgroundColor = UIColor(red: 0x17/255.0, green: 0x17/255.0, blue: 0x17/255.0, alpha: 0.9)
@@ -22,10 +22,10 @@ public class DXPromptView: UIWindow {
         self.addSubview(imageView)
         
         let label = UILabel()
-        label.font = UIFont.systemFontOfSize(14.0)
-        label.backgroundColor = UIColor.clearColor()
-        label.textColor = UIColor.whiteColor()
-        label.textAlignment = .Center
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        label.backgroundColor = UIColor.clear
+        label.textColor = UIColor.white
+        label.textAlignment = .center
         label.numberOfLines = 0
         label.text = message
         label.sizeToFit()

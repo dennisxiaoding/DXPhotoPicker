@@ -13,13 +13,13 @@ class DXFullImageButton: UIView {
     struct DXFullImageButtonParam {
         static let buttonPadding: CGFloat = 20
         static let buttonImageWidth: CGFloat = 16
-        static let buttonFont = UIFont.systemFontOfSize(13)
+        static let buttonFont = UIFont.systemFont(ofSize: 13)
     }
     
     // MARK: lazy load property
     
     private lazy var fullImageButton: UIButton = {
-        let button = UIButton(type: .Custom)
+        let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = self.backgroundColor
         self.addSubview(button)
@@ -27,35 +27,35 @@ class DXFullImageButton: UIView {
     }()
     
     private lazy var imageView: UIImageView = {
-        let imv = UIImageView(frame: CGRectZero)
+        let imv = UIImageView(frame: CGRect.zero)
         imv.translatesAutoresizingMaskIntoConstraints = false
         imv.backgroundColor = self.backgroundColor
         return imv
     }()
     
     private lazy var nameLabel: UILabel = {
-        let label = UILabel(frame: CGRectZero)
-        label.text = DXlocalizedString("fullImage", comment: "原图")
+        let label = UILabel(frame: CGRect.zero)
+        label.text = DXlocalized(string: "fullImage", comment: "原图")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = self.backgroundColor
-        label.font = UIFont.systemFontOfSize(14)
-        label.textAlignment = .Left
-        label.textColor = UIColor.whiteColor()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .left
+        label.textColor = UIColor.white
         return label
     }()
     
     private lazy var imageSizeLabel: UILabel = {
-        let label = UILabel(frame: CGRectZero)
+        let label = UILabel(frame: CGRect.zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = self.backgroundColor
-        label.font = UIFont.systemFontOfSize(13)
-        label.textAlignment = .Left
-        label.textColor = UIColor.whiteColor()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textAlignment = .left
+        label.textColor = UIColor.white
         return label
     }()
     
     private lazy var indicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(frame: CGRectZero)
+        let view = UIActivityIndicatorView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.hidesWhenStopped = true
         view.stopAnimating()
@@ -65,32 +65,32 @@ class DXFullImageButton: UIView {
     // MARK: public
     var text: String {
         didSet {
-            imageSizeLabel.text = text
+            self.imageSizeLabel.text = text
         }
     }
     
     var selected: Bool {
         didSet {
-            imageSizeLabel.hidden = !selected
+            self.imageSizeLabel.isHidden = !selected
             if selected {
-                imageView.image = UIImage(named: "photo_full_image_selected")
+                self.imageView.image = UIImage(named: "photo_full_image_selected")
             } else {
-                imageView.image = UIImage(named: "photo_full_image_unselected")
+                self.imageView.image = UIImage(named: "photo_full_image_unselected")
             }
         }
     }
     
     func addTarget(target: AnyObject?, action: Selector) {
-        fullImageButton.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        self.fullImageButton.addTarget(target, action: action, for: UIControlEvents.touchUpInside)
     }
     
     func shouldAnimating(animated: Bool) {
         if selected {
-            imageSizeLabel.hidden = animated
+            self.imageSizeLabel.isHidden = animated
             if animated {
-                indicatorView.startAnimating()
+                self.indicatorView.startAnimating()
             } else {
-                indicatorView.stopAnimating()
+                self.indicatorView.stopAnimating()
             }
         }
     }
@@ -98,54 +98,54 @@ class DXFullImageButton: UIView {
     // MARK: priviate
     
     private func setupView() {
-        backgroundColor = UIColor.clearColor()
-        addSubview(fullImageButton)
-        addSubview(imageView)
-        addSubview(nameLabel)
-        addSubview(imageSizeLabel)
-        addSubview(indicatorView)
-        imageView.image = UIImage(named: "photo_full_image_unselected")
+        self.backgroundColor = UIColor.clear
+        self.addSubview(fullImageButton)
+        self.addSubview(imageView)
+        self.addSubview(nameLabel)
+        self.addSubview(imageSizeLabel)
+        self.addSubview(indicatorView)
+        self.imageView.image = UIImage(named: "photo_full_image_unselected")
         let viewBindingsDict = [
             "fullImageButton":fullImageButton,
             "imageView": imageView,
             "nameLabel": nameLabel,
             "imageSizeLabel": imageSizeLabel,
             "indicatorView": indicatorView
-        ]
+        ] as [String : Any]
         
         let btVflH = "H:|-0-[fullImageButton]-0-|"
         let btVflV = "V:|-0-[fullImageButton]-0-|"
         let vflH = "H:|-0-[imageView(20)]-5-[nameLabel(>=2)]-5-[imageSizeLabel(80)]"
-        let constraintsVflH = NSLayoutConstraint.constraintsWithVisualFormat(vflH, options: .AlignAllCenterY, metrics: nil, views: viewBindingsDict)
-        let btContstraintsH = NSLayoutConstraint.constraintsWithVisualFormat(btVflH, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
-        let btContstraintsV = NSLayoutConstraint.constraintsWithVisualFormat(btVflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
-        let imageCenter = NSLayoutConstraint(item: imageView, attribute: .CenterY, relatedBy: .Equal, toItem: fullImageButton, attribute: .CenterY, multiplier: 1, constant: 0)
-        let imageViewHeight = NSLayoutConstraint(item: imageView, attribute: .Height, relatedBy: .Equal, toItem: imageView, attribute: .Width, multiplier: 1, constant: 0)
-        let nameLabelHeight = NSLayoutConstraint(item: nameLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
-        let imageSizeLabelHeight = NSLayoutConstraint(item: imageSizeLabel, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: 30)
-        let indicatorViewWidth = NSLayoutConstraint(item: indicatorView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 26)
-        let indicatorViewLeading = NSLayoutConstraint(item: indicatorView, attribute: .Leading, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .Leading, multiplier: 1, constant: 0)
-        let indicatorViewCenterY = NSLayoutConstraint(item: indicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: imageSizeLabel, attribute: .CenterY, multiplier: 1, constant: 0)
-        let indicatorViewHeight = NSLayoutConstraint(item: indicatorView, attribute: .Height, relatedBy: .Equal, toItem: indicatorView, attribute: .Width, multiplier: 1, constant: 0)
+        let constraintsVflH = NSLayoutConstraint.constraints(withVisualFormat: vflH, options: .alignAllCenterY, metrics: nil, views: viewBindingsDict)
+        let btContstraintsH = NSLayoutConstraint.constraints(withVisualFormat: btVflH, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
+        let btContstraintsV = NSLayoutConstraint.constraints(withVisualFormat: btVflV, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewBindingsDict)
+        let imageCenter = NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: fullImageButton, attribute: .centerY, multiplier: 1, constant: 0)
+        let imageViewHeight = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .width, multiplier: 1, constant: 0)
+        let nameLabelHeight = NSLayoutConstraint(item: nameLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0, constant: 30)
+        let imageSizeLabelHeight = NSLayoutConstraint(item: imageSizeLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0, constant: 30)
+        let indicatorViewWidth = NSLayoutConstraint(item: indicatorView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 26)
+        let indicatorViewLeading = NSLayoutConstraint(item: indicatorView, attribute: .leading, relatedBy: .equal, toItem: imageSizeLabel, attribute: .leading, multiplier: 1, constant: 0)
+        let indicatorViewCenterY = NSLayoutConstraint(item: indicatorView, attribute: .centerY, relatedBy: .equal, toItem: imageSizeLabel, attribute: .centerY, multiplier: 1, constant: 0)
+        let indicatorViewHeight = NSLayoutConstraint(item: indicatorView, attribute: .height, relatedBy: .equal, toItem: indicatorView, attribute: .width, multiplier: 1, constant: 0)
         
         
-        addConstraints(btContstraintsH)
-        addConstraints(btContstraintsV)
-        addConstraints(constraintsVflH)
-        addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewCenterY,indicatorViewLeading,indicatorViewWidth,indicatorViewHeight])
+        self.addConstraints(btContstraintsH)
+        self.addConstraints(btContstraintsV)
+        self.addConstraints(constraintsVflH)
+        self.addConstraints([imageCenter, imageViewHeight, nameLabelHeight, imageSizeLabelHeight,indicatorViewCenterY,indicatorViewLeading,indicatorViewWidth,indicatorViewHeight])
     }
     
     // MARK: init
     override init(frame: CGRect) {
-        selected = false
-        text = ""
+        self.selected = false
+        self.text = ""
         super.init(frame: frame)
-        setupView()
+        self.setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        selected = false
-        text = ""
+        self.selected = false
+        self.text = ""
         super.init(coder: aDecoder)
     }
 }

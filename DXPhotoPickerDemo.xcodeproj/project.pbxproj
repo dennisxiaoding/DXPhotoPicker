@@ -230,6 +230,7 @@
 					9541C6A71BCD080D003102FC = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = 7RQERF84NY;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -423,6 +424,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDenS;
 				PRODUCT_NAME = DXPhotoPickerDemo;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -437,6 +439,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennis.DXPhotoPickerDenS;
 				PRODUCT_NAME = DXPhotoPickerDemo;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -15,7 +15,7 @@ class DXAssetCell: UICollectionViewCell {
     // MARK: properties
     private var asset: PHAsset?
     
-    private var selectItemBlock: ((selectItem: Bool, asset: PHAsset) -> Bool)?
+    private var selectItemBlock: ((Bool, PHAsset) -> Bool)?
     
     lazy var imageView: UIImageView = {
         let imv = UIImageView(image: UIImage(named: "assets_placeholder_picture"))
@@ -24,15 +24,15 @@ class DXAssetCell: UICollectionViewCell {
     }()
     
     private lazy var checkButton: UIButton = {
-        let button = UIButton(type: .Custom)
+        let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(DXAssetCell.checkButtonAction), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(DXAssetCell.checkButtonAction), for: .touchUpInside)
         return button
     }()
     
     private lazy var checkImageView: UIImageView = {
-        let imv = UIImageView(frame: CGRectZero)
-        imv.contentMode = .ScaleAspectFit
+        let imv = UIImageView(frame: CGRect.zero)
+        imv.contentMode = .scaleAspectFit
         imv.translatesAutoresizingMaskIntoConstraints = false
         return imv
     }()
@@ -67,10 +67,10 @@ class DXAssetCell: UICollectionViewCell {
     func fillWithAsset(asset: PHAsset, isAssetSelected: Bool) {
         self.asset = asset
         assetSeleted = isAssetSelected
-        checkButton(assetSeleted, animated: false)
+        self.checkButton(selected: assetSeleted, animated: false)
     }
     
-    func selectItemBlock(block: (selected: Bool, asset: PHAsset) -> Bool) {
+    func selectItemBlock(block: @escaping (_ selected: Bool, _ asset: PHAsset) -> Bool) {
         self.selectItemBlock = block
     }
     
@@ -83,14 +83,14 @@ class DXAssetCell: UICollectionViewCell {
             if animated == false {
                 return
             }
-            UIView.animateWithDuration(0.2,
+            UIView.animate(withDuration: 0.2,
                 animations: {
                     [unowned self] () -> Void in
-                    self.checkImageView.transform = CGAffineTransformMakeScale(1.2, 1.2);},
+                    self.checkImageView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2);},
                 completion: {
                     [unowned self](stop) -> Void in
-                    UIView.animateWithDuration(0.2, animations: { [unowned self]() -> Void in
-                        self.checkImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                    UIView.animate(withDuration: 0.2, animations: { [unowned self]() -> Void in
+                        self.checkImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0);
                         })
                 })
         } else {
@@ -106,69 +106,69 @@ class DXAssetCell: UICollectionViewCell {
             "posterImageView":imageView,
             "checkButton": checkButton,
             "checkImageView": checkImageView
-        ]
+        ] as [String : Any]
         let mertic = ["sideLength": 25]
         let imageViewVFLV = "V:|-0-[posterImageView]-0-|"
         let imageViewVFLH = "H:|-0-[posterImageView]-0-|"
-        let imageViewContraintsV = NSLayoutConstraint.constraintsWithVisualFormat(
-            imageViewVFLV,
+        let imageViewContraintsV = NSLayoutConstraint.constraints(
+            withVisualFormat: imageViewVFLV,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: nil,
             views: viewBindingsDict
         )
-        let imageViewContraintsH = NSLayoutConstraint.constraintsWithVisualFormat(
-            imageViewVFLH,
+        let imageViewContraintsH = NSLayoutConstraint.constraints(
+            withVisualFormat: imageViewVFLH,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: nil,
             views: viewBindingsDict
         )
         let checkImageViewVFLH = "H:[checkImageView(sideLength)]-3-|"
         let checkImageViewVFLV = "V:|-3-[checkImageView(sideLength)]"
-        let checkImageViewContrainsH = NSLayoutConstraint.constraintsWithVisualFormat(
-            checkImageViewVFLH,
+        let checkImageViewContrainsH = NSLayoutConstraint.constraints(
+            withVisualFormat: checkImageViewVFLH,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: mertic,
             views: viewBindingsDict
         )
-        let checkImageViewContrainsV = NSLayoutConstraint.constraintsWithVisualFormat(
-            checkImageViewVFLV,
+        let checkImageViewContrainsV = NSLayoutConstraint.constraints(
+            withVisualFormat: checkImageViewVFLV,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: mertic,
             views: viewBindingsDict
         )
         let checkConstraitRight = NSLayoutConstraint(
             item: checkButton,
-            attribute: .Trailing,
-            relatedBy: .Equal,
+            attribute: .trailing,
+            relatedBy: .equal,
             toItem: contentView,
-            attribute: .Trailing,
+            attribute: .trailing,
             multiplier: 1.0,
             constant: 0
         )
         let checkConstraitTop = NSLayoutConstraint(
             item: checkButton,
-            attribute: .Top,
-            relatedBy: .Equal,
+            attribute: .top,
+            relatedBy: .equal,
             toItem: contentView,
-            attribute: .Top,
+            attribute: .top,
             multiplier: 1.0,
             constant: 0
         )
         let checkContraitWidth = NSLayoutConstraint(
             item: checkButton,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: imageView,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 0.5,
             constant: 0
         )
         let checkConsraintHeight = NSLayoutConstraint(
             item: checkButton,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: checkButton,
-            attribute: .Height,
+            attribute: .height,
             multiplier: 1.0,
             constant: 0
         )
@@ -185,7 +185,7 @@ class DXAssetCell: UICollectionViewCell {
         guard selectItemBlock != nil else {
             return
         }
-        assetSeleted = selectItemBlock!(selectItem: assetSeleted, asset: asset!)
-        checkButton(assetSeleted, animated: true)
+        assetSeleted = selectItemBlock!(assetSeleted, asset!)
+        self.checkButton(selected: assetSeleted, animated: true)
     }
 }

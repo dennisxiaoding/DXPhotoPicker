@@ -15,27 +15,30 @@ class DXSendButton: UIView {
         static let sendButtonTintHighlightedColor = "#C9EFCA"
         static let sendButtonTintDisabledColor = "#C9EFCB"
         static let sendButtonTextWitdh: CGFloat = 38.0
-        static let commonSize = CGSizeMake(20, 20)
-        static let sendButtonFont = UIFont.systemFontOfSize(15.0)
+        static let commonSize = CGSize(width: 20, height: 20)
+        static let sendButtonFont = UIFont.systemFont(ofSize: 15.0)
     }
     
     var badgeValue: String = "0" {
         didSet {
             
             func showBadgeValue() {
-                self.badgeValueLabel.hidden = false
-                self.backGroudView.hidden = false
-                self.sendButton.enabled = true
+                self.badgeValueLabel.isHidden = false
+                self.backGroudView.isHidden = false
+                self.sendButton.isEnabled = true
             }
             
             func hideBadgeValue() {
-                self.badgeValueLabel.hidden = true
-                self.backGroudView.hidden = true
-                self.sendButton.enabled = false
+                self.badgeValueLabel.isHidden = true
+                self.backGroudView.isHidden = true
+                self.sendButton.isEnabled = false
             }
             
             let str = badgeValue as NSString
-            let rect = str.boundingRectWithSize(CGSizeMake(100, 20), options: .TruncatesLastVisibleLine, attributes: [NSFontAttributeName:DXSendButtonConfig.sendButtonFont], context: nil)
+            let rect = str.boundingRect(with: CGSize(width: 100, height: 20),
+                                        options: .truncatesLastVisibleLine,
+                                        attributes: [NSFontAttributeName:DXSendButtonConfig.sendButtonFont],
+                                        context: nil)
             self.badgeValueLabel.dx_width = (rect.size.width + 9) > 20 ? (rect.size.width + 9) : 20
             self.badgeValueLabel.dx_height = 20
             self.sendButton.dx_width = self.badgeValueLabel.dx_width + DXSendButtonConfig.sendButtonTextWitdh
@@ -44,11 +47,11 @@ class DXSendButton: UIView {
             
             if str.integerValue > 0 {
                 showBadgeValue()
-                self.backGroudView.transform = CGAffineTransformMakeScale(0, 0);
-                UIView.animateWithDuration(0.2, animations: { [unowned self]() -> Void in
-                    self.backGroudView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                self.backGroudView.transform = CGAffineTransform(scaleX: 0, y: 0);
+                UIView.animate(withDuration: 0.2, animations: { [unowned self]() -> Void in
+                    self.backGroudView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
                     }, completion: { [unowned self] (completed) -> Void in
-                        self.backGroudView.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        self.backGroudView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                     })
             } else {
                 hideBadgeValue()
@@ -58,7 +61,7 @@ class DXSendButton: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame = CGRectMake(0, 0, 56, 26)
+        self.frame = CGRect(x: 0, y: 0, width: 56, height: 26)
         setupViews()
     }
     
@@ -77,23 +80,23 @@ class DXSendButton: UIView {
     // MARK: public
     
     func addTarget(target: AnyObject?, action: Selector) {
-        self.sendButton.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
+        self.sendButton.addTarget(target, action: action, for: UIControlEvents.touchUpInside)
     }
     
     // MARK: lazy load
     
     private lazy var badgeValueLabel: UILabel = {
-        let label = UILabel(frame: CGRectMake(0, 0, 20, 20))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         label.dx_centerY = self.dx_centerY
-        label.backgroundColor = UIColor.clearColor()
-        label.textColor = UIColor.whiteColor()
+        label.backgroundColor = UIColor.clear
+        label.textColor = UIColor.white
         label.font = DXSendButtonConfig.sendButtonFont
-        label.textAlignment = NSTextAlignment.Center
+        label.textAlignment = NSTextAlignment.center
         return label
     }()
     
     private lazy var backGroudView: UIView = {
-        let view = UIView(frame: CGRectMake(0, 0, 20, 20))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         view.dx_centerY = self.dx_centerY
         view.backgroundColor = UIColor(hexColor: DXSendButtonConfig.sendButtonTintNormalColor)
         view.layer.cornerRadius = DXSendButtonConfig.commonSize.width/2
@@ -101,15 +104,15 @@ class DXSendButton: UIView {
     }()
     
     private lazy var sendButton: UIButton = {
-        let button = UIButton(type: UIButtonType.Custom)
+        let button = UIButton(type: UIButtonType.custom)
         button.frame = self.bounds
-        button.setTitle(DXlocalizedString("send", comment: "发送"), forState: UIControlState.Normal)
-        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintNormalColor), forState: UIControlState.Normal)
-        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintHighlightedColor), forState: UIControlState.Highlighted)
-        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintDisabledColor), forState: UIControlState.Disabled)
+        button.setTitle(DXlocalized(string: "send", comment: "发送"), for: UIControlState.normal)
+        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintNormalColor), for: UIControlState.normal)
+        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintHighlightedColor), for: UIControlState.highlighted)
+        button.setTitleColor(UIColor(hexColor: DXSendButtonConfig.sendButtonTintDisabledColor), for: UIControlState.disabled)
         button.titleLabel?.font = DXSendButtonConfig.sendButtonFont
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0)
-        button.backgroundColor = UIColor.clearColor()
+        button.backgroundColor = UIColor.clear
         return button
     }()
 }

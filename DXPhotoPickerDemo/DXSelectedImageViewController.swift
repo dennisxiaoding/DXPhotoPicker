@@ -21,7 +21,7 @@ class DXSelectedImageViewController: UICollectionViewController {
     }
     
     @objc private func back() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,21 +31,21 @@ class DXSelectedImageViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard selectedImages != nil else {
             return 0
         }
         return selectedImages!.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! DXSelectedImageCell
-        DXPickerHelper.fetchImageWithAsset(selectedImages![indexPath.row], targetSize: CGSizeMake(150, 150)) { (image) -> Void in
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! DXSelectedImageCell
+        DXPickerHelper.fetchImage(viaAsset: selectedImages![indexPath.row], targetSize: CGSize(width:150, height: 150)) { (image) -> Void in
             cell.selectedImageView.image = image
         }
         
         if isFullImage {
-            DXPickerHelper.fetchImageSize(selectedImages![indexPath.row]) { (imageSize, sizeString) -> Void in
+            DXPickerHelper.fetchImageSize(asset: selectedImages![indexPath.row]) { (imageSize, sizeString) -> Void in
                 cell.infoLabel.text = "imageSize: " + sizeString
             }
         } else {

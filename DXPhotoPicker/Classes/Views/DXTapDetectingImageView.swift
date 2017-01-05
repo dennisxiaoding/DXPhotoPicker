@@ -10,9 +10,9 @@
 import UIKit
 
 @objc protocol DXTapDetectingImageViewDelegate: NSObjectProtocol {
-    optional func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?)
-    optional func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?)
-    optional func imageView(imageView: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?)
+    @objc optional func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?)
+    @objc optional func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?)
+    @objc optional func imageView(imageView: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?)
 }
 
 class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
@@ -23,17 +23,17 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     
     override init(image: UIImage?) {
         super.init(image: image)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     
     override init(image: UIImage?, highlightedImage: UIImage?) {
         super.init(image: image, highlightedImage: highlightedImage)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,11 +41,9 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     }
     
     // MARK: touch events
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         func handleSingleTap(touch: UITouch?) {
-            tapDelegate?.imageView?(self, singleTapDetected: touch)
+            self.tapDelegate?.imageView?(self, singleTapDetected: touch)
         }
         
         func handleDoubleTap(touch: UITouch?) {
@@ -59,9 +57,9 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
         let touch = touches.first
         let tapcount = touch?.tapCount
         switch(tapcount!) {
-        case 1: handleSingleTap(touch)
-        case 2: handleDoubleTap(touch)
-        case 3: handleTripleTap(touch)
+        case 1: handleSingleTap(touch: touch)
+        case 2: handleDoubleTap(touch: touch)
+        case 3: handleTripleTap(touch: touch)
         default: break
         }
     }

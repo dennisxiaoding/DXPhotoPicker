@@ -17,9 +17,9 @@ class DXUnAuthorizedTipsView: UIView {
     }()
     
     lazy var label: UILabel! = {
-        let lb = UILabel(frame: CGRectZero)
-        let text = DXlocalizedString("UnAuthorizedTip", comment: "UnAuthorizedTip") as NSString
-        let infoDic = NSBundle.mainBundle().infoDictionary
+        let lb = UILabel(frame: CGRect.zero)
+        let text = DXlocalized(string: "UnAuthorizedTip", comment: "UnAuthorizedTip") as NSString
+        let infoDic = Bundle.main.infoDictionary
         var displayName = infoDic!["CFBundleDisplayName"] as? NSString
         if displayName == nil {
             displayName = infoDic!["CFBundleName"] as? NSString
@@ -29,12 +29,12 @@ class DXUnAuthorizedTipsView: UIView {
         }
         let tipString = NSString(format: text, displayName!)
         lb.text = tipString as String
-        lb.textColor = UIColor.blackColor()
-        lb.font = UIFont.systemFontOfSize(14.0)
-        lb.textAlignment = NSTextAlignment.Center
+        lb.textColor = UIColor.black
+        lb.font = UIFont.systemFont(ofSize: 14.0)
+        lb.textAlignment = NSTextAlignment.center
         lb.numberOfLines = 0
-        lb.backgroundColor = UIColor.clearColor()
-        lb.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        lb.backgroundColor = UIColor.clear
+        lb.lineBreakMode = NSLineBreakMode.byTruncatingTail
         return lb
     }()
     
@@ -56,26 +56,26 @@ class DXUnAuthorizedTipsView: UIView {
         let viewBindingsDict = [
             "label": label,
             "imageView": imageView
-        ]
+        ] as [String : Any]
         let mertic = [
             "imageLength": 130,
             "labelHeight": 60
         ]
         let vflV = "V:|-120-[imageView(imageLength)]-30-[label(<=labelHeight@750)]"
         let vflH = "H:|-33-[label]-33-|"
-        let contstraintsV: Array = NSLayoutConstraint.constraintsWithVisualFormat(vflV,
-            options: NSLayoutFormatOptions.AlignAllCenterX,
+        let contstraintsV: Array = NSLayoutConstraint.constraints(withVisualFormat: vflV,
+            options: NSLayoutFormatOptions.alignAllCenterX,
             metrics: mertic,
             views: viewBindingsDict)
-        let contstraintsH: Array = NSLayoutConstraint.constraintsWithVisualFormat(vflH,
+        let contstraintsH: Array = NSLayoutConstraint.constraints(withVisualFormat: vflH,
             options: NSLayoutFormatOptions(rawValue: 0),
             metrics: mertic,
             views: viewBindingsDict)
         let imageViewConttraintsWidth = NSLayoutConstraint(item: imageView,
-            attribute: NSLayoutAttribute.Width,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.width,
+            relatedBy: NSLayoutRelation.equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: NSLayoutAttribute.notAnAttribute,
             multiplier: 0,
             constant: 130.0)
         self.addConstraints(contstraintsV)

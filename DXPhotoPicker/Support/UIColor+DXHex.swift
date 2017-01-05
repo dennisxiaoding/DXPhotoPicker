@@ -22,11 +22,11 @@ extension UIColor {
             hexColorString = "#"+hexColor;
         }
         
-        let index   = hexColorString.startIndex.advancedBy(1)
-        let hex     = hexColorString.substringFromIndex(index)
-        let scanner = NSScanner(string: hex)
+        let index   = hexColorString.index(hexColorString.startIndex, offsetBy: 1);
+        let hex     = hexColorString.substring(from: index)
+        let scanner = Scanner(string: hex)
         var hexValue: CUnsignedLongLong = 0
-        if scanner.scanHexLongLong(&hexValue) {
+        if scanner.scanHexInt64(&hexValue) {
             switch (hex.characters.count) {
             case 3:
                 red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0

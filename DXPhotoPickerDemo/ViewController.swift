@@ -14,7 +14,7 @@ class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
     @IBAction func addPhotos(sender: UIButton) {
         let picker = DXPhotoPickerController()
         picker.photoPickerDelegate = self
-        self.presentViewController(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -22,16 +22,16 @@ class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
     }
     
     @IBAction func aboutAction(sender: UIButton) {
-        UIApplication.sharedApplication().openURL(NSURL(string: "http://weibo.com/GreatDingXiao")!)
+        UIApplication.shared.openURL(URL(string: "http://weibo.com/GreatDingXiao")!)
     }
     // MARK: DXPhototPickerControllerDelegate
     func photoPickerDidCancel(photoPicker: DXPhotoPickerController) {
-        photoPicker.dismissViewControllerAnimated(true, completion: nil)
+        photoPicker.dismiss(animated: true, completion: nil)
     }
     
-    func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
-        photosPicker?.dismissViewControllerAnimated(true, completion: nil)
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("DXSelectedImageViewController") as! DXSelectedImageViewController
+    func photoPickerController(photoPicker photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
+        photosPicker?.dismiss(animated: true, completion: nil)
+        let vc = storyboard?.instantiateViewController(withIdentifier: "DXSelectedImageViewController") as! DXSelectedImageViewController
         vc.selectedImages = sendImages
         vc.isFullImage = isFullImage
         navigationController?.pushViewController(vc, animated: true)

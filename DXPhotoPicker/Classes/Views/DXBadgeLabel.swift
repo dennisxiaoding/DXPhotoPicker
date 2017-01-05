@@ -13,14 +13,14 @@ class DXBadgeLabel: UIView {
     var title: String?
     
     private lazy var backgroundView: UIView = {
-        let view = UIView(frame: CGRectZero)
+        let view = UIView(frame: CGRect.zero)
         view.backgroundColor = UIColor(hexColor: "#1FB823")
         view.layer.cornerRadius = 10
         return view
     }()
     
     private lazy var badgeLabel: UILabel = {
-        let label = UILabel(frame: CGRectZero)
+        let label = UILabel(frame: CGRect.zero)
         return label
     }()
 }

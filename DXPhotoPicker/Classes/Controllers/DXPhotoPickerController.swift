@@ -18,12 +18,12 @@ import Photos
      - parameter sendImages:   selected images
      - parameter isFullImage:  if the selected image is high quality
      */
-    optional func photoPickerController(photoPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
+    @objc optional func photoPickerController(photoPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool)
     
     /**
      cancel selected
      */
-    optional func photoPickerDidCancel(photoPicker: DXPhotoPickerController)
+    @objc optional func photoPickerDidCancel(photoPicker: DXPhotoPickerController)
 }
 
 @available(iOS 8.0, *)
@@ -40,7 +40,7 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.interactivePopGestureRecognizer?.delegate = self
-        self.interactivePopGestureRecognizer?.enabled = true
+        self.interactivePopGestureRecognizer?.isEnabled = true
         
         func showAlbumList() {
             let viewController = DXAlbumTableViewController()
@@ -53,7 +53,7 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
             self.viewControllers = [rootVC,imageFlowVC]
         }
         
-        func chargeAuthorizationStatus(status: PHAuthorizationStatus) {
+        func chargeAuthorization(status: PHAuthorizationStatus) {
     
             let viewController = viewControllers.first as? DXAlbumTableViewController
             guard viewController != nil else {
@@ -61,20 +61,20 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
                 return
             }
             switch (status) {
-            case .Authorized:
+            case .authorized:
                 viewController!.reloadTableView()
-            case .Denied:
+            case .denied:
                 viewController!.showUnAuthorizedTipsView()
-            case .Restricted:
+            case .restricted:
                 viewController!.showUnAuthorizedTipsView()
-            case .NotDetermined:
+            case .notDetermined:
                 PHPhotoLibrary.requestAuthorization({ (status) -> Void in
-                    guard status != .NotDetermined else {
+                    guard status != .notDetermined else {
                         return
                     }
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        chargeAuthorizationStatus(status)
-                    })
+                    DispatchQueue.main.async{ () -> Void in
+                        chargeAuthorization(status: status)
+                    }
                 })
             }
             
@@ -82,11 +82,11 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
         
         if DXPickerHelper.fetchAlbumIdentifier() == nil {
             showAlbumList()
-            chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
+            chargeAuthorization(status: PHPhotoLibrary.authorizationStatus())
         } else {
             if DXPickerHelper.fetchAlbumIdentifier()!.isEmpty {
                 showAlbumList()
-                chargeAuthorizationStatus(PHPhotoLibrary.authorizationStatus())
+                chargeAuthorization(status: PHPhotoLibrary.authorizationStatus())
             } else {
                 showImageFlow()
             }

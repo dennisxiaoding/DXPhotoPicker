@@ -10,14 +10,14 @@ import UIKit
 
 extension UICollectionView {
     func aapl_indexPathsForElementsInRect(rect: CGRect) -> [NSIndexPath]? {
-        let allLayoutAttributes = collectionViewLayout.layoutAttributesForElementsInRect(rect)
+        let allLayoutAttributes = collectionViewLayout.layoutAttributesForElements(in: rect)
         if allLayoutAttributes?.count == 0 {
             return nil
         }
         var indexPaths = [NSIndexPath]()
-        for (_, layoutAttributes) in allLayoutAttributes!.enumerate() {
+        for (_, layoutAttributes) in allLayoutAttributes!.enumerated() {
             let indexPath = layoutAttributes.indexPath;
-            indexPaths.append(indexPath)
+            indexPaths.append(indexPath as NSIndexPath)
         }
         return indexPaths
     }

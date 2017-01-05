@@ -8,19 +8,19 @@
 
 import Foundation
 
-public func DXLog<T>(message: T, file: String = #file, method: String = #function,line: Int = #line) {
+public func DXLog<T>(_ message: T, file: String = #file, method: String = #function,line: Int = #line) {
     #if DEBUG
         print("\((file as NSString).lastPathComponent)[line:\(line)], \(method): \(message)")
     #endif
 }
 
-public func DXlocalizedString(key: String, comment: String) -> String {
-    return NSLocalizedString(key, tableName: "DXPhotoPicker", bundle: NSBundle.mainBundle(), value: "", comment: comment)
+public func DXlocalized(string: String, comment: String) -> String {
+    return NSLocalizedString(string, tableName: "DXPhotoPicker", bundle: Bundle.main, value: "", comment: comment)
 }
 
 
 extension Float {
-    func format(f: String) -> String {
+    func format(_ f: String) -> String {
         return NSString(format: "%0.1f", self) as String
     }
 }

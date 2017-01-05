@@ -15,9 +15,9 @@ import Photos
  */
 
 class DXAlbum: NSObject {
-    var results: PHFetchResult?
+    var results: PHFetchResult<AnyObject>?
     var count = 0
     var name: String?
-    var startDate: NSDate?
+    var startDate: Date?
     var identifier: String?
 }

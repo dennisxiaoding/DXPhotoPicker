@@ -24,7 +24,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     private var requestID: PHImageRequestID?
     
     private lazy var zoomingScrollView: UIScrollView = {
-        let scroll = UIScrollView(frame: CGRectMake(10, 0, self.dx_width - 20, self.dx_height))
+        let scroll = UIScrollView(frame: CGRect(x: 10, y: 0, width: self.dx_width - 20, height: self.dx_height))
         scroll.delegate = self
         scroll.showsHorizontalScrollIndicator = false
         scroll.showsVerticalScrollIndicator = false
@@ -33,17 +33,16 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     }()
     
     private lazy var photoImageView: DXTapDetectingImageView = {
-        let imageView = DXTapDetectingImageView(frame: CGRectZero)
+        let imageView = DXTapDetectingImageView(frame: CGRect.zero)
         imageView.tapDelegate = self
-        imageView.contentMode = .ScaleAspectFit
-        imageView.backgroundColor = UIColor.blackColor()
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = UIColor.black
         return imageView
     }()
     
     // MARK: life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView
         setupView()
     }
     
@@ -56,7 +55,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         super.prepareForReuse()
         photoImageView.image = nil
         if requestID != nil {
-            PHImageManager.defaultManager().cancelImageRequest(requestID!)
+            PHImageManager.default().cancelImageRequest(requestID!)
             requestID = nil
         }
     }
@@ -64,7 +63,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     override func layoutSubviews() {
         super.layoutSubviews()
         // Center the image as it becomes smaller than the size of the screen
-        photoImageView.center = CGPointMake(photoImageView.dx_width/2, photoImageView.dx_height/2)
+        photoImageView.center = CGPoint(x: photoImageView.dx_width/2, y: photoImageView.dx_height/2)
         
         // Center the image as it becomes smaller than the size of the screen
         let boundsSize = zoomingScrollView.dx_size
@@ -85,7 +84,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         }
         
         // Center
-        if (!CGRectEqualToRect(photoImageView.frame, frameToCenter)) {
+        if (!photoImageView.frame.equalTo(frameToCenter)) {
             photoImageView.frame = frameToCenter;
         }
     }
@@ -101,17 +100,17 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.maximumZoomScale = 1
         zoomingScrollView.minimumZoomScale = 1;
         zoomingScrollView.zoomScale = 1
-        zoomingScrollView.contentSize = CGSizeMake(0, 0);
+        zoomingScrollView.contentSize = CGSize(width: 0, height: 0);
         photoImageView.frame = zoomingScrollView.bounds
-        requestID = DXPickerHelper.fetchImageWithAsset(asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
+        requestID = DXPickerHelper.fetchImage(viaAsset:asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
             self.requestID = nil
             guard image != nil else {
                 return
             }
             self.photoImageView.image = image
-            self.photoImageView.hidden = false
-            var photoImageViewFrame = CGRectZero
-            photoImageViewFrame.origin = CGPointZero
+            self.photoImageView.isHidden = false
+            var photoImageViewFrame = CGRect.zero
+            photoImageViewFrame.origin = CGPoint.zero
             photoImageViewFrame.size = image!.size;
             self.photoImageView.frame = photoImageViewFrame;
             self.zoomingScrollView.contentSize = photoImageViewFrame.size;
@@ -128,7 +127,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.zoomScale = 1
         guard photoImageView.image != nil else { return }
         // rest position
-        photoImageView.frame = CGRectMake(0, 0, photoImageView.dx_width, photoImageView.dx_height)
+        photoImageView.frame = CGRect(x: 0, y: 0, width: photoImageView.dx_width, height: photoImageView.dx_height)
         // caculate the Min
         let boundSize = zoomingScrollView.bounds.size
         let imageSize = photoImageView.image!.size
@@ -137,7 +136,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         var minScale = min(xScale, yScale)                  // use minimum of these to allow the image to become fully visible
         // caculate Max
         var maxScale: CGFloat = 1.5
-        if UI_USER_INTERFACE_IDIOM() == .Pad {
+        if UI_USER_INTERFACE_IDIOM() == .pad {
             maxScale = 3
         }
         // Image is smaller than screen so no zooming!
@@ -152,10 +151,10 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         // If we're zooming to fill then centralise
         if (zoomingScrollView.zoomScale != minScale) {
             // Centralise
-            zoomingScrollView.contentOffset = CGPointMake((imageSize.width * zoomingScrollView.zoomScale - boundSize.width) / 2.0,
-                (imageSize.height * self.zoomingScrollView.zoomScale - boundSize.height) / 2.0)
+            zoomingScrollView.contentOffset = CGPoint(x: (imageSize.width * zoomingScrollView.zoomScale - boundSize.width) / 2.0,
+                                                      y: (imageSize.height * self.zoomingScrollView.zoomScale - boundSize.height) / 2.0)
             // Disable scrolling initially until the first pinch to fix issues with swiping on an initally zoomed in photo
-            self.zoomingScrollView.scrollEnabled = false
+            self.zoomingScrollView.isScrollEnabled = false
         }
         // Layout
         setNeedsLayout()
@@ -181,17 +180,17 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     
     // MARK: UIScrollViewDelegate
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    private func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return photoImageView
     }
     
-    func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
-        zoomingScrollView.scrollEnabled = true
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        zoomingScrollView.isScrollEnabled = true
     }
     
-    func scrollViewDidZoom(scrollView: UIScrollView) {
-        setNeedsLayout()
-        layoutIfNeeded()
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
     
     // MARK: DXTapDetectingImageView
@@ -201,14 +200,14 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             guard photoBrowser != nil else {
                 return
             }
-            photoBrowser?.performSelector(#selector(DXPhotoBrowser.toggleControls), withObject: nil, afterDelay: 0.2)
+            photoBrowser?.perform(#selector(DXPhotoBrowser.toggleControls), with: nil, afterDelay: 0.2)
         }
         
         guard touch != nil else {
             DXLog("touch error")
             return
         }
-        handleSingleTap(touch!.locationInView(imageView))
+        handleSingleTap(touchPoint: touch!.location(in: imageView))
     }
     
     func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?) {
@@ -216,21 +215,21 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
             guard photoBrowser != nil else {
                 return
             }
-            NSObject.cancelPreviousPerformRequestsWithTarget(photoBrowser!)
+            NSObject.cancelPreviousPerformRequests(withTarget: photoBrowser!)
             if (zoomingScrollView.zoomScale != zoomingScrollView.minimumZoomScale && zoomingScrollView.zoomScale != initialZoomScaleWithMinScale()) {
                 zoomingScrollView.setZoomScale(zoomingScrollView.minimumZoomScale, animated: true)
             } else {
                 let newZoomScale = (zoomingScrollView.maximumZoomScale + zoomingScrollView.minimumZoomScale) / 2
                 let xsize = zoomingScrollView.dx_width / newZoomScale
                 let ysize = zoomingScrollView.dx_height / newZoomScale
-                zoomingScrollView.zoomToRect(CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize), animated: true)
+                zoomingScrollView.zoom(to: CGRect(x: touchPoint.x - xsize/2, y: touchPoint.y - ysize/2, width: xsize, height: ysize), animated: true)
             }
         }
         guard touch != nil else {
             DXLog("touch error")
             return
         }
-        handleDoubleTap(touch!.locationInView(imageView))
+        handleDoubleTap(touchPoint: touch!.location(in: imageView))
     }
     
 }
