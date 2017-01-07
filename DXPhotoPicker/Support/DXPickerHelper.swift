@@ -43,10 +43,12 @@ class DXPickerHelper: NSObject {
         }
     
         let collection = result.firstObject
-        let requestResult = PHAsset.fetchAssets(in: collection!, options: options)
+        let requestResult = PHAsset.fetchAssets(in: collection!, options: options) as? PHFetchResult<AnyObject>
         album.name = collection?.localizedTitle
         album.results = requestResult
-        album.count = requestResult.count
+        if let count = requestResult?.count {
+            album.count = count
+        }
         album.startDate = collection?.startDate
         album.identifier = collection?.localIdentifier
         return album
@@ -54,11 +56,11 @@ class DXPickerHelper: NSObject {
     
     class func fetchAlbumList() -> [DXAlbum]? {
         
-        func fetchAlbums() -> [PHFetchResult<AnyObject>]? {
+        func fetchAlbums() -> [PHFetchResult<PHAssetCollection>]? {
             let userAlbumsOptions = PHFetchOptions()
             userAlbumsOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
             userAlbumsOptions.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-            var albums: [PHFetchResult] = [PHFetchResult]
+            var albums = [PHFetchResult<PHAssetCollection>]()
             albums.append(
                 PHAssetCollection.fetchAssetCollections(
                     with: PHAssetCollectionType.smartAlbum,
@@ -86,7 +88,7 @@ class DXPickerHelper: NSObject {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         for (_, result) in results!.enumerated() {
             result.enumerateObjects({ (collection, index, isStop) -> Void in
-                let album = collection as! PHAssetCollection
+                let album = collection
                 let assetResults = PHAsset.fetchAssets(in: album, options: options)
                 var count = 0
                 switch album.assetCollectionType {
@@ -101,7 +103,7 @@ class DXPickerHelper: NSObject {
                     autoreleasepool {
                         let ab = DXAlbum()
                         ab.count = count
-                        ab.results = assetResults
+                        ab.results = assetResults as? PHFetchResult<AnyObject>
                         ab.name = album.localizedTitle
                         ab.startDate = album.startDate
                         ab.identifier = album.localIdentifier

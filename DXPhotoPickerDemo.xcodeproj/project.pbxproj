@@ -16,7 +16,6 @@
 		9541C6B11BCD080D003102FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6AF1BCD080D003102FC /* Main.storyboard */; };
 		9541C6B31BCD080D003102FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6B21BCD080D003102FC /* Assets.xcassets */; };
 		9541C6B61BCD080D003102FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9541C6B41BCD080D003102FC /* LaunchScreen.storyboard */; };
-		9541C6DB1BCD084C003102FC /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541C6DA1BCD084C003102FC /* Photos.framework */; };
 		9541C6E01BCD0D23003102FC /* UIColor+DXHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9541C6DF1BCD0D23003102FC /* UIColor+DXHex.swift */; };
 		9554A02D1BEB2BB100DD6F6B /* DXPickerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9554A02C1BEB2BB100DD6F6B /* DXPickerHelper.swift */; };
 		9554A0371BEB2BBC00DD6F6B /* DXAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9554A02E1BEB2BBC00DD6F6B /* DXAlbumCell.swift */; };
@@ -35,6 +34,7 @@
 		95643B311BCF54FF0091ACE8 /* DXUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95643B301BCF54FF0091ACE8 /* DXUtil.swift */; };
 		956595BD1BCD4DCD00A74B30 /* DXPhotoPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 956595BF1BCD4DCD00A74B30 /* DXPhotoPicker.strings */; };
 		95A3F1891BCD441300A43CE1 /* imageResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95A3F1881BCD441300A43CE1 /* imageResources.xcassets */; };
+		95A9A4301E214043008D6374 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541C6DA1BCD084C003102FC /* Photos.framework */; };
 		95D786A51BD931E900C7A5A8 /* UIViewController+DXPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D786A41BD931E900C7A5A8 /* UIViewController+DXPhotoPicker.swift */; };
 		95D9571C1BD758420012BD36 /* DXAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D9571B1BD758420012BD36 /* DXAlbum.swift */; };
 /* End PBXBuildFile section */
@@ -80,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9541C6DB1BCD084C003102FC /* Photos.framework in Frameworks */,
+				95A9A4301E214043008D6374 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -62,11 +62,20 @@ public class DXPhotoPickerController: UINavigationController, UINavigationContro
             }
             switch (status) {
             case .authorized:
-                viewController!.reloadTableView()
+                DispatchQueue.main.async {
+                    viewController!.reloadTableView()
+                }
+                
             case .denied:
-                viewController!.showUnAuthorizedTipsView()
+                DispatchQueue.main.async {
+                    viewController!.showUnAuthorizedTipsView()
+                }
+                
             case .restricted:
-                viewController!.showUnAuthorizedTipsView()
+                DispatchQueue.main.async {
+                    viewController!.showUnAuthorizedTipsView()
+                }
+
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization({ (status) -> Void in
                     guard status != .notDetermined else {

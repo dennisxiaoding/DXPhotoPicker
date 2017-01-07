@@ -220,11 +220,12 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
             return
         }
         title = "\(currentIndex + 1)"+"/" + "\(photosDataSource!.count)"
-        let selected = self.delegate?.photoBrowser(self, currentPhotoAssetIsSeleted: photosDataSource?[currentIndex])
+        let asset = photosDataSource?[currentIndex]
+        let selected = self.delegate?.photoBrowser(photoBrowser: self, currentPhotoAssetIsSeleted: asset)
         if selected == nil {
             checkButton.isSelected = false
         } else {
-            checkButton.selected = selected!
+            checkButton.isSelected = selected!
         }
 
         fullImageButton.selected = fullImage
@@ -264,23 +265,25 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
         fullImage = fullImageButton.selected
         self.delegate?.photoBrowser(photoBrowser: self, seleteFullImage: fullImage)
         if fullImageButton.selected {
-            if ((delegate?.photoBrowser(self, seletedAsset: photosDataSource?[currentIndex])) != nil){
+            let asset =  photosDataSource?[currentIndex]
+            if delegate?.photoBrowser(photoBrowser: self, seletedAsset: asset) != nil {
                 updateNavigationBarAndToolBar()
             }
         }
     }
     
     @objc private func checkButtonAction() {
+        let asset =  photosDataSource?[currentIndex]
         if checkButton.isSelected {
-            delegate?.photoBrowser(self, deseletedAsset: photosDataSource?[currentIndex])
+            delegate?.photoBrowser(photoBrowser: self, deseletedAsset: asset)
             checkButton.isSelected = false
             updateSelestedNumber()
         } else {
-            let selected = delegate?.photoBrowser(self, seletedAsset: photosDataSource?[currentIndex])
+            let selected = delegate?.photoBrowser(photoBrowser: self, seletedAsset: asset)
             if selected == nil {
                 checkButton.isSelected = false
             } else {
-                checkButton.selected = selected!
+                checkButton.isSelected = selected!
             }
             
             if checkButton.isSelected {
@@ -355,11 +358,11 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden: Bool {
         return statusBarShouldBeHidden
     }
     
-    func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return .slide
     }
     

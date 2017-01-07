@@ -37,8 +37,8 @@ class DXSelectedImageViewController: UICollectionViewController {
         }
         return selectedImages!.count
     }
-
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! DXSelectedImageCell
         DXPickerHelper.fetchImage(viaAsset: selectedImages![indexPath.row], targetSize: CGSize(width:150, height: 150)) { (image) -> Void in
             cell.selectedImageView.image = image
@@ -49,8 +49,9 @@ class DXSelectedImageViewController: UICollectionViewController {
                 cell.infoLabel.text = "imageSize: " + sizeString
             }
         } else {
-                cell.infoLabel.text = "not full image"
+            cell.infoLabel.text = "not full image"
         }
         return cell
-    }
+    }    
 }
+

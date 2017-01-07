@@ -11,7 +11,9 @@ import Photos
 
 class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
 // MARK: ui actions
-    @IBAction func addPhotos(sender: UIButton) {
+    
+    
+    @IBAction func addPhotos(_ sender: UIButton) {
         let picker = DXPhotoPickerController()
         picker.photoPickerDelegate = self
         self.present(picker, animated: true, completion: nil)
@@ -21,9 +23,10 @@ class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
         super.viewDidLoad()
     }
     
-    @IBAction func aboutAction(sender: UIButton) {
+    @IBAction func aboutAction(_ sender: UIButton) {
         UIApplication.shared.openURL(URL(string: "http://weibo.com/GreatDingXiao")!)
     }
+   
     // MARK: DXPhototPickerControllerDelegate
     func photoPickerDidCancel(photoPicker: DXPhotoPickerController) {
         photoPicker.dismiss(animated: true, completion: nil)

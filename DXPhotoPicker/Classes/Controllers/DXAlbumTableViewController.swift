@@ -23,8 +23,9 @@ class DXAlbumTableViewController: UITableViewController {
             action: #selector(DXAlbumTableViewController.cancelAction)
         )
         assetsCollection = DXPickerHelper.fetchAlbumList()
-        tableView.register(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
-        tableView.tableFooterView = UIView()
+        self.tableView.register(DXAlbumCell.self, forCellReuseIdentifier: dxalbumTableViewCellReuseIdentifier)
+
+        self.tableView.tableFooterView = UIView()
     }
     
     // MARK: public
@@ -54,8 +55,8 @@ class DXAlbumTableViewController: UITableViewController {
         return assetsCollection!.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView .dequeueReusableCell(withIdentifier: dxalbumTableViewCellReuseIdentifier, for: indexPath as IndexPath) as! DXAlbumCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: dxalbumTableViewCellReuseIdentifier, for: indexPath) as! DXAlbumCell
         let album = assetsCollection![indexPath.row]
         cell.titleLabel.text = album.name
         cell.countLabel.text = "(\(album.count))"
@@ -65,20 +66,22 @@ class DXAlbumTableViewController: UITableViewController {
         return cell
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60;
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+    
     // MARK: - Table view data delegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let album = assetsCollection![indexPath.row]
         let photosListViewController = DXImageFlowViewController(album: album)
         navigationController?.pushViewController(photosListViewController, animated: true)
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
+   
 }

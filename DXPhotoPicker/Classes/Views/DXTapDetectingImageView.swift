@@ -10,9 +10,9 @@
 import UIKit
 
 @objc protocol DXTapDetectingImageViewDelegate: NSObjectProtocol {
-    @objc optional func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?)
-    @objc optional func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?)
-    @objc optional func imageView(imageView: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?)
+    @objc optional func imageView(_: DXTapDetectingImageView?, singleTapDetected touch: UITouch?)
+    @objc optional func imageView(_: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?)
+    @objc optional func imageView(_: DXTapDetectingImageView?, tripleTapDetected touch: UITouch?)
 }
 
 class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
@@ -43,7 +43,7 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     // MARK: touch events
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         func handleSingleTap(touch: UITouch?) {
-            self.tapDelegate?.imageView?(self, singleTapDetected: touch)
+            self.tapDelegate?.imageView?(self, doubleTapDetected: touch)
         }
         
         func handleDoubleTap(touch: UITouch?) {
