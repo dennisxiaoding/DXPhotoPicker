@@ -43,7 +43,7 @@ class DXTapDetectingImageView: UIImageView, DXTapDetectingImageViewDelegate {
     // MARK: touch events
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         func handleSingleTap(touch: UITouch?) {
-            self.tapDelegate?.imageView?(self, doubleTapDetected: touch)
+            self.tapDelegate?.imageView?(self, singleTapDetected: touch)
         }
         
         func handleDoubleTap(touch: UITouch?) {

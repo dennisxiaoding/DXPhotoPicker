@@ -63,7 +63,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     override func layoutSubviews() {
         super.layoutSubviews()
         // Center the image as it becomes smaller than the size of the screen
-        photoImageView.center = CGPoint(x: photoImageView.dx_width/2, y: photoImageView.dx_height/2)
+        photoImageView.center = CGPoint(x: self.zoomingScrollView.dx_width/2, y: self.zoomingScrollView.dx_height/2)
         
         // Center the image as it becomes smaller than the size of the screen
         let boundsSize = zoomingScrollView.dx_size
@@ -102,7 +102,10 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.zoomScale = 1
         zoomingScrollView.contentSize = CGSize(width: 0, height: 0);
         photoImageView.frame = zoomingScrollView.bounds
-        requestID = DXPickerHelper.fetchImage(viaAsset:asset, targetSize: zoomingScrollView.dx_size, needHighQuality: true, imageResultHandler: { [unowned self](image) -> Void in
+        requestID = DXPickerHelper.fetchImage(viaAsset:asset,
+                                              targetSize: zoomingScrollView.dx_size,
+                                              needHighQuality: true,
+                                              imageResultHandler: { [unowned self](image) -> Void in
             self.requestID = nil
             guard image != nil else {
                 return
@@ -148,6 +151,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         zoomingScrollView.minimumZoomScale = minScale
         // Initial zoom
         zoomingScrollView.zoomScale = initialZoomScaleWithMinScale()
+    
         // If we're zooming to fill then centralise
         if (zoomingScrollView.zoomScale != minScale) {
             // Centralise
@@ -180,7 +184,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     
     // MARK: UIScrollViewDelegate
     
-    private func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return photoImageView
     }
     
@@ -195,7 +199,7 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
     
     // MARK: DXTapDetectingImageView
     
-    func imageView(imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?) {
+    func imageView(_ imageView: DXTapDetectingImageView?, singleTapDetected touch: UITouch?) {
         func handleSingleTap(touchPoint: CGPoint) {
             guard photoBrowser != nil else {
                 return
@@ -210,7 +214,8 @@ class DXBrowserCell: UICollectionViewCell, UIScrollViewDelegate, DXTapDetectingI
         handleSingleTap(touchPoint: touch!.location(in: imageView))
     }
     
-    func imageView(imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?) {
+    func imageView(_ imageView: DXTapDetectingImageView?, doubleTapDetected touch: UITouch?) {
+    
         func handleDoubleTap(touchPoint: CGPoint) {
             guard photoBrowser != nil else {
                 return
