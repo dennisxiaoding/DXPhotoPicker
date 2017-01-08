@@ -268,6 +268,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
             let asset =  photosDataSource?[currentIndex]
             if delegate?.photoBrowser(photoBrowser: self, seletedAsset: asset) != nil {
                 updateNavigationBarAndToolBar()
+                updateSelestedNumber()
             }
         }
     }
