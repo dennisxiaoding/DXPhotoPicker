@@ -168,7 +168,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
     }
     
     @objc private func backButtonAction() {
-        navigationController?.popViewController(animated: true)
+        self.pop(animated: true)
     }
     
     @objc private func cancelAction() {
@@ -205,6 +205,7 @@ class DXImageFlowViewController: UIViewController, UIScrollViewDelegate, UIColle
         return true
     }
     
+    @discardableResult
     private func deleteAsset(asset: PHAsset) -> Bool {
         if selectedAssetsArray.contains(asset) {
             let index = selectedAssetsArray.index(of: asset)

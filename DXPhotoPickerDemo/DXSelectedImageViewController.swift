@@ -21,7 +21,7 @@ class DXSelectedImageViewController: UICollectionViewController {
     }
     
     @objc private func back() {
-        navigationController?.popViewController(animated: true)
+        self.pop(animated: true)
     }
 
     override func didReceiveMemoryWarning() {

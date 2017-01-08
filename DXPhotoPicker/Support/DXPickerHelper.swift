@@ -127,6 +127,7 @@ class DXPickerHelper: NSObject {
      
      - returns: PHImageRequestID  so that you can cancel the request if needed
      */
+    @discardableResult
     class func fetchImage(viaAsset asset: PHAsset?, targetSize: CGSize, imageResultHandler: @escaping (_ image: UIImage?)->Void) -> PHImageRequestID? {
         guard asset != nil else {
             return nil
@@ -143,7 +144,7 @@ class DXPickerHelper: NSObject {
                 imageResultHandler(result)
         }
     }
-    
+    @discardableResult
     class func fetchImage(viaAsset asset: PHAsset?, targetSize: CGSize, needHighQuality: Bool,imageResultHandler: @escaping (_ image: UIImage?)->Void) -> PHImageRequestID? {
         guard asset != nil else {
             return nil

@@ -253,7 +253,7 @@ class DXPhotoBrowser: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK: ui actions
     
     @objc private func backButtonAction() {
-        navigationController?.popViewController(animated: true)
+        self.pop(animated: true)
     }
     
     @objc private func sendButtonAction() {

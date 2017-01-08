@@ -102,4 +102,14 @@ public extension UIViewController {
             self.navigationItem.leftBarButtonItem = barButtonItem
     }
     
+    @discardableResult
+    public func pop(animated: Bool) -> UIViewController? {
+        return self.navigationController?.popViewController(animated: animated)
+    }
+    
+    @discardableResult
+    public func popToRoot(animated: Bool) -> [UIViewController]? {
+        return self.navigationController?.popToRootViewController(animated: animated);
+    }
 }
+
