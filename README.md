@@ -11,6 +11,10 @@ I don't make it as a pod because of the flexible UI requirements. Only supported
 
 <center> ![image](https://github.com/AwesomeDennis/DXPhotoPicker/blob/master/ScreenShot/ScreenShot.gif) </center>
 
+##Version
+The current version can support Swift 3. If you want the Swift 2.2 one, [click here](https://github.com/AwesomeDennis/DXPhotoPicker/releases/tag/1.0)
+
+
 ## Usage
 `DXPhotoPickerController` is similar to `UIImagePickerController` in its usage.
 
@@ -18,29 +22,44 @@ I don't make it as a pod because of the flexible UI requirements. Only supported
 ```
 	let picker = DXPhotoPickerController()
     picker.photoPickerDelegate = self
-    self.presentViewController(picker, animated: true, completion: nil)
+    self.present(picker, animated: true, completion: nil)
 ```
 ```
     // MARK: DXPhototPickerControllerDelegate
     func photoPickerDidCancel(photoPicker: DXPhotoPickerController) {
-        photoPicker.dismissViewControllerAnimated(true, completion: nil)
+        photoPicker.dismiss(animated: true, completion: nil)
     }
-    func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages:   	[PHAsset]?, isFullImage: Bool) {
-        photosPicker?.dismissViewControllerAnimated(true, completion: nil)
-        print(sendImages)
+
+    func photoPickerController(photoPicker photosPicker: DXPhotoPickerController?,
+                               sendImages: [PHAsset]?,
+                               isFullImage: Bool) {
+        photosPicker?.dismiss(animated: true, completion: nil)
+        let vc = storyboard?.instantiateViewController(withIdentifier: "DXSelectedImageViewController") as! DXSelectedImageViewController
+        vc.selectedImages = sendImages
+        vc.isFullImage = isFullImage
+        navigationController?.pushViewController(vc, animated: true)
     }
+
+
 ```
 
-The call back delegte methods `func photoPickerController(photosPicker: DXPhotoPickerController?, sendImages:   	[PHAsset]?, isFullImage: Bool)` param `isFullImage` suggested if the image you choose is the high quality image.
+The call back delegte methods
+```
+	 func photoPickerController(photoPicker photosPicker: DXPhotoPickerController?,
+                               sendImages: [PHAsset]?,
+                               isFullImage: Bool)
+```
+ param `isFullImage` suggested if the image you choose is the high quality image.
 
 ## Requirements
 DXPhotoPickerController is written in Swift and links against `Photos.framework`. It therefore requires iOS 8 or later.
+
+##Tips
+Add `Photo Library Usage Description` key in `Info.plist` after iOS 10, or it will crash.
 
 ## Author
 我叫丁晓， [Weibo](http://weibo.com/GreatDingXiao).
 😄
 
 ## Inspired
-[JKImagePicker](https://github.com/pjk1129/JKImagePicker) 
-and [mwaterfall/MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser) gave a me great help!
-
+[mwaterfall/MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser) gave a me great help!

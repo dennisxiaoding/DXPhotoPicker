@@ -32,7 +32,9 @@ class ViewController: UIViewController, DXPhotoPickerControllerDelegate {
         photoPicker.dismiss(animated: true, completion: nil)
     }
     
-    func photoPickerController(photoPicker photosPicker: DXPhotoPickerController?, sendImages: [PHAsset]?, isFullImage: Bool) {
+    func photoPickerController(photoPicker photosPicker: DXPhotoPickerController?,
+                               sendImages: [PHAsset]?,
+                               isFullImage: Bool) {
         photosPicker?.dismiss(animated: true, completion: nil)
         let vc = storyboard?.instantiateViewController(withIdentifier: "DXSelectedImageViewController") as! DXSelectedImageViewController
         vc.selectedImages = sendImages
