@@ -9,7 +9,7 @@ DXPhotoPickerController is a swift version of [DNImagePicker](https://github.com
 
 I don't make it as a pod because of the flexible UI requirements. Only supported the simple demo and you can customize your own style.
 
-<center> ![image](https://github.com/AwesomeDennis/DXPhotoPicker/blob/master/ScreenShot/ScreenShot.gif) </center>
+<center> ![image](https://github.com/AwesomeDennis/DXPhotoPicker/blob/master/ScreenShot/ScreenShot.gif)  </center>
 
 ##Version
 The current version can support Swift 3. If you want the Swift 2.2 one, [click here](https://github.com/AwesomeDennis/DXPhotoPicker/releases/tag/1.0)
